@@ -70,3 +70,15 @@ GAME-04 should use it to:
 5. keep character/environment proportions consistent.
 
 Do not generate the entire city from this image.
+
+
+## Production note — GAME-04R
+
+The current code-generated raster assets are **not the approved look**. They
+are placeholders for engine integration only. Production acceptance is now
+defined in `GAME_04R_VISUAL_REBUILD.md`.
+
+Key correction: a technically valid PNG pipeline does not equal acceptable
+art direction. Final environment art may be hand-authored or AI-assisted and
+then cleaned into raster assets; the runtime should simply load/blit those
+assets.
