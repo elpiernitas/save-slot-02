@@ -2,21 +2,21 @@
 
 Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 
-| Fase    | Contenido                                 | Estado      |
-| ------- | ----------------------------------------- | ----------- |
-| GAME-00 | Constitución técnica y estructura         | ✅ Hecho    |
-| GAME-01 | Desktop-first + fullscreen + boot + title | ✅ Hecho    |
-| GAME-02 | Motor de diálogos retro                   | ✅ Hecho    |
-| GAME-03 | Selección de clase                        | ⏭ Siguiente |
-| GAME-04 | Mapa y exploración                        | Pendiente   |
-| GAME-05 | Inventario y cartas                       | Pendiente   |
-| GAME-06 | Puzzles / minijuegos                      | Pendiente   |
-| GAME-07 | Boss + aparición PLAYER 2                 | Pendiente   |
-| GAME-08 | Portales y selección de fecha             | Pendiente   |
-| GAME-09 | Final + save slot                         | Pendiente   |
-| GAME-10 | Desbloqueos posteriores                   | Pendiente   |
-| GAME-11 | Easter eggs, sonido, animaciones y pulido | Pendiente   |
-| GAME-12 | QA en ordenador + producción Netlify      | Pendiente   |
+| Fase    | Contenido                                  | Estado      |
+| ------- | ------------------------------------------ | ----------- |
+| GAME-00 | Constitución técnica y estructura          | ✅ Hecho    |
+| GAME-01 | Desktop-first + fullscreen + boot + title  | ✅ Hecho    |
+| GAME-02 | Motor de diálogos retro                    | ✅ Hecho    |
+| GAME-03 | World bible + selección de clase           | ✅ Hecho    |
+| GAME-04 | Mundo explorable / vertical slice de Gijón | ⏭ Siguiente |
+| GAME-05 | Inventario y cartas                        | Pendiente   |
+| GAME-06 | Puzzles / minijuegos                       | Pendiente   |
+| GAME-07 | Boss + aparición PLAYER 2                  | Pendiente   |
+| GAME-08 | Portales y selección de fecha              | Pendiente   |
+| GAME-09 | Final + save slot                          | Pendiente   |
+| GAME-10 | Desbloqueos posteriores                    | Pendiente   |
+| GAME-11 | Easter eggs, sonido, animaciones y pulido  | Pendiente   |
+| GAME-12 | QA en ordenador + producción Netlify       | Pendiente   |
 
 ## Detalle por fase
 
@@ -49,17 +49,22 @@ quests/logros, registro de escenas, viewport 16:9 con safe areas, shell mínimo.
 - SETTINGS: TEXT SPEED y MOTION. Demo `dialogueDemo` (en español) desde
   CONTINUE.
 
-### GAME-03 — Selección de clase
+### GAME-03 — World bible + selección de clase ✅
 
-Clases (idea: guerrero / tanque / curador u otras), estrechar
-`PlayerClassId`, nombre del jugador. Usar `DialoguePlayer` para la
-presentación. Poner `CONTINUE_OVERRIDE` a `null` (o apuntar a la nueva
-escena) y decidir si la demo se retira.
+- `docs/WORLD_BIBLE.md`: Gijón cotidiano gamificado, franjas del día, estilo
+  visual, paleta, personajes, clases, tarot, música.
+- Clases GUERRERO / TANQUE / CURADOR (`src/game/player/classes.ts`), acción
+  `player/assignClass` permanente, condición `playerClass`.
+- Escena `classSelect` (intro, tarjetas, confirmación diegética) →
+  `overworld` provisional ("LOADING WORLD..."). Demo de GAME-02 fuera del
+  flujo.
 
-### GAME-04 — Mapa y exploración
+### GAME-04 — Mundo explorable / vertical slice de Gijón
 
-Movimiento, controles táctiles, mapa. **Evaluar aquí si hace falta Phaser**
-(o canvas propio) y registrar la decisión.
+Primera zona jugable siguiendo `WORLD_BIBLE.md`: decidir motor (canvas
+propio vs Phaser), reevaluar la resolución 480×270 con sprites/fondos
+reales, movimiento, colisiones, NPCs con `DialoguePlayer`, una franja
+horaria y su paleta. Sustituye el `overworld` provisional.
 
 ### GAME-05 — Inventario y cartas
 

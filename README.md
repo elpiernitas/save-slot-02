@@ -6,6 +6,7 @@ preferiblemente en pantalla completa). El móvil queda bloqueado con una
 pantalla diegética. Proyecto personal, repositorio privado.
 
 > Visión, tono, fechas y reglas: [`docs/GAME_CONSTITUTION.md`](docs/GAME_CONSTITUTION.md).
+> Universo (Gijón, estilo, personajes, clases): [`docs/WORLD_BIBLE.md`](docs/WORLD_BIBLE.md).
 > Estado actual y siguiente paso: [`docs/HANDOFF.md`](docs/HANDOFF.md).
 
 ## Requisitos
@@ -57,10 +58,11 @@ src/
     dialogue/              motor de diálogo: tipos, markup, typewriter, runtime puro,
                            efectos, validación, retratos; ui/ = capa React
     audio/                 contrato AudioEngine, motor Web Audio (SFX + voces sintetizadas)
-    content/               datos: jugador, reparto (cast), retratos, scripts de diálogo
+    player/                clases de jugador (GUERRERO / TANQUE / CURADOR)
+    content/               datos: jugador, reparto (cast), retratos, sigilos, scripts de diálogo
     calendar/              fechas del proyecto (Europe/Madrid) + time gates
     inventory/, quests/, achievements/   contratos (tipos) de fases futuras
-docs/                      constitución, roadmap, decisiones, handoff, assets
+docs/                      constitución, world bible, roadmap, decisiones, handoff, assets
 ```
 
 Flujo: `App` crea los servicios (`Clock`, `SaveManager`, `AudioEngine`,
@@ -71,8 +73,19 @@ el save y arranca la sesión → `SceneRenderer` pinta la escena de
 autosave.
 
 Secuencia de arranque: `systemCheck` → (`boot` → `saveDetected`, solo la
-primera vez) → `title`. Mientras no exista juego, CONTINUE abre la demo del
-motor de diálogo (`dialogueDemo`).
+primera vez) → `title`. CONTINUE → `classSelect` (solo si aún no hay clase)
+→ `overworld` (provisional hasta GAME-04).
+
+La demo del motor de diálogo (`dialogueDemo`) es una escena de desarrollo:
+no aparece en el flujo del jugador y solo se abre en `npm run dev` con
+`http://localhost:5173/?devScene=dialogueDemo`.
+
+## Clases (GAME-03)
+
+Definidas en `src/game/player/classes.ts` (`PlayerClassDefinition`). Para
+contenido dependiente de clase: condición `{ kind: 'playerClass', classId }`
+en diálogos o `hasPlayerClass(save, 'tank')` en código. La clase se asigna
+solo con la acción `player/assignClass` y es permanente hasta un reset.
 
 ## Diálogos (GAME-02)
 

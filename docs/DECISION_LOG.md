@@ -361,3 +361,89 @@ desconocida → `neutral`. El único retrato es un placeholder original (el
 Archivero, un monitor CRT) con neutral, happy, confused, annoyed, smug,
 surprised y `off` (arte de escena). Los retratos definitivos no están
 diseñados.
+
+---
+
+## GAME-03
+
+### D-040 · 2026-09-25 · Dirección creativa: Gijón cotidiano gamificado + World Bible
+
+El mundo pasa a ser una versión ligeramente ficcionada y gamificada del
+**Gijón cotidiano**: cosas normales con lógica de RPG, humor seco, rareza
+ligera, emoción sutil y la "regla del anticlímax" (lo épico acaba pidiendo
+algo cotidiano). La ciudad tiene franjas (mañana, tarde, atardecer, noche) y
+no es siempre nocturna. Estilo "pixel art moderno, pero no demasiado retro"
+y paleta costera por franja. Se descarta explícitamente: juego nocturno,
+RPG gótico, recreación cronológica de la relación, colección de recuerdos,
+tarot como eje y parodia de Pokémon. Nuevo documento
+`docs/WORLD_BIBLE.md` como fuente de verdad creativa; la constitución lo
+enlaza sin duplicarlo. Marcas comerciales reales → equivalentes ficcionados
+cuando convenga.
+
+### D-041 · 2026-09-25 · Tarot, música y personajes
+
+- Tarot: no central, sin clase de oráculo, como mucho easter egg sutil,
+  nunca predicción real.
+- Música: la playlist compartida es solo referencia estética; OST original
+  en GAME-11 por zona/franja.
+- Luis (PLAYER 1) elige su clase; Manu (PLAYER 2) no aparece hasta GAME-07;
+  Randy (golden retriever) es secundario/easter egg. Sin retratos ni sprites
+  definitivos hasta tener las referencias visuales de Manu. El Archivero de
+  GAME-02 no es canon.
+
+### D-042 · 2026-09-25 · Clases: definición central y tipo cerrado
+
+`src/game/player/classes.ts` define `PlayerClassId = 'warrior' | 'tank' |
+'healer'` (ids en inglés, nombres visibles en español: GUERRERO, TANQUE,
+CURADOR) y `PlayerClassDefinition` (displayName, shortDescription,
+longDescription, flavorLine, sigil, accent, traitLabels, traits). Sin
+estadísticas numéricas. **No se sube `SAVE_VERSION`**: la forma JSON no
+cambia (`classId: string | null`); solo se estrecha el tipo. Al cargar, un
+`classId` desconocido se normaliza a `null` (test incluido).
+
+### D-043 · 2026-09-25 · `player/assignClass` es permanente
+
+La acción guarda la clase y marca `classSelect` como completada. Si ya hay
+clase, es un no-op (devuelve el mismo save): no se puede cambiar por
+accidente. Solo un reset de partida la borra. Ningún componente toca
+`player.classId` directamente.
+
+### D-044 · 2026-09-25 · Contenido por clase
+
+Nueva condición declarativa `{ kind: 'playerClass', classId }` (diálogos,
+opciones, rutas) y helper `hasPlayerClass(save, id)`. Micro-demo: el diálogo
+tras confirmar (`CLASS_ASSIGNED`) ramifica por clase. Regla: las variantes
+son pequeñas y el contenido principal siempre es accesible.
+
+### D-045 · 2026-09-25 · Selección de clase y flujo
+
+- `classSelect` es una máquina de estados pura (`classSelectMachine.ts`):
+  intro → browse → confirm → assigned. Nada se guarda hasta **SÍ**; Escape
+  en browse vuelve al título; Escape/VOLVER en la confirmación vuelve a
+  browse.
+- Flujo: TITLE → CONTINUE → `classSelect` (si no hay clase) → `overworld`.
+  `resolveClassSelect` evita pedir la clase dos veces; la escena también se
+  protege al montarse.
+- `CONTINUE_OVERRIDE` **eliminado**. `dialogueDemo` sigue como escena DEV:
+  fuera del flujo, no reanudable, y solo accesible en builds de desarrollo
+  con `?devScene=dialogueDemo` (ignorado en producción; comprobado).
+- `overworld` es provisional: pantalla diegética "LOADING WORLD..." con la
+  clase del jugador y frases de carga; GAME-04 la sustituye por el mundo.
+
+### D-046 · 2026-09-25 · Input: handlers en layout effects y hover por mousemove
+
+Bug encontrado en la QA de GAME-03: pulsar → y Enter en el mismo frame
+confirmaba la clase anterior, porque `useInput` refrescaba su handler en un
+efecto pasivo. Ahora el handler y el registro de capas usan
+`useLayoutEffect` (se aplican en el commit). Además, los menús y tarjetas
+seleccionan por `mousemove` en vez de `mouseenter`, para que un menú que
+aparece bajo un puntero quieto no robe la selección del teclado. Afecta a
+todos los menús; la QA posterior lo confirma.
+
+### D-047 · 2026-09-25 · Arte de clase provisional y paleta del mundo
+
+Sigilos pixel propios y abstractos (doble chevrón, muro, brote; sin espadas,
+escudos ni cruces médicas) y una silueta genérica sin rasgos que **no** es
+Luis. Tokens `--world-*` (marino, costa, crema, piedra, coral, cálido) y
+acentos de clase añadidos a `tokens.css`. Sprites reales de Luis, Manu y
+Randy: más adelante, a partir de referencias de Manu.

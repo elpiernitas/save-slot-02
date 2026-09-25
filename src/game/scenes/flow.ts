@@ -1,23 +1,40 @@
 import type { GameSave } from '../state/types';
-import { FIRST_GAMEPLAY_SCENE, type SceneId } from './sceneIds';
+import { DEV_SCENES, FIRST_GAMEPLAY_SCENE, isSceneId, type SceneId } from './sceneIds';
 
 /**
- * Start-up routing, kept pure so the rules are testable:
+ * Pure routing rules, testable without React:
  *   first visit:  systemCheck → boot → saveDetected → title
  *   later visits: systemCheck → title
+ *   CONTINUE:     title → classSelect (until a class is confirmed) → next scene
  */
 export function sceneAfterSystemCheck(save: GameSave): SceneId {
   return save.system.bootCompletedAt ? 'title' : 'boot';
 }
 
 /**
- * TEMPORARY (GAME-02): while no gameplay scene exists, CONTINUE opens the
- * dialogue demo instead of the "not generated" placeholder. Set to `null`
- * when GAME-03 builds the class selection.
+ * Where the game goes once a class is confirmed. GAME-04 builds the real
+ * explorable world here; until then `overworld` is a diegetic loading screen.
  */
-export const CONTINUE_OVERRIDE: SceneId | null = 'dialogueDemo';
+export const SCENE_AFTER_CLASS_SELECT: SceneId = 'overworld';
+
+/** classSelect is only for players without a class; others move on. */
+export function resolveClassSelect(save: GameSave): SceneId {
+  return save.player.classId === null ? 'classSelect' : SCENE_AFTER_CLASS_SELECT;
+}
 
 /** Where the title screen's CONTINUE leads. */
 export function continueTarget(save: GameSave): SceneId {
-  return save.progress.resumeSceneId ?? CONTINUE_OVERRIDE ?? FIRST_GAMEPLAY_SCENE;
+  const resume = save.progress.resumeSceneId ?? FIRST_GAMEPLAY_SCENE;
+  return resume === 'classSelect' ? resolveClassSelect(save) : resume;
+}
+
+/**
+ * Development only: `?devScene=dialogueDemo` jumps to a dev scene after the
+ * system check. Callers pass `import.meta.env.DEV`, so production builds
+ * never honour it and no link to it exists in the UI.
+ */
+export function devSceneFromQuery(search: string, isDev: boolean): SceneId | null {
+  if (!isDev) return null;
+  const requested = new URLSearchParams(search).get('devScene');
+  return isSceneId(requested) && DEV_SCENES.includes(requested) ? requested : null;
 }

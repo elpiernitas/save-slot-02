@@ -3,6 +3,11 @@
 > Fuente de verdad del proyecto. Si otro documento o el código contradicen
 > esto, gana este archivo (o se actualiza aquí primero, con entrada en
 > `DECISION_LOG.md`).
+>
+> Los detalles del universo (Gijón, franjas del día, estilo visual, paleta,
+> personajes, clases, tarot, música) viven en
+> [`WORLD_BIBLE.md`](WORLD_BIBLE.md). Aquí solo quedan las reglas de alto
+> nivel.
 
 ## 1. Qué es
 
@@ -25,13 +30,20 @@ Lenguaje visual de referencia (sensación, nunca copia):
 - menús RPG, inventario, decisiones, secretos, progresión
 - humor autorreferencial
 
+**El mundo** (desde GAME-03, D-040): un **Gijón cotidiano, ligeramente
+ficcionado y gamificado** — cosas completamente normales tratadas con lógica
+de RPG. Luis reconoce lugares y detalles, pero vive una **misión nueva**.
+Detalle en [`WORLD_BIBLE.md`](WORLD_BIBLE.md).
+
 ## 3. Tono
 
 **Sí:** humor, sorpresa, ironía, pequeños momentos absurdos, referencias
 internas, cierto misterio, progresión, una parte emocional **sutil**.
 
 **No:** cursi, empalagoso, infantil, tarjeta romántica, encuesta,
-presentación, Wrapped, landing de San Valentín.
+presentación, Wrapped, landing de San Valentín, recreación cronológica de
+"cómo se conocieron", colección de recuerdos, RPG oscuro/gótico, juego
+exclusivamente nocturno, parodia de Pokémon.
 
 **Regla narrativa clave:** la cita final es un **plot twist / recompensa**, no
 el propósito evidente desde el principio. Nada en las primeras escenas debe
@@ -98,6 +110,11 @@ delatarlo.
 Las referencias a IP ajenas se hacen como **guiño** (texto, humor, alusión),
 nunca con sprites, logos, música, sonidos o personajes protegidos.
 
+Decisiones tomadas sobre este perfil (detalle en `WORLD_BIBLE.md`): las
+clases son GUERRERO / TANQUE / CURADOR y **las elige Luis**; el tarot **no**
+es tema central (como mucho, easter egg sutil); la playlist compartida es
+solo referencia estética privada (nada de audio comercial).
+
 ## 7. Reglas creativas
 
 1. Todo asset es original o con licencia compatible documentada.
@@ -131,8 +148,14 @@ nunca con sprites, logos, música, sonidos o personajes protegidos.
 - Bordes nítidos, sombras duras, sin blur ni degradados decorativos.
 - Cajas RPG, interfaz retro, tipografía pixel **Pixelify Sans** (SIL OFL,
   autoalojada; ver DECISION_LOG D-021 y `docs/ASSETS.md`).
-- Negro y tonos oscuros al inicio, pequeños acentos de color, sensación
-  misteriosa. Animaciones discretas.
+- **Pixel art moderno, pero no demasiado retro**: sprites reconocibles,
+  fondos detallados, iluminación contemporánea; nada de 4 colores, CRT
+  exagerado ni scanlines constantes (WORLD_BIBLE §5).
+- El **arranque del sistema** puede seguir oscuro; el **mundo** usa una paleta
+  costera (marino, verde, crema, piedra, coral, amarillo) que cambia con la
+  franja del día (WORLD_BIBLE §4–6). Animaciones discretas.
+- Assets definitivos de Luis, Manu y Randy: se crearán a partir de
+  referencias visuales de Manu; hasta entonces, siluetas y sigilos propios.
 - Evitar: glassmorphism, degradados decorativos, estética SaaS, botones
   redondeados, emojis en la UI, componentes tipo app móvil.
 - Buen contraste. Transiciones rápidas.

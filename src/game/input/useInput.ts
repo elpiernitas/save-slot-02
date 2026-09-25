@@ -1,10 +1,15 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useLayoutEffect, useRef } from 'react';
 import { InputContext } from './InputContext';
 import { INPUT_PRIORITY, type InputHandler } from './inputRouter';
 
 /**
  * Registers an input layer while mounted (and `enabled`). The latest handler
  * is always used, so callers can pass inline functions.
+ *
+ * Layout effects (not passive ones) on purpose: they run during the commit,
+ * so two keys pressed within the same frame (→ then Enter) always see the
+ * state rendered by the first one, and a panel that just opened owns the
+ * very next key press.
  */
 export function useInput(
   handler: InputHandler,
@@ -16,11 +21,11 @@ export function useInput(
   const router = useContext(InputContext);
   if (!router) throw new Error('useInput must be used inside <InputProvider>');
   const handlerRef = useRef(handler);
-  useEffect(() => {
+  useLayoutEffect(() => {
     handlerRef.current = handler;
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!enabled) return;
     return router.add((input, meta) => handlerRef.current(input, meta), priority);
   }, [router, priority, enabled]);

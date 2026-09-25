@@ -7,7 +7,7 @@ import { Menu } from '../../ui/Menu';
 import { useMenu, type MenuItem } from '../../ui/useMenu';
 import { useReducedMotion } from '../../ui/useReducedMotion';
 import { useRevealLines } from '../../ui/useRevealLines';
-import { sceneAfterSystemCheck } from '../flow';
+import { devSceneFromQuery, sceneAfterSystemCheck } from '../flow';
 import type { SceneProps } from '../types';
 import '../terminal.css';
 import './SystemCheckScene.css';
@@ -36,7 +36,8 @@ export function SystemCheckScene(_: SceneProps) {
 
   const proceed = () => {
     void services.audio.unlock();
-    dispatch({ type: 'scene/goTo', scene: sceneAfterSystemCheck(save) });
+    const devScene = devSceneFromQuery(window.location.search, import.meta.env.DEV);
+    dispatch({ type: 'scene/goTo', scene: devScene ?? sceneAfterSystemCheck(save) });
   };
 
   const enterFullscreen = () => {

@@ -2,7 +2,7 @@ import type { AchievementId } from '../achievements/types';
 import { getDateOption, isTimeGateOpen, type TimeGate } from '../calendar';
 import type { ItemId } from '../inventory/types';
 import type { QuestId, QuestStatus } from '../quests/types';
-import type { ChoiceId, FlagId, FlagValue, GameSave } from './types';
+import type { ChoiceId, FlagId, FlagValue, GameSave, PlayerClassId } from './types';
 
 /**
  * Declarative, serialisable conditions shared by dialogue, scenes, quests and
@@ -16,6 +16,8 @@ export type Condition =
   | { kind: 'quest'; quest: QuestId; status: QuestStatus }
   | { kind: 'bossDefeated' }
   | { kind: 'dateChosen' }
+  /** Class-specific content (GAME-03): exclusive lines, alternative options… */
+  | { kind: 'playerClass'; classId: PlayerClassId }
   | { kind: 'time'; gate: TimeGate }
   | { kind: 'not'; condition: Condition }
   | { kind: 'all'; conditions: readonly Condition[] }
@@ -46,6 +48,8 @@ export function evaluateCondition(condition: Condition, ctx: ConditionContext): 
       return save.boss.defeated;
     case 'dateChosen':
       return save.dateQuest.chosenOptionId !== null;
+    case 'playerClass':
+      return save.player.classId === condition.classId;
     case 'time':
       return isTimeGateOpen(condition.gate, {
         now: ctx.now,

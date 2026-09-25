@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { getSceneDefinition, SCENE_REGISTRY } from './registry';
 import {
+  DEV_SCENES,
   FIRST_GAMEPLAY_SCENE,
   INITIAL_SCENE,
   isResumableScene,
@@ -32,5 +33,18 @@ describe('scene registry', () => {
     expect(isSceneId('title')).toBe(true);
     expect(isSceneId('pokemonCenter')).toBe(false);
     expect(isSceneId(42)).toBe(false);
+  });
+});
+
+describe('GAME-03 scenes', () => {
+  it('registers classSelect and the provisional overworld', () => {
+    expect(getSceneDefinition('classSelect')).toBeDefined();
+    expect(getSceneDefinition('overworld')).toBeDefined();
+  });
+
+  it('keeps dialogueDemo registered for development only', () => {
+    expect(getSceneDefinition('dialogueDemo')).toBeDefined();
+    expect(DEV_SCENES).toContain('dialogueDemo');
+    expect(isResumableScene('dialogueDemo')).toBe(false);
   });
 });

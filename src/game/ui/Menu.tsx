@@ -13,7 +13,9 @@ interface MenuProps {
  * RPG menu view. Keyboard is handled globally by `useMenu`; buttons here are
  * for the mouse, so they never take DOM focus (tabIndex -1 + no mousedown
  * focus) — that keeps Enter from firing twice. The `>` cursor + color
- * inversion is the visible focus indicator.
+ * inversion is the visible focus indicator. Hover uses mousemove, not
+ * mouseenter: a menu appearing under a resting pointer must not steal the
+ * keyboard selection.
  */
 export function Menu({ items, selected, onHover, onConfirm, label, className }: MenuProps) {
   return (
@@ -32,7 +34,7 @@ export function Menu({ items, selected, onHover, onConfirm, label, className }: 
             data-selected={index === selected || undefined}
             aria-current={index === selected || undefined}
             aria-disabled={item.disabled || undefined}
-            onMouseEnter={() => onHover(index)}
+            onMouseMove={() => onHover(index)}
             onMouseDown={(event) => event.preventDefault()}
             onClick={() => onConfirm(index)}
           >

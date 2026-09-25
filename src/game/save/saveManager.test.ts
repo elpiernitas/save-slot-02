@@ -147,3 +147,30 @@ describe('storage failures', () => {
     await expect(manager.saveGame(manager.createNewGame())).rejects.toThrow('QuotaExceededError');
   });
 });
+
+describe('player class persistence (GAME-03)', () => {
+  it('keeps the confirmed class across save/load', async () => {
+    const { manager } = setup();
+    const save = manager.createNewGame();
+    save.player.classId = 'tank';
+    await manager.saveGame(save);
+    const loaded = await manager.loadGame();
+    expect(loaded.status === 'loaded' && loaded.save.player.classId).toBe('tank');
+  });
+
+  it('drops an unknown stored class (the JSON shape did not change, no version bump)', async () => {
+    const stored = createInitialSave(clock.now());
+    const raw = { ...stored, player: { ...stored.player, classId: 'mage' } };
+    const { manager } = setup({ [SAVE_STORAGE_KEY]: JSON.stringify(raw) });
+    const loaded = await manager.loadGame();
+    expect(loaded.status === 'loaded' && loaded.save.player.classId).toBeNull();
+  });
+
+  it('a game reset clears the class', async () => {
+    const { manager } = setup();
+    const save = manager.createNewGame();
+    save.player.classId = 'warrior';
+    await manager.saveGame(save);
+    expect((await manager.resetGame()).player.classId).toBeNull();
+  });
+});

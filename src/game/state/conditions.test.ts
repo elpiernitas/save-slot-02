@@ -69,3 +69,18 @@ describe('evaluateCondition', () => {
     expect(check(gate, chosen)).toBe(true);
   });
 });
+
+describe('playerClass condition (GAME-03)', () => {
+  it('matches only the assigned class', () => {
+    const tank = saveWith((s) => {
+      s.player.classId = 'tank';
+    });
+    expect(check({ kind: 'playerClass', classId: 'tank' }, tank)).toBe(true);
+    expect(check({ kind: 'playerClass', classId: 'healer' }, tank)).toBe(false);
+  });
+
+  it('is false for every class before choosing', () => {
+    const none = saveWith(() => {});
+    expect(check({ kind: 'playerClass', classId: 'warrior' }, none)).toBe(false);
+  });
+});

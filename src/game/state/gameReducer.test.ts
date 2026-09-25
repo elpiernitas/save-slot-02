@@ -140,3 +140,21 @@ describe('settings/update — nested settings are never lost', () => {
     expect(initial.settings).toEqual(before);
   });
 });
+
+describe('player/assignClass (GAME-03)', () => {
+  const initial = createInitialSave(T0);
+
+  it('stores the class and marks classSelect completed', () => {
+    const save = gameReducer(initial, { type: 'player/assignClass', classId: 'healer', at: T1 });
+    expect(save.player.classId).toBe('healer');
+    expect(save.progress.completedScenes).toEqual(['classSelect']);
+    expect(save.timestamps.updatedAt).toBe(T1);
+  });
+
+  it('never overwrites a confirmed class by accident', () => {
+    const first = gameReducer(initial, { type: 'player/assignClass', classId: 'warrior', at: T1 });
+    const again = gameReducer(first, { type: 'player/assignClass', classId: 'tank', at: T2 });
+    expect(again).toBe(first);
+    expect(again.player.classId).toBe('warrior');
+  });
+});

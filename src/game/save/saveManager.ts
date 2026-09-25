@@ -1,4 +1,5 @@
 import type { Clock } from '../../lib/time';
+import { isPlayerClassId } from '../player/classes';
 import { isSceneId, INITIAL_SCENE } from '../scenes/sceneIds';
 import { createInitialSave } from '../state/newGame';
 import { SAVE_VERSION, type GameSave } from '../state/types';
@@ -125,6 +126,10 @@ function normalizeSave(raw: RawSave, now: Date): GameSave {
       isPlainObject(defaultValue) && isPlainObject(value) ? { ...defaultValue, ...value } : value;
   }
   const save = merged as unknown as GameSave;
+  // Only the three known classes are valid; anything else means "not chosen".
+  if (save.player.classId !== null && !isPlayerClassId(save.player.classId)) {
+    save.player = { ...save.player, classId: null };
+  }
   if (!isSceneId(save.progress.sceneId)) {
     save.progress = { ...save.progress, sceneId: INITIAL_SCENE, checkpoint: null };
   }

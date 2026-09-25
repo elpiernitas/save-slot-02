@@ -4,6 +4,7 @@ import type { AudioSettings } from '../audio/types';
 import type { DateOptionId } from '../calendar';
 import type { CardCollectionState, InventoryState } from '../inventory/types';
 import type { QuestId, QuestProgress } from '../quests/types';
+import type { PlayerClassId } from '../player/classes';
 import type { SceneId } from '../scenes/sceneIds';
 
 /**
@@ -18,8 +19,8 @@ export type ChoiceId = string;
 export type PuzzleId = string;
 export type UnlockId = string;
 
-/** Provisional. GAME-03 will narrow this to the real class ids. */
-export type PlayerClassId = string;
+/** Closed union since GAME-03; definitions in `src/game/player/classes.ts`. */
+export type { PlayerClassId } from '../player/classes';
 
 export interface PlayerState {
   name: string | null;

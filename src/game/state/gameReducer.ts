@@ -1,6 +1,14 @@
 import type { AchievementId } from '../achievements/types';
 import { INITIAL_SCENE, isResumableScene, type SceneId } from '../scenes/sceneIds';
-import type { ChoiceId, FlagId, FlagValue, GameSave, GameSettings, SettingsPatch } from './types';
+import type {
+  ChoiceId,
+  FlagId,
+  FlagValue,
+  GameSave,
+  GameSettings,
+  PlayerClassId,
+  SettingsPatch,
+} from './types';
 
 /**
  * The only way the running game mutates its save. Every action carries its own
@@ -16,6 +24,12 @@ export type GameAction =
   | { type: 'choice/record'; choice: ChoiceId; option: string; at: string }
   | { type: 'achievement/unlock'; achievement: AchievementId; at: string }
   | { type: 'settings/update'; settings: SettingsPatch; at: string }
+  /**
+   * Assigns the player's class and marks classSelect as completed. A class
+   * is permanent for the playthrough: if one is already set this is a no-op
+   * (only a game reset clears it).
+   */
+  | { type: 'player/assignClass'; classId: PlayerClassId; at: string }
   /** Once per page load: counts the session and restarts at the system check. */
   | { type: 'system/sessionStart'; at: string }
   | { type: 'system/bootCompleted'; at: string }
@@ -84,6 +98,22 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
 
     case 'settings/update':
       return touch({ ...save, settings: mergeSettings(save.settings, action.settings) }, action.at);
+
+    case 'player/assignClass':
+      if (save.player.classId !== null) return save;
+      return touch(
+        {
+          ...save,
+          player: { ...save.player, classId: action.classId },
+          progress: {
+            ...save.progress,
+            completedScenes: save.progress.completedScenes.includes('classSelect')
+              ? save.progress.completedScenes
+              : [...save.progress.completedScenes, 'classSelect'],
+          },
+        },
+        action.at,
+      );
 
     case 'system/sessionStart':
       return touch(

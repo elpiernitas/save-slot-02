@@ -25,6 +25,20 @@
   --color-danger: #ef6f6c;
   --color-shadow: #000000;
 
+  /* ---- World palette (WORLD_BIBLE §6). Base values; per time-of-day
+   * variants arrive with the first backgrounds in GAME-04. ---- */
+  --world-navy: #1d3557;
+  --world-coast: #4f9d7e;
+  --world-cream: #f1e6cf;
+  --world-stone: #8e959c;
+  --world-coral: #e8735a;
+  --world-warm: #f2c14e;
+
+  /* Class accents: lighter variants of the world palette, legible on dark UI. */
+  --accent-coral: #ef7a5f;
+  --accent-stone: #a9b4bf;
+  --accent-coast: #7fd6a0;
+
   /* ---- Typography ---- */
   --font-pixel: 'Pixelify Sans', ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;
   --font-mono: ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;

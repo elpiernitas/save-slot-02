@@ -1,0 +1,72 @@
+.world-loading {
+  background: var(--color-bg);
+}
+
+.world-loading__player {
+  position: absolute;
+  top: calc(var(--px) * 10);
+  left: calc(var(--px) * 12);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--px) * 5);
+  font-size: var(--text-xs);
+  letter-spacing: var(--px);
+  color: var(--accent, var(--color-text-dim));
+}
+
+.world-loading__sigil {
+  width: calc(var(--px) * 12);
+  height: calc(var(--px) * 10);
+}
+
+.world-loading__center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: calc(var(--px) * 8);
+}
+
+.world-loading__center p {
+  margin: 0;
+}
+
+.world-loading__title {
+  font-size: var(--text-md);
+  color: var(--color-system);
+}
+
+.world-loading__bar {
+  width: calc(var(--px) * 180);
+  height: calc(var(--px) * 7);
+  padding: var(--px);
+  border: var(--px) solid var(--color-border-dim);
+}
+
+.world-loading__fill {
+  height: 100%;
+  width: 99%;
+  background: var(--accent, var(--color-system));
+  animation: world-load 4.5s steps(22, end) both;
+}
+
+@keyframes world-load {
+  from {
+    width: 0;
+  }
+  to {
+    width: 99%;
+  }
+}
+
+.world-loading__status {
+  font-size: var(--text-sm);
+  color: var(--color-text-dim);
+}
+
+.world-loading__hints {
+  position: absolute;
+  left: calc(var(--px) * 12);
+  bottom: calc(var(--px) * 10);
+}
