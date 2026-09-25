@@ -84,6 +84,12 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
   `GAME_05_IMPLEMENTATION_ORDER.md`. También existe la skill
   `.claude/skills/save-slot-inventory-cards/SKILL.md`. **No implementar hasta
   ACCEPT visual de GAME-04R.**
+- GAME-06 también está preparado a nivel de diseño/arquitectura:
+  `GAME_06_SPEC.md`, `PUZZLE_BIBLE.md`, `GAME_06_CONTENT_FLOW.md`,
+  `GAME_06_IMPLEMENTATION_ORDER.md`, `GAME_06_TEST_MATRIX.md` y la skill
+  `.claude/skills/save-slot-puzzles/SKILL.md`. Incluye ROUTE BEACONS,
+  SEAGULL PROTOCOL opcional y SYNC TERMINAL que prepara el misterio de
+  PLAYER 2. **No implementar hasta aceptar GAME-05.**
 
 ## Qué NO está hecho (a propósito)
 
