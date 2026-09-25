@@ -7,9 +7,6 @@ Status: active implementation geometry for the visual rebuild.
 Translate the approved ChatGPT visual direction into a compact, explorable
 640×360 world slice without losing the existing engine.
 
-This document controls composition/placement. Exact pixel positions may be
-tuned during browser QA, but the relationships should remain.
-
 ## Camera
 
 Logical viewport: 640×360.
@@ -88,66 +85,26 @@ Arrival dialogue should not cover his sprite.
 
 ## Interactables
 
-### INT-01 — tree
-Visual:
-large leafy street tree.
-
-Anchor:
-base/trunk on pedestrian plane.
-
-Interaction:
-short descriptive line.
-
-### INT-02 — menu board
-Visual:
-small café board near terrace/frontage.
-
-Interaction:
-short dry joke / description.
-
-### INT-03 — empty table
-Visual:
-clearly empty table, separate from occupied tables.
-
-Interaction:
-existing remembered-state behaviour can stay.
-
-### INT-04 — class bollard
-Visual:
-one urban bollard close enough to face/interact with.
-
-Interaction:
-GUERRERO / TANQUE / CURADOR flavour variant.
-
-### INT-05 — bar door/window
-Visual:
-obvious entrance/window in façade.
-
-Interaction:
-short line; does not need to open yet.
-
-### INT-06 — waitress
-Visual:
-functional NPC inside/edge of terrace.
-
-Interaction:
-DialoguePlayer.
+- tree: short descriptive line.
+- menu board: dry joke / description.
+- empty table: existing remembered-state behaviour can stay.
+- class bollard: GUERRERO / TANQUE / CURADOR flavour variant.
+- bar door/window: short line; does not need to open yet.
+- waitress: DialoguePlayer.
 
 ## Collision principles
 
-- architecture collider should follow visible façade/terrace edge;
-- table colliders should be compact, allowing narrow walking lanes;
-- tree collider should be ground/trunk only, not canopy;
-- windbreak should act as a thin wall;
-- background people baked into art should not introduce invisible colliders;
-- bollards should have tiny ground footprint;
-- no collider should extend far beyond visible geometry.
+- architecture collider follows visible façade/terrace edge;
+- table colliders compact, allowing walking lanes;
+- tree collider uses ground/trunk only, not canopy;
+- windbreak acts as a thin wall;
+- baked background people do not introduce invisible colliders;
+- bollards use tiny ground footprints;
+- no collider extends far beyond visible geometry.
 
 ## Depth / y-sort
 
-Use ground anchor.
-
-Suggested order:
+Use ground anchor:
 1. baked background;
 2. back terrace props;
 3. NPCs/player and mid props;
