@@ -12,6 +12,10 @@ Implement only after GAME-06 ACCEPT.
 - docs/GAME_07_SPEC.md
 - docs/DESYNC_BOSS_BIBLE.md
 - docs/GAME_07_PLAYER2_REVEAL.md
+- docs/GAME_07_BOSS_PATTERN_SPEC.md
+- docs/GAME_07_REVEAL_UI_SPEC.md
+- docs/GAME_07_ASSET_REQUESTS.md
+- docs/GAME_07_SCOPE_CUT.md
 - docs/GAME_07_IMPLEMENTATION_ORDER.md
 - docs/GAME_07_TEST_MATRIX.md
 - docs/CHARACTER_ASSET_SPEC.md
@@ -27,14 +31,17 @@ No stats/equipment.
 No weapons.
 
 ## Difficulty
+Use the fixed authored release sequence.
 Readable telegraphs.
-Forgiving.
-Assist after repeated failures.
+Three-strike SIGNAL integrity.
+Assist after two failed attempts.
+No frame-count timing.
 
 ## Reveal
 PLAYER 2 is Manu.
 Recognition first.
-One short line.
+Locked release line:
+"¿me ha cargado bien por lo menos?"
 No romantic monologue.
 No date choice yet.
 
