@@ -29,8 +29,8 @@ visualmente GAME-04**.
   para validar la tubería de assets, pero **no está aprobado visualmente**.
 - No continuar GAME-05 hasta superar `docs/GAME_04R_VISUAL_REBUILD.md`.
 - `SAVE_VERSION` sigue en **2** (GAME-04 no cambió la forma JSON).
-- ⚠️ `docs/art/visual-concept-v1.jpg` está **truncado** (no decodifica).
-  Hay que volver a subirlo (D-053).
+- El antiguo `docs/art/visual-concept-v1.jpg` corrupto (D-053) se eliminó.
+  Las referencias activas están en `docs/art/chatgpt-v2/`.
 
 ## Qué hay hecho
 
@@ -118,7 +118,7 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
   - Comparación de resolución 480×270 vs 640×360 (D-049).
 - Pendiente en máquina real: sensación de movimiento a 60/120/144 Hz,
   nitidez en pantallas no 1080p, fullscreen real, audio, Safari/Firefox.
-  Revisar el slice contra la imagen de concepto cuando se vuelva a subir.
+  Revisar el slice contra las referencias activas de `docs/art/chatgpt-v2/`.
 - Revisión visual (reconstrucción): capturas en `docs/art/review/` a
   1920×1080, 1440×900 y 1366×768 (build de producción).
 
