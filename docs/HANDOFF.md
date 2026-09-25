@@ -90,8 +90,13 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
   `.claude/skills/save-slot-puzzles/SKILL.md`. Incluye ROUTE BEACONS,
   SEAGULL PROTOCOL opcional y SYNC TERMINAL que prepara el misterio de
   PLAYER 2. **No implementar hasta aceptar GAME-05.**
-- GAME-07→12 ya tienen paquetes de spec/orden/tests/skills preparados. Índice
-  completo: `docs/PROJECT_INDEX.md`. El critical path real está en
+- GAME-07 queda especialmente cerrado para producción: además del spec base,
+  incluye `GAME_07_BOSS_PATTERN_SPEC.md` (secuencia/timing determinista),
+  `GAME_07_REVEAL_UI_SPEC.md` (staging de PLAYER 2),
+  `GAME_07_ASSET_REQUESTS.md` y `GAME_07_SCOPE_CUT.md`. La línea humana
+  de reveal queda fijada a "¿me ha cargado bien por lo menos?". GAME-07→12
+  tienen paquetes de spec/orden/tests/skills preparados. Índice completo:
+  `docs/PROJECT_INDEX.md`. El critical path real está en
   `docs/RELEASE_CRITICAL_PATH.md`; GAME-10 es cortable y GAME-12 ya tiene
   checklist/QA/Netlify. CI del PR ejecuta `npm run check` (D-059).
 
