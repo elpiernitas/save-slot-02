@@ -62,3 +62,36 @@ If mechanical modifiers are used:
 - fullscreen/window
 - console clean
 - no scroll
+
+
+## Timing / authored pattern contract
+
+- authored phase sequence matches GAME_07_BOSS_PATTERN_SPEC
+- BAR SWEEP telegraph always precedes active collider
+- PULSE telegraph always precedes active collider
+- FINAL RING occurs only in Phase 3
+- node completion ends current phase after active hazard resolves
+- fixed pattern sequence is reproducible without RNG
+- 60 Hz equivalent timing
+- 120 Hz equivalent timing
+- 144 Hz / variable-delta equivalent timing
+- no frame-count-dependent movement or hazard velocity
+
+## Reveal recovery
+
+- boss defeated + player2Found false → player2Reveal
+- refresh mid-reveal does not replay boss
+- compressed re-entry reveal still identifies Manu
+- player2Found true + gate incomplete resumes cooperative gate
+- gate complete routes to GAME-08 setup
+- reveal fast-forward cannot skip persistent flag writes
+- reduced-motion snap cannot deadlock scripted Manu movement
+
+## Copy / visual regression
+
+- locked human line is exactly "¿me ha cargado bien por lo menos?"
+- no date choices visible in GAME-07
+- no forbidden romantic copy from GAME_07_COPY
+- Manu glasses visible/readable in reveal QA
+- PLAYER 2 name also rendered as text
+- boss has no monster/face representation
