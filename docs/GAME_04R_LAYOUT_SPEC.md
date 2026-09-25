@@ -64,13 +64,14 @@ Contains:
 
 Do not fill with huge uninterrupted pavement.
 
-## Suggested world dimensions
+## World dimensions
 
-Start from approximately 960×540 world pixels, using a 640×360 camera.
+Prefer keeping the current compact **800×416** world with the 640×360 camera.
+It already provides limited camera movement and avoids rebuilding world logic
+for no visual benefit.
 
-This gives enough room for a gentle camera follow while keeping the location
-compact.
-
+Only change map dimensions if the approved composition cannot physically fit.
+Do not enlarge the map just to create more camera travel or empty pavement.
 Do not create a full city block.
 
 ## First arrival
