@@ -1,5 +1,6 @@
+import { createFullscreenController } from '../lib/fullscreen';
 import { systemClock } from '../lib/time';
-import { createSilentAudioEngine } from '../game/audio/silentAudioEngine';
+import { createWebAudioEngine } from '../game/audio';
 import { createLocalStorageDriver, createSaveManager } from '../game/save';
 import type { GameServices } from '../game/state';
 
@@ -9,6 +10,7 @@ export function createDefaultServices(): GameServices {
   return {
     clock,
     saveManager: createSaveManager({ driver: createLocalStorageDriver(), clock }),
-    audio: createSilentAudioEngine(),
+    audio: createWebAudioEngine(),
+    fullscreen: createFullscreenController(),
   };
 }

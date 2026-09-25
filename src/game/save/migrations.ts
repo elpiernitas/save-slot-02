@@ -13,8 +13,30 @@ export type RawSave = Record<string, unknown> & { version: number };
 export type Migration = (raw: RawSave) => RawSave;
 export type MigrationTable = Readonly<Record<number, Migration>>;
 
-/** Empty until the first shape change after launch. */
-export const MIGRATIONS: MigrationTable = {};
+/**
+ * Migrations are frozen snapshots: never import current types or helpers that
+ * may change later; describe the old → new shape literally.
+ */
+export const MIGRATIONS: MigrationTable = {
+  /**
+   * v1 → v2 (GAME-01): adds `system` (boot/session flags) and
+   * `progress.resumeSceneId`. v1 only ever reached start-up scenes, so there
+   * is no gameplay scene to resume and the boot intro counts as not seen.
+   */
+  1: (raw) => {
+    const progress = isRecord(raw.progress) ? raw.progress : {};
+    return {
+      ...raw,
+      version: 2,
+      progress: { ...progress, resumeSceneId: null },
+      system: { bootCompletedAt: null, enteredGameAt: null, sessionCount: 0, lastSessionAt: null },
+    };
+  },
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
 
 export class SaveMigrationError extends Error {
   override name = 'SaveMigrationError';

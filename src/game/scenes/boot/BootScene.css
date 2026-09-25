@@ -1,64 +1,15 @@
-.boot-shell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  text-align: center;
-}
-
-.boot-shell__title {
-  margin: 0;
-  font-size: var(--text-xl);
-  letter-spacing: 0.12em;
-  color: var(--color-text);
-  text-shadow: var(--shadow-hard-sm) var(--color-shadow);
-}
-
-.boot-shell__status {
-  margin: 0;
-  font-size: var(--text-md);
-  color: var(--color-accent);
-}
-
-.boot-shell__cursor {
-  animation: boot-blink 1s steps(1) infinite;
-}
-
-.boot-shell__phase {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--color-text-dim);
-}
-
-.boot-shell__diagnostics {
+.boot__bar {
   position: absolute;
-  inset-inline: var(--space-3);
-  bottom: var(--space-2);
-  display: flex;
-  justify-content: space-between;
-  margin: 0;
-  font-size: var(--text-xs);
-  color: var(--color-text-dim);
+  left: calc(var(--space-5) * 2);
+  bottom: var(--space-5);
+  width: calc(var(--px) * 160);
+  height: calc(var(--px) * 6);
+  border: var(--px) solid var(--color-border-dim);
+  padding: var(--px);
 }
 
-.boot-shell__diagnostics div {
-  display: flex;
-  gap: 0.5em;
-}
-
-.boot-shell__diagnostics dd {
-  margin: 0;
-}
-
-@keyframes boot-blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .boot-shell__cursor {
-    animation: none;
-  }
+.boot__bar-fill {
+  height: 100%;
+  background: var(--color-system);
+  transition: width var(--duration-base) steps(4, end);
 }

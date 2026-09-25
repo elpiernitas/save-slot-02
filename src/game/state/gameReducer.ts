@@ -1,5 +1,5 @@
 import type { AchievementId } from '../achievements/types';
-import type { SceneId } from '../scenes/sceneIds';
+import { INITIAL_SCENE, isResumableScene, type SceneId } from '../scenes/sceneIds';
 import type { ChoiceId, FlagId, FlagValue, GameSave, GameSettings } from './types';
 
 /**
@@ -16,6 +16,10 @@ export type GameAction =
   | { type: 'choice/record'; choice: ChoiceId; option: string; at: string }
   | { type: 'achievement/unlock'; achievement: AchievementId; at: string }
   | { type: 'settings/update'; settings: Partial<GameSettings>; at: string }
+  /** Once per page load: counts the session and restarts at the system check. */
+  | { type: 'system/sessionStart'; at: string }
+  | { type: 'system/bootCompleted'; at: string }
+  | { type: 'system/enteredGame'; at: string }
   /** Replace the whole save (load, reset, debug). */
   | { type: 'save/replace'; save: GameSave };
 
@@ -36,6 +40,9 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
             ...save.progress,
             sceneId: action.scene,
             checkpoint: action.checkpoint ?? null,
+            resumeSceneId: isResumableScene(action.scene)
+              ? action.scene
+              : save.progress.resumeSceneId,
           },
         },
         action.at,
@@ -77,6 +84,28 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
 
     case 'settings/update':
       return touch({ ...save, settings: { ...save.settings, ...action.settings } }, action.at);
+
+    case 'system/sessionStart':
+      return touch(
+        {
+          ...save,
+          progress: { ...save.progress, sceneId: INITIAL_SCENE, checkpoint: null },
+          system: {
+            ...save.system,
+            sessionCount: save.system.sessionCount + 1,
+            lastSessionAt: action.at,
+          },
+        },
+        action.at,
+      );
+
+    case 'system/bootCompleted':
+      if (save.system.bootCompletedAt) return save;
+      return touch({ ...save, system: { ...save.system, bootCompletedAt: action.at } }, action.at);
+
+    case 'system/enteredGame':
+      if (save.system.enteredGameAt) return save;
+      return touch({ ...save, system: { ...save.system, enteredGameAt: action.at } }, action.at);
 
     case 'save/replace':
       return action.save;

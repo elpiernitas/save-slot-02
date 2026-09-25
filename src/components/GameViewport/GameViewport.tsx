@@ -1,18 +1,14 @@
 import type { ReactNode } from 'react';
-import { useOrientation } from '../../hooks/useOrientation';
 import './GameViewport.css';
 
 /**
- * Full-screen letterbox that hosts a 16:9 stage, kept inside the iPhone safe
- * areas (notch / Dynamic Island / home indicator). Everything the player sees
- * lives inside the stage; nothing scrolls.
- *
- * `data-orientation` lets CSS and GAME-01 react to portrait mode.
+ * Full-window letterbox hosting the 16:9 stage. The stage is the largest
+ * 16:9 box that fits the window (or the screen, in fullscreen). Everything the
+ * player sees lives inside it; nothing scrolls.
  */
 export function GameViewport({ children }: { children: ReactNode }) {
-  const orientation = useOrientation();
   return (
-    <div className="game-viewport" data-orientation={orientation}>
+    <div className="game-viewport">
       <main className="game-stage">{children}</main>
     </div>
   );

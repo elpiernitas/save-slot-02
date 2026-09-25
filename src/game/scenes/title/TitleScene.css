@@ -1,0 +1,134 @@
+.title {
+  overflow: hidden;
+}
+
+/* ---- Backdrop ---- */
+.title-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.title-star {
+  position: absolute;
+  background: var(--color-text);
+  opacity: 0.25;
+  animation: title-twinkle 2.4s steps(2) infinite;
+}
+
+.title-star--slow {
+  background: var(--color-mystic);
+  animation-duration: 3.7s;
+}
+
+@keyframes title-twinkle {
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.title-crystal {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--px) * 18);
+  width: calc(var(--px) * 22);
+  height: calc(var(--px) * 22);
+  margin-left: calc(var(--px) * -11);
+  animation: title-float 2.2s steps(2) infinite;
+}
+
+@keyframes title-float {
+  50% {
+    transform: translateY(calc(var(--px) * -2));
+  }
+}
+
+.title-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: calc(var(--px) * 24);
+}
+
+/* ---- Logo ---- */
+.title__logo {
+  position: absolute;
+  top: calc(var(--px) * 50);
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.title__name {
+  margin: 0;
+  font-size: var(--text-logo);
+  font-weight: 700;
+  letter-spacing: calc(var(--px) * 2);
+  color: var(--color-text);
+  text-shadow:
+    calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--color-mystic-dark),
+    calc(var(--px) * 3) calc(var(--px) * 3) 0 var(--color-shadow);
+}
+
+.title__number {
+  color: var(--color-mystic);
+}
+
+.title__tagline {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-xs);
+  letter-spacing: var(--px);
+  color: var(--color-text-dim);
+}
+
+/* ---- Menu ---- */
+.title__menu {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--px) * 150);
+  width: calc(var(--px) * 116);
+  transform: translateX(-50%);
+}
+
+.title__overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.55);
+}
+
+.title-settings {
+  width: calc(var(--px) * 200);
+  display: grid;
+  gap: var(--space-3);
+}
+
+.title-settings__heading {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--color-system);
+}
+
+.title-settings__notice {
+  margin: 0;
+  font-size: var(--text-xs);
+}
+
+/* ---- Footer ---- */
+.title__footer {
+  position: absolute;
+  left: var(--space-4);
+  bottom: calc(var(--px) * 30);
+}
+
+.title__version {
+  position: absolute;
+  right: var(--space-4);
+  bottom: calc(var(--px) * 30);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}

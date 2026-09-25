@@ -1,63 +1,66 @@
 /*
- * SAVE SLOT 02 — visual tokens (PROVISIONAL).
- * The palette is not final (see docs/GAME_CONSTITUTION.md §Art direction).
- * Rules: hard edges, hard shadows, no blur, no gradients-as-decoration,
- * fast transitions. Stage-relative sizes use `cqh` (1cqh = 1% of stage height).
+ * SAVE SLOT 02 — visual tokens.
+ * Palette: dark and mysterious, small accents. Still provisional past GAME-01.
+ * Rules: hard edges, hard shadows, no blur, no decorative gradients, no
+ * rounded corners, fast transitions.
+ *
+ * Inside the 16:9 stage, size everything in LOGICAL PIXELS with `--px`:
+ * the stage is 480×270 logical px, so `calc(var(--px) * 8)` is 8 logical px
+ * whatever the real window size is.
  */
 :root {
-  /* ---- Palette (provisional) ---- */
+  /* ---- Palette ---- */
   --color-letterbox: #000000;
-  --color-bg: #0e0d14;
-  --color-surface: #1b1a26;
-  --color-surface-raised: #2a2838;
-  --color-border: #f2efe6;
-  --color-text: #f2efe6;
-  --color-text-dim: #9d98ad;
-  --color-accent: #7ee2a8;
-  --color-accent-alt: #f2c14e;
+  --color-bg: #07060b;
+  --color-surface: #110f19;
+  --color-surface-raised: #1c1929;
+  --color-border: #e9e4d6;
+  --color-border-dim: #4a4560;
+  --color-text: #e9e4d6;
+  --color-text-dim: #857f99;
+  --color-system: #7ee2a8; /* terminal / system messages */
+  --color-select: #f2c14e; /* selection, focus */
+  --color-mystic: #8f6bff; /* title accent */
+  --color-mystic-dark: #3b2a78;
   --color-danger: #ef6f6c;
   --color-shadow: #000000;
 
-  /* ---- Typography ----
-   * No bitmap font is bundled yet (see docs/DECISION_LOG.md D-011).
-   * System monospace is the safe fallback until an OFL font is chosen. */
-  --font-pixel:
-    ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace;
-
-  /* Stage-relative type scale */
-  --text-xs: 3.2cqh;
-  --text-sm: 4cqh;
-  --text-md: 5cqh;
-  --text-lg: 7cqh;
-  --text-xl: 10cqh;
-
-  /* ---- Spacing (stage-relative) ---- */
-  --space-1: 1.5cqh;
-  --space-2: 3cqh;
-  --space-3: 5cqh;
-  --space-4: 8cqh;
-
-  /* ---- Borders & shadows: crisp, never blurred ---- */
-  --border-width: max(2px, 0.8cqh);
-  --radius: 0;
-  --shadow-hard-sm: 0.5cqh 0.5cqh 0;
-  --shadow-hard-md: 1cqh 1cqh 0;
-
-  /* ---- Motion ---- */
-  --duration-fast: 120ms;
-  --duration-base: 200ms;
-  --ease-snap: steps(4, end);
+  /* ---- Typography ---- */
+  --font-pixel: 'Pixelify Sans', ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;
+  --font-mono: ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;
 
   /* ---- Stage ---- */
   --stage-aspect: 16 / 9;
-  /* Provisional logical resolution for future pixel art (480×270 = 16:9). */
   --stage-logical-width: 480;
   --stage-logical-height: 270;
+  /* One logical pixel. Only valid inside the stage (a size container). */
+  --px: calc(100cqh / 270);
 
-  /* ---- Touch ---- */
-  --touch-target-min: 44px;
+  /* Type scale, in logical px */
+  --text-xs: calc(var(--px) * 7);
+  --text-sm: calc(var(--px) * 9);
+  --text-md: calc(var(--px) * 11);
+  --text-lg: calc(var(--px) * 14);
+  --text-xl: calc(var(--px) * 22);
+  --text-logo: calc(var(--px) * 36);
 
-  /* ---- Viewport / safe areas ---- */
+  /* Spacing, in logical px */
+  --space-1: calc(var(--px) * 2);
+  --space-2: calc(var(--px) * 4);
+  --space-3: calc(var(--px) * 8);
+  --space-4: calc(var(--px) * 12);
+  --space-5: calc(var(--px) * 20);
+
+  /* Borders & shadows: crisp, never blurred */
+  --border: var(--px);
+  --shadow-hard: var(--px) var(--px) 0;
+  --shadow-hard-lg: calc(var(--px) * 2) calc(var(--px) * 2) 0;
+
+  /* ---- Motion ---- */
+  --duration-fast: 90ms;
+  --duration-base: 160ms;
+
+  /* ---- Viewport ---- */
   --app-height: 100vh;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
@@ -68,12 +71,5 @@
 @supports (height: 100dvh) {
   :root {
     --app-height: 100dvh;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --duration-fast: 0ms;
-    --duration-base: 0ms;
   }
 }

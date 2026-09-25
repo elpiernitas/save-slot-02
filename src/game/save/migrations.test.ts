@@ -42,3 +42,49 @@ describe('migrateSave', () => {
     for (let v = 1; v < SAVE_VERSION; v++) expect(MIGRATIONS[v]).toBeTypeOf('function');
   });
 });
+
+describe('v1 → v2 (GAME-01)', () => {
+  /** A real save exactly as written by the GAME-00 build. */
+  const V1_FIXTURE = {
+    version: 1,
+    player: { name: null, classId: null },
+    progress: { sceneId: 'boot', checkpoint: null, completedScenes: [] },
+    flags: { keepMe: true },
+    choices: {},
+    inventory: { items: {} },
+    cards: { owned: {} },
+    achievements: {},
+    puzzles: {},
+    boss: { defeated: false, attempts: 0, defeatedAt: null },
+    quests: {},
+    dateQuest: { chosenOptionId: null, chosenAt: null },
+    unlocks: {},
+    timestamps: {
+      createdAt: '2026-09-25T18:00:00.000Z',
+      updatedAt: '2026-09-25T18:00:00.000Z',
+      lastPlayedAt: '2026-09-25T18:00:00.000Z',
+      completedAt: null,
+    },
+    settings: {
+      audio: { muted: true, volume: { music: 0.6, sfx: 0.8, voice: 0.5 } },
+      textSpeed: 'normal',
+      reducedMotion: 'system',
+    },
+  };
+
+  it('adds system flags and resume scene without touching existing progress', () => {
+    const { save, migratedFrom } = migrateSave(structuredClone(V1_FIXTURE), 2);
+    expect(migratedFrom).toBe(1);
+    expect(save).toEqual({
+      ...V1_FIXTURE,
+      version: 2,
+      progress: { ...V1_FIXTURE.progress, resumeSceneId: null },
+      system: { bootCompletedAt: null, enteredGameAt: null, sessionCount: 0, lastSessionAt: null },
+    });
+  });
+
+  it('survives a v1 save with a missing progress section', () => {
+    const { save } = migrateSave({ version: 1 }, 2);
+    expect(save.progress).toEqual({ resumeSceneId: null });
+  });
+});

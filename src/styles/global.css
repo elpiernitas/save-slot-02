@@ -1,3 +1,4 @@
+@import './fonts.css';
 @import './tokens.css';
 
 *,
@@ -7,7 +8,6 @@
 }
 
 html {
-  /* Stop iOS from inflating text in landscape. */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   color-scheme: dark;
@@ -19,21 +19,29 @@ body {
   width: 100%;
   height: var(--app-height);
   overflow: hidden;
-  /* No rubber-band / pull-to-refresh during gameplay. */
   overscroll-behavior: none;
   background: var(--color-letterbox);
   color: var(--color-text);
   font-family: var(--font-pixel);
+  /* Pixel font: keep edges hard where the platform allows it. */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  /* Kills double-tap zoom while keeping pinch-zoom available for accessibility. */
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  /* Long-press must not open the iOS text selection / callout mid-game. */
+  /* A game, not a document: no text selection, no callouts, normal cursor. */
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  cursor: default;
+}
+
+/* Prepared for a future "hide cursor when idle" feature (not enabled yet). */
+[data-cursor='hidden'],
+[data-cursor='hidden'] * {
+  cursor: none !important;
 }
 
 #root {
@@ -41,48 +49,25 @@ body {
 }
 
 img,
-canvas {
+canvas,
+svg {
   display: block;
-  /* Pixel art must stay crisp when scaled. */
   image-rendering: pixelated;
 }
 
 button {
   font: inherit;
   color: inherit;
-  min-width: var(--touch-target-min);
-  min-height: var(--touch-target-min);
-  touch-action: manipulation;
-}
-
-/* Inputs below 16px make iOS Safari auto-zoom on focus. */
-input,
-select,
-textarea {
-  font: inherit;
-  font-size: max(16px, 1em);
+  background: none;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  cursor: pointer;
 }
 
 :focus-visible {
-  outline: var(--border-width) solid var(--color-accent-alt);
+  outline: var(--border, 2px) solid var(--color-select);
   outline-offset: 2px;
-}
-
-/* Generic scene container: fills the stage. */
-.scene {
-  position: absolute;
-  inset: 0;
-}
-
-.scene--placeholder {
-  display: grid;
-  place-items: center;
-}
-
-.shell-text {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--color-text-dim);
 }
 
 .visually-hidden {

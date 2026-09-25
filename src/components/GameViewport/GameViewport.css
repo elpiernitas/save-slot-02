@@ -1,8 +1,7 @@
 /*
- * Letterbox + 16:9 stage.
- * The stage is the largest 16:9 box that fits inside the safe area.
- * Inside the stage, size text/UI with `cqh`/`cqw` units (container queries)
- * so the game scales like a fixed-resolution screen.
+ * Letterbox + 16:9 stage. Safe-area padding is kept because it is free on
+ * desktop (env() = 0) and harmless elsewhere; it no longer drives the design.
+ * Inside the stage, size with `--px` (1 logical pixel of the 480×270 screen).
  */
 .game-viewport {
   position: fixed;
@@ -27,4 +26,6 @@
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-pixel);
+  font-size: var(--text-md);
+  line-height: 1.25;
 }

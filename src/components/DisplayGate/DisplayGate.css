@@ -1,0 +1,72 @@
+/*
+ * Lives outside the 16:9 stage (the screen may be too small for one), so it
+ * sizes itself from the viewport instead of --px.
+ */
+.display-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: max(16px, var(--safe-top)) max(16px, var(--safe-right)) max(16px, var(--safe-bottom))
+    max(16px, var(--safe-left));
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-pixel);
+  font-size: clamp(14px, 2.2vmax, 22px);
+  line-height: 1.35;
+  text-align: center;
+}
+
+.display-gate--overlay {
+  background: var(--color-letterbox);
+}
+
+.display-gate__panel {
+  display: grid;
+  gap: 0.9em;
+  max-width: 34em;
+}
+
+.display-gate__panel p {
+  margin: 0;
+}
+
+.display-gate__heading {
+  color: var(--color-system);
+}
+
+.display-gate__error {
+  font-weight: 700;
+  font-size: 1.4em;
+  color: var(--color-danger);
+}
+
+.display-gate__list {
+  display: grid;
+  gap: 0.3em;
+}
+
+.display-gate__dim {
+  color: var(--color-text-dim);
+}
+
+.display-gate__small {
+  font-size: 0.7em;
+}
+
+.display-gate__blink {
+  animation: display-gate-blink 1s steps(1) infinite;
+}
+
+@keyframes display-gate-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .display-gate__blink {
+    animation: none;
+  }
+}

@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import type { FullscreenController } from '../../lib/fullscreen';
 import type { Clock } from '../../lib/time';
 import type { AudioEngine } from '../audio/types';
 import type { BootResult, SaveManager } from '../save';
@@ -10,6 +11,7 @@ export interface GameServices {
   clock: Clock;
   saveManager: SaveManager;
   audio: AudioEngine;
+  fullscreen: FullscreenController;
 }
 
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;

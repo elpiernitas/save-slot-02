@@ -28,6 +28,8 @@ export default defineConfig([
         { name: 'sessionStorage', message: 'Use the save layer in src/game/save instead.' },
       ],
       '@typescript-eslint/consistent-type-imports': 'error',
+      // Scenes share one props contract; `_` marks props a scene does not need.
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
   {

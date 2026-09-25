@@ -5,8 +5,8 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | Fase    | Contenido                                 | Estado      |
 | ------- | ----------------------------------------- | ----------- |
 | GAME-00 | Constitución técnica y estructura         | ✅ Hecho    |
-| GAME-01 | Desktop-first + fullscreen + boot + title | ⏭ Siguiente |
-| GAME-02 | Motor de diálogos retro                   | Pendiente   |
+| GAME-01 | Desktop-first + fullscreen + boot + title | ✅ Hecho    |
+| GAME-02 | Motor de diálogos retro                   | ⏭ Siguiente |
 | GAME-03 | Selección de clase                        | Pendiente   |
 | GAME-04 | Mapa y exploración                        | Pendiente   |
 | GAME-05 | Inventario y cartas                       | Pendiente   |
@@ -16,7 +16,7 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | GAME-09 | Final + save slot                         | Pendiente   |
 | GAME-10 | Desbloqueos posteriores                   | Pendiente   |
 | GAME-11 | Easter eggs, sonido, animaciones y pulido | Pendiente   |
-| GAME-12 | QA móvil + producción Netlify             | Pendiente   |
+| GAME-12 | QA en ordenador + producción Netlify      | Pendiente   |
 
 ## Detalle por fase
 
@@ -27,7 +27,7 @@ modelo `GameSave`, capa de guardado con migraciones, utilidades de tiempo
 Europe/Madrid, time gates, condiciones, contratos de diálogo/audio/inventario/
 quests/logros, registro de escenas, viewport 16:9 con safe areas, shell mínimo.
 
-### GAME-01 — Desktop-first + fullscreen + boot + title screen
+### GAME-01 — Desktop-first + fullscreen + boot + title screen ✅
 
 (Redefinida por D-017: sustituye "orientación horizontal móvil".)
 
@@ -41,8 +41,9 @@ quests/logros, registro de escenas, viewport 16:9 con safe areas, shell mínimo.
 ### GAME-02 — Motor de diálogos retro
 
 Implementar el contrato de `src/game/dialogue/types.ts`: caja RPG,
-typewriter, páginas, ▼, nombre/retrato, elecciones, efectos, condiciones,
-blips opcionales, velocidad de texto desde ajustes.
+typewriter, páginas, ▼ (ya existe `.more-indicator`), nombre/retrato,
+elecciones (reutilizar `useMenu`/`Menu`), efectos, condiciones, blips
+(`audio.playVoiceBlip`), velocidad de texto y movimiento reducido en SETTINGS.
 
 ### GAME-03 — Selección de clase
 
@@ -79,7 +80,7 @@ Usar `TimeGate` (`relativeToChosenDate`, `fromDate`, `hourWindow`…).
 Sustituir `createSilentAudioEngine` por un motor real (Web Audio / HTMLAudio)
 con el mismo contrato `AudioEngine`. Botón de mute visible.
 
-### GAME-12 — QA móvil + producción Netlify
+### GAME-12 — QA en ordenador + producción Netlify
 
 QA en ordenador real (Chrome, Safari, Firefox, Edge; fullscreen real,
 portátil 1366×768 y monitores grandes), comprobación del bloqueo en móvil,

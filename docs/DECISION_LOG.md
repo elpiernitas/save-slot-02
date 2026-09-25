@@ -138,3 +138,95 @@ por controles táctiles.
 
 **Se conserva** (no molesta): `viewport-fit=cover`, safe areas vía `env()`,
 `100dvh`, bloqueo de scroll/zoom.
+
+### D-018 · 2026-09-25 · Gate de pantalla (sustituye la pantalla ROTATE DEVICE)
+
+Lógica pura en `src/lib/display/displayGate.ts`, sin user-agent sniffing ni
+listas de modelos. Señales: `(pointer: coarse)`, `(any-pointer: fine)`,
+tamaño de `screen` y del viewport.
+
+- **Incompatible** (`INCOMPATIBLE DISPLAY`, el juego no se monta y no se crea
+  save): dispositivo **solo táctil** cuyo lado corto (máx. de screen y
+  viewport) es < 600 CSS px → teléfonos en cualquier orientación.
+- **Demasiado pequeña** (`WINDOW TOO SMALL`): viewport < **800×450** CSS px.
+  800×450 es el escenario 480×270 a ≥ 1,67×: texto de 7 px lógicos ≈ 12 px
+  reales, legible. Un portátil 1366×768 con la barra del navegador
+  (≈1366×657) pasa de sobra. Se reevalúa en cada `resize`; si el juego ya
+  estaba en marcha sigue montado debajo (estado intacto) y el input se bloquea.
+- Cualquier equipo con ratón/trackpad **nunca** es "incompatible", solo
+  "pequeño": algunos navegadores/emuladores reportan `screen` = ventana
+  (detectado durante la QA con Playwright) y no deben bloquear un ordenador.
+- Tablets grandes solo táctiles no se bloquean (pueden usar el ratón/táctil en
+  menús), aunque no son objetivo.
+
+### D-019 · 2026-09-25 · Fullscreen: abstracción + primer gesto
+
+`src/lib/fullscreen/` es el único sitio que toca la Fullscreen API (incluye
+prefijo `webkit`). `request()` nunca lanza: devuelve `entered | already |
+unsupported | denied`. Se llama de forma síncrona dentro del gesto (click o
+Enter) en el system check; el mismo gesto desbloquea el audio. Si se deniega o
+no existe: se explica y se continúa en ventana; se puede reintentar ahí o en
+SETTINGS. Nunca se usa F11 ni se obliga al fullscreen; Escape siempre sale.
+
+### D-020 · 2026-09-25 · Secuencia de arranque y save v2
+
+- Cada carga de página ejecuta `system/sessionStart` (cuenta sesiones y fija
+  la escena en `systemCheck`): el primer gesto es necesario en cada visita
+  para fullscreen/audio.
+- Primera visita: systemCheck → boot → saveDetected → title.
+  Siguientes: systemCheck (líneas instantáneas) → title.
+- `SAVE_VERSION = 2`: añade `system { bootCompletedAt, enteredGameAt,
+sessionCount, lastSessionAt }` y `progress.resumeSceneId` (última escena de
+  juego; las de arranque nunca se reanudan). Migración 1→2 literal y
+  congelada, con test sobre un save real v1. Timestamps en vez de booleanos
+  (`hasCompletedBoot`) para tener también el "cuándo".
+- CONTINUE va a `resumeSceneId` o, la primera vez, a `classSelect`
+  (placeholder diegético hasta GAME-03).
+
+### D-021 · 2026-09-25 · Fuente: Pixelify Sans (cierra D-011)
+
+SIL OFL 1.1, autoalojada (latin 400/700, ~15 KB en total). Elegida por
+legibilidad en textos largos (diálogos futuros) con personalidad pixel, sin
+ser tan "arcade" como Press Start 2P. Origen y licencia en `docs/ASSETS.md`.
+`font-display: block` para evitar el parpadeo con la fuente del sistema.
+
+### D-022 · 2026-09-25 · Input: un listener, router por capas
+
+- Un único `keydown` global (`InputProvider`) traduce teclas a entradas
+  lógicas (`up/down/left/right/confirm/cancel`). WASD por `KeyboardEvent.code`
+  (posición física). Nunca se capturan atajos con Ctrl/Alt/Meta.
+- `InputRouter`: solo la capa superior (prioridad, luego la más reciente)
+  recibe la entrada. Escena < panel < bloqueador (transiciones, gate).
+- Los botones de menú son para el ratón (`tabIndex=-1`, sin foco al hacer
+  click) y el teclado lo gestiona el router: así Enter nunca dispara dos
+  veces. El indicador `>` + inversión de color es el foco visible. Tab no se
+  usa para navegar; flechas/WASD cubren todas las acciones.
+
+### D-023 · 2026-09-25 · Audio: SFX sintetizados con Web Audio
+
+`createWebAudioEngine` implementa el contrato `AudioEngine` con blips
+generados por osciladores (`cursor`, `confirm`, `cancel`, `boot`, `blip`): sin
+archivos ni licencias. El `AudioContext` se crea en el primer gesto. Sin Web
+Audio, silencio. La música sigue pendiente (GAME-11). `createSilentAudioEngine`
+queda para tests. Amplía D-012.
+
+### D-024 · 2026-09-25 · Transición de escena
+
+`SceneRenderer`: corte a negro escalonado (3 pasos, 110 ms + 150 ms), input
+bloqueado mientras dura; instantánea con movimiento reducido. El ajuste
+`settings.reducedMotion` (`system` por defecto) se aplica como
+`data-reduced-motion` en `.game-root` y desactiva todas las animaciones CSS.
+
+### D-025 · 2026-09-25 · Unidad de píxel lógico `--px`
+
+Dentro del escenario, todo se mide en píxeles lógicos del 480×270
+(`--px = 100cqh / 270`). El escalado no es entero (p. ej. 1366×768 → 2,84×),
+así que la nitidez perfecta de la fuente no está garantizada; a cambio el
+juego llena siempre el máximo espacio 16:9. Revaluar si se añaden sprites
+rasterizados (GAME-04).
+
+### D-026 · 2026-09-25 · Title screen mínima
+
+Solo CONTINUE y SETTINGS (FULLSCREEN, SOUND, BACK): ningún menú vacío.
+Velocidad de texto y movimiento reducido se añadirán a SETTINGS cuando haya
+diálogos (GAME-02).

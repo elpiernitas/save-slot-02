@@ -10,13 +10,16 @@ const UNLOCK_EVENTS = ['pointerdown', 'keydown', 'touchend'] as const;
 export function useAudioUnlock(engine: AudioEngine): void {
   useEffect(() => {
     if (engine.unlocked) return;
-    const handler = () => {
-      void engine.unlock();
+    const remove = () => {
       for (const type of UNLOCK_EVENTS) window.removeEventListener(type, handler, true);
+    };
+    // Keep listening until the engine really unlocks (a gesture can be refused).
+    const handler = () => {
+      void engine.unlock().then(() => {
+        if (engine.unlocked) remove();
+      });
     };
     for (const type of UNLOCK_EVENTS) window.addEventListener(type, handler, true);
-    return () => {
-      for (const type of UNLOCK_EVENTS) window.removeEventListener(type, handler, true);
-    };
+    return remove;
   }, [engine]);
 }

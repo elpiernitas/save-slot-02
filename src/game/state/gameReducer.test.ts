@@ -15,7 +15,7 @@ describe('gameReducer', () => {
     expect(next.progress.checkpoint).toBeNull();
     expect(next.timestamps.updatedAt).toBe(T1);
     expect(next.timestamps.createdAt).toBe(initial.timestamps.createdAt);
-    expect(initial.progress.sceneId).toBe('boot'); // immutability
+    expect(initial.progress.sceneId).toBe('systemCheck'); // immutability
   });
 
   it('records completed scenes once', () => {
@@ -56,5 +56,33 @@ describe('gameReducer', () => {
   it('replaces the whole save', () => {
     const other = createInitialSave(new Date('2026-10-01T00:00:00Z'));
     expect(gameReducer(initial, { type: 'save/replace', save: other })).toBe(other);
+  });
+});
+
+describe('gameReducer — start-up / system (v2)', () => {
+  const initial = createInitialSave(T0);
+
+  it('sessionStart counts sessions and always restarts at the system check', () => {
+    const inTitle = gameReducer(initial, { type: 'scene/goTo', scene: 'title', at: T1 });
+    const next = gameReducer(inTitle, { type: 'system/sessionStart', at: T2 });
+    expect(next.progress.sceneId).toBe('systemCheck');
+    expect(next.system.sessionCount).toBe(1);
+    expect(next.system.lastSessionAt).toBe(T2);
+  });
+
+  it('remembers only gameplay scenes as the resume point', () => {
+    let save = gameReducer(initial, { type: 'scene/goTo', scene: 'classSelect', at: T1 });
+    save = gameReducer(save, { type: 'scene/goTo', scene: 'title', at: T2 });
+    expect(save.progress.sceneId).toBe('title');
+    expect(save.progress.resumeSceneId).toBe('classSelect');
+  });
+
+  it('keeps the first boot/enter timestamps', () => {
+    let save = gameReducer(initial, { type: 'system/bootCompleted', at: T1 });
+    save = gameReducer(save, { type: 'system/bootCompleted', at: T2 });
+    save = gameReducer(save, { type: 'system/enteredGame', at: T1 });
+    save = gameReducer(save, { type: 'system/enteredGame', at: T2 });
+    expect(save.system.bootCompletedAt).toBe(T1);
+    expect(save.system.enteredGameAt).toBe(T1);
   });
 });

@@ -17,7 +17,7 @@ describe('createNewGame', () => {
     const { manager } = setup();
     const save = manager.createNewGame();
     expect(save.version).toBe(SAVE_VERSION);
-    expect(save.progress.sceneId).toBe('boot');
+    expect(save.progress.sceneId).toBe('systemCheck');
     expect(save.timestamps.createdAt).toBe('2026-09-28T09:00:00.000Z');
     expect(JSON.parse(JSON.stringify(save))).toEqual(save);
   });
@@ -45,7 +45,7 @@ describe('save / load round trip', () => {
     if (result.status !== 'loaded') return;
     expect(result.save.flags).toEqual({ a: 1 });
     expect(result.save.inventory).toEqual({ items: {} });
-    expect(result.save.progress.sceneId).toBe('boot');
+    expect(result.save.progress.sceneId).toBe('systemCheck');
   });
 
   it('falls back to the initial scene if the stored scene no longer exists', async () => {
@@ -53,7 +53,7 @@ describe('save / load round trip', () => {
     const raw = { ...stored, progress: { ...stored.progress, sceneId: 'deletedScene' } };
     const { manager } = setup({ [SAVE_STORAGE_KEY]: JSON.stringify(raw) });
     const result = await manager.loadGame();
-    expect(result.status === 'loaded' && result.save.progress.sceneId).toBe('boot');
+    expect(result.status === 'loaded' && result.save.progress.sceneId).toBe('systemCheck');
   });
 });
 

@@ -9,6 +9,7 @@ import {
 } from 'react';
 import type { BootResult } from '../save';
 import { gameReducer, type GameAction } from './gameReducer';
+import type { GameSave } from './types';
 import { GameContext, type GameCommand, type GameServices } from './GameContext';
 
 interface GameProviderProps {
@@ -27,20 +28,24 @@ export function GameProvider({ services, children, fallback = null }: GameProvid
 
   useEffect(() => {
     let cancelled = false;
+    const startSession = (save: GameSave) =>
+      gameReducer(save, { type: 'system/sessionStart', at: services.clock.now().toISOString() });
     services.saveManager.loadOrCreateGame().then(
       (result) => {
-        if (!cancelled) setBoot(result);
+        if (!cancelled) setBoot({ ...result, save: startSession(result.save) });
       },
       (error: unknown) => {
         // Storage failed completely: play without persistence rather than crash.
         console.error('[save] boot failed, starting an unsaved game', error);
-        if (!cancelled) setBoot({ save: services.saveManager.createNewGame(), source: 'new' });
+        if (!cancelled) {
+          setBoot({ save: startSession(services.saveManager.createNewGame()), source: 'new' });
+        }
       },
     );
     return () => {
       cancelled = true;
     };
-  }, [services.saveManager]);
+  }, [services.saveManager, services.clock]);
 
   if (!boot) return <>{fallback}</>;
   return (
@@ -60,7 +65,8 @@ function LoadedGame({
   children: ReactNode;
 }) {
   const [save, rawDispatch] = useReducer(gameReducer, boot.save);
-  const lastPersisted = useRef(boot.save);
+  // `null` so the session-start changes (counter, scene) are persisted on mount.
+  const lastPersisted = useRef<GameSave | null>(null);
 
   useEffect(() => {
     if (save === lastPersisted.current) return;

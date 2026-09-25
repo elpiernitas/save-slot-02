@@ -14,7 +14,12 @@ export function createInitialSave(now: Date, settings: GameSettings = DEFAULT_SE
   return {
     version: SAVE_VERSION,
     player: { name: null, classId: null },
-    progress: { sceneId: INITIAL_SCENE, checkpoint: null, completedScenes: [] },
+    progress: {
+      sceneId: INITIAL_SCENE,
+      checkpoint: null,
+      completedScenes: [],
+      resumeSceneId: null,
+    },
     flags: {},
     choices: {},
     inventory: { items: {} },
@@ -27,5 +32,6 @@ export function createInitialSave(now: Date, settings: GameSettings = DEFAULT_SE
     unlocks: {},
     timestamps: { createdAt: iso, updatedAt: iso, lastPlayedAt: iso, completedAt: null },
     settings: structuredClone(settings),
+    system: { bootCompletedAt: null, enteredGameAt: null, sessionCount: 0, lastSessionAt: null },
   };
 }

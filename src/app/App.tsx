@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { GameViewport } from '../components';
+import { DisplayGate, GameViewport } from '../components';
+import { InputProvider } from '../game/input';
 import { SceneRenderer } from '../game/scenes';
 import { GameProvider } from '../game/state';
 import { useAudioUnlock } from '../hooks/useAudioUnlock';
@@ -10,10 +11,14 @@ export function App() {
   useAudioUnlock(services.audio);
 
   return (
-    <GameViewport>
-      <GameProvider services={services}>
-        <SceneRenderer />
-      </GameProvider>
-    </GameViewport>
+    <InputProvider>
+      <DisplayGate>
+        <GameViewport>
+          <GameProvider services={services}>
+            <SceneRenderer />
+          </GameProvider>
+        </GameViewport>
+      </DisplayGate>
+    </InputProvider>
   );
 }

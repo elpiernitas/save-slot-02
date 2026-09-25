@@ -10,7 +10,7 @@ import type { SceneId } from '../scenes/sceneIds';
  * Bump when the shape of `GameSave` changes and add a migration in
  * `src/game/save/migrations.ts`. Never edit a released shape in place.
  */
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 export type FlagId = string;
 export type FlagValue = boolean | number | string;
@@ -32,6 +32,19 @@ export interface ProgressState {
   checkpoint: string | null;
   /** Scenes the player has fully cleared, in completion order. */
   completedScenes: SceneId[];
+  /** Last gameplay (non start-up) scene visited: where CONTINUE resumes. v2+. */
+  resumeSceneId: SceneId | null;
+}
+
+/** Start-up / meta state (v2+). Drives which intro screens are skipped. */
+export interface SystemState {
+  /** First time the boot + save-detection intro was completed. Skips it afterwards. */
+  bootCompletedAt: IsoTimestamp | null;
+  /** First time the player chose CONTINUE on the title screen. */
+  enteredGameAt: IsoTimestamp | null;
+  /** Number of times the game has been opened (incremented on load). */
+  sessionCount: number;
+  lastSessionAt: IsoTimestamp | null;
 }
 
 export interface PuzzleResult {
@@ -90,4 +103,5 @@ export interface GameSave {
   unlocks: Record<UnlockId, { unlockedAt: IsoTimestamp }>;
   timestamps: GameTimestamps;
   settings: GameSettings;
+  system: SystemState;
 }
