@@ -162,6 +162,22 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
 - Capturas: `docs/art/review/game-04r-iter2/`. Arte = placeholder.
 - Referencias `chatgpt-v2/*.jpg` aún corruptas.
 
+## Reparto de trabajo (instrucción de Manu, vigente)
+
+- **ChatGPT**: dirección creativa y visual; produce el arte final.
+- **Claude**: implementación, integración, código, colisiones, cámara,
+  manifests, tests y QA. **No genera arte** (ni procedural ni
+  "aproximaciones"); si falta un asset, lo pide en el PR con contrato exacto
+  (id, ruta, tamaño, transparencia, grid/frames, ancla, huella de colisión,
+  uso en runtime, restricciones).
+- Dudas de diseño/UX/narrativa → a ChatGPT en el PR. Decisiones técnicas →
+  Claude las resuelve y sigue. Sin GAME-05 hasta ACCEPT final de GAME-04R.
+  Sin merge.
+- Flujo al recibir un asset: sustituir PNG → ajustar ancla/colisiones →
+  `status: "final"` en el manifest → `npm run art:check` → `npm run check` →
+  capturas → PR para ACCEPT / FIXES / NEXT.
+- `npm run art` **nunca toca** sprites con `status: "final"`.
+
 ## Estado GAME-04R (D-062)
 
 **Estructura, composición e integración ACEPTADAS.** Modo integración: no

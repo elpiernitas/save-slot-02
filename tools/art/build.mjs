@@ -50,11 +50,23 @@ const manifest = {
 let failures = 0;
 if (!check) mkdirSync(outDir, { recursive: true });
 
+// Approved art is never touched: any manifest entry with status "final"
+// (e.g. PNGs delivered by ChatGPT) keeps its file and metadata as they are.
+const manifestPath = join(outDir, 'manifest.json');
+const previous = existsSync(manifestPath)
+  ? (JSON.parse(readFileSync(manifestPath, 'utf8')).sprites ?? {})
+  : {};
+const finals = Object.fromEntries(
+  Object.entries(previous).filter(([, info]) => info && info.status === 'final'),
+);
+Object.assign(manifest.sprites, finals);
+
 for (const [id, sprite] of Object.entries(sprites)) {
   const frames = sprite.frames ?? 1;
   const rows = sprite.rows ?? 1;
   const { canvas } = sprite;
   const file = `${id}.png`;
+  if (id in finals) continue;
   manifest.sprites[id] = {
     file,
     // Every generated sprite is a WIP placeholder (ASSET_IMPORT_CONTRACT.md).
@@ -92,20 +104,24 @@ for (const [id, sprite] of Object.entries(sprites)) {
 // Remove PNGs that the generator no longer produces (renamed/retired sprites).
 if (!check) {
   for (const file of readdirSync(outDir)) {
-    if (file.endsWith('.png') && !(file.slice(0, -4) in sprites)) rmSync(join(outDir, file));
+    const kept = Object.values(manifest.sprites).some((info) => info.file === file);
+    if (file.endsWith('.png') && !kept) rmSync(join(outDir, file));
   }
 }
 
 const manifestText = `${JSON.stringify(manifest, null, 2)}\n`;
-const manifestPath = join(outDir, 'manifest.json');
 if (check) {
   if (!existsSync(manifestPath) || readFileSync(manifestPath, 'utf8') !== manifestText) {
     console.error('out of date: manifest.json (run npm run art)');
     failures++;
   }
   if (failures) process.exit(1);
-  console.log(`art: ${Object.keys(sprites).length} sprites up to date`);
+  console.log(
+    `art: placeholders up to date (${Object.keys(finals).length} final sprites untouched)`,
+  );
 } else {
   writeFileSync(manifestPath, manifestText);
-  console.log(`art: wrote ${Object.keys(sprites).length} sprites to ${outDir}`);
+  console.log(
+    `art: wrote placeholders to ${outDir} (${Object.keys(finals).length} final sprites untouched)`,
+  );
 }
