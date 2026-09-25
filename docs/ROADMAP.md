@@ -8,7 +8,7 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | GAME-01 | Desktop-first + fullscreen + boot + title  | ✅ Hecho               |
 | GAME-02 | Motor de diálogos retro                    | ✅ Hecho               |
 | GAME-03 | World bible + selección de clase           | ✅ Hecho               |
-| GAME-04 | Mundo explorable / vertical slice de Gijón | 🔁 Revisión visual     |
+| GAME-04 | Mundo explorable / vertical slice de Gijón | 🔴 Visual no aprobado  |
 | GAME-05 | Inventario y cartas                        | ⏸ Tras aprobar GAME-04 |
 | GAME-06 | Puzzles / minijuegos                       | Pendiente              |
 | GAME-07 | Boss + aparición PLAYER 2                  | Pendiente              |
@@ -61,9 +61,11 @@ quests/logros, registro de escenas, viewport 16:9 con safe areas, shell mínimo.
 
 ### GAME-04 — Mundo explorable / vertical slice de Gijón 🔁
 
-Técnicamente aceptado; **visualmente rechazado** en la primera versión
-(La Muralla se interpretó como una muralla). Reconstruida la capa visual
-(D-054–D-056); pendiente de la aprobación visual de Manu.
+Técnicamente aceptado. La primera versión fue rechazada por interpretar
+La Muralla como fortificación. La reconstrucción WIP `bbd1a6b` corrigió la
+semántica y la tubería raster, pero **sigue sin alcanzar la dirección visual
+aprobada**. GAME-04R queda bloqueando GAME-05; criterios en
+`docs/GAME_04R_VISUAL_REBUILD.md`.
 
 - Motor propio Canvas 2D (D-048), mundo a 640×360 (D-049).
 - Slice: la calle del **bar La Muralla** en Cimavilla por la tarde: fachada
