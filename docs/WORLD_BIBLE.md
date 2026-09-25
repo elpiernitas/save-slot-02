@@ -113,8 +113,9 @@ No:
 - **Mundo explorable: 640×360** lógicos (16:9). Tiles de 16 px; personajes
   de mapa de **32×48 px** (D-056). Así un encuadre muestra un tramo de calle
   entero (fachada, terraza, árbol) y el personaje se lee bien.
-- Arte del mundo: **PNG raster** generado offline y commiteado (D-055); el
-  renderer solo blitea imágenes.
+- Arte del mundo: **PNG raster** commiteado; el renderer solo blitea imágenes.
+  El generador procedural de D-055 se conserva como placeholder/regresión,
+  pero la producción visual final sigue D-057 y las referencias ChatGPT v2.
 - **UI** (cajas, menús, textos): sigue en su rejilla de 480×270 (`--px`),
   independiente del mundo.
 - En portátiles 1366×768 el personaje mide ≈102 px en pantalla (antes ≈51
@@ -145,10 +146,10 @@ afinarán con los primeros fondos en GAME-04.
 
 ## 7. Personajes
 
-Los assets definitivos (sprites y retratos) se crearán **más adelante, a
-partir de referencias visuales que proporcionará Manu**. Hasta entonces no
-se inventan retratos ni sprites definitivos de Luis, Manu ni Randy; se usan
-siluetas genéricas, sigilos e iconos propios.
+Ya existen referencias visuales aportadas por Manu y direction boards en
+`docs/art/chatgpt-v2/`. Los assets definitivos se producen/integran a partir
+de esas referencias. Claude no debe inventar otra identidad visual; los
+placeholders técnicos deben ser fácilmente sustituibles.
 
 ### Luis — PLAYER 1
 
