@@ -2,7 +2,8 @@
 
 > Léeme primero. Resumen para que una sesión nueva continúe sin contexto previo.
 > Después: `docs/GAME_CONSTITUTION.md` (reglas), `docs/WORLD_BIBLE.md`
-> (universo), `docs/ART_DIRECTION_V1.md` (concepto visual aprobado) y
+> (universo), `docs/ART_DIRECTION_V1.md` (dirección),
+> `docs/GAME_04R_VISUAL_REBUILD.md` (**gate visual actual**) y
 > `docs/DECISION_LOG.md` (por qué).
 
 **Fase actual:** GAME-04 — **reconstrucción visual** del slice tras la
@@ -23,8 +24,9 @@ visualmente GAME-04**.
 - Rama `claude/save-slot-02-game-00-5tw0pw`, PR #1 (borrador) contra la rama
   por defecto `anthropich/claude-code-cloud`. Contiene GAME-00 → GAME-04 y el
   commit de referencias visuales de Manu (`c2dd94e`). No mergeado. Sin CI.
-- `npm run check` pasa: typecheck, lint, format:check, art:check, tests y
-  build (cifras exactas en el último comentario del PR).
+- El commit WIP `bbd1a6b` añadió una reconstrucción raster/generada. Sirve
+  para validar la tubería de assets, pero **no está aprobado visualmente**.
+- No continuar GAME-05 hasta superar `docs/GAME_04R_VISUAL_REBUILD.md`.
 - `SAVE_VERSION` sigue en **2** (GAME-04 no cambió la forma JSON).
 - ⚠️ `docs/art/visual-concept-v1.jpg` está **truncado** (no decodifica).
   Hay que volver a subirlo (D-053).
@@ -115,11 +117,10 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
 
 ## Próximo paso exacto
 
-1. **Esperar la revisión visual de Manu** sobre las capturas del PR. Si pide
-   ajustes, se hacen en `tools/art/` + `muralla.layout.json` → `npm run art`.
-   Si aporta PNG dibujados a mano, sustituyen a los generados (mismo nombre,
-   frame y ancla) y se retira ese asset del generador.
-2. Solo con GAME-04 aprobado: **GAME-05 — inventario y cartas**
+1. Ejecutar **GAME-04R** siguiendo `docs/GAME_04R_VISUAL_REBUILD.md`.
+   El motor se conserva; se sustituye la calidad/composición del arte.
+2. Entregar las 6 capturas de aceptación definidas en ese documento.
+3. Solo con aprobación explícita de Manu: **GAME-05 — inventario y cartas**
 
 3. Diseñar items y cartas **originales** (inspiración: colección de cartas de
    Luis, sin IP de terceros) según WORLD_BIBLE.
