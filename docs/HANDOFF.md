@@ -162,6 +162,13 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
 - Capturas: `docs/art/review/game-04r-iter2/`. Arte = placeholder.
 - Referencias `chatgpt-v2/*.jpg` aún corruptas.
 
+## Estado GAME-04R (D-062)
+
+**Estructura, composición e integración ACEPTADAS.** Modo integración: no
+iterar la escena sin assets finales. Pendiente: CHAR-001 y ENV-001 (ver ART
+REQUESTS en el PR y `docs/art/requests/`) → sustituir, reajustar, check,
+capturas → ACCEPT final.
+
 ## Próximo paso exacto
 
 1. Ejecutar **GAME-04R** siguiendo `docs/GAME_04R_VISUAL_REBUILD.md`.

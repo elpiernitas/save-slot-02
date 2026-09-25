@@ -709,3 +709,13 @@ contrastarlo con las imágenes.
 
 Todo el arte sigue siendo **placeholder generado por código**
 (`status: "placeholder"`). Capturas: `docs/art/review/game-04r-iter2/`.
+
+### D-062 · 2026-09-26 · GAME-04R: estructura aceptada, modo integración
+
+Manu acepta la **estructura, la composición base y la integración** de la
+iteración 2 (`ef9282b`). No se itera más la escena sin assets finales.
+
+Siguiente paso: al llegar **CHAR-001** (`player.png`, 120×240, frames 40×60,
+ancla 20,57) y **ENV-001** (`background.png`, 960×400) se sustituyen los
+placeholders, se reajustan anclas/colisiones si hace falta, `npm run check`,
+capturas, y entonces se decide el ACCEPT final de GAME-04R.
