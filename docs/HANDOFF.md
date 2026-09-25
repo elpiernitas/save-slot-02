@@ -79,6 +79,11 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
 - `docs/CONTENT_BACKLOG.md`: candidatos para inventario/cartas, puzzles,
   boss, portales, post-game, OST y backlog de assets. **Planning only**;
   no desbloquea GAME-05.
+- GAME-05 queda completamente preparado en documentación: `GAME_05_SPEC.md`,
+  `CITY_CARDS_BIBLE.md`, `GAME_05_UI_SPEC.md`, `GAME_05_TEST_MATRIX.md` y
+  `GAME_05_IMPLEMENTATION_ORDER.md`. También existe la skill
+  `.claude/skills/save-slot-inventory-cards/SKILL.md`. **No implementar hasta
+  ACCEPT visual de GAME-04R.**
 
 ## Qué NO está hecho (a propósito)
 
