@@ -73,6 +73,20 @@ export interface GameTimestamps {
 
 export type TextSpeed = 'slow' | 'normal' | 'fast' | 'instant';
 
+/**
+ * Partial update for settings. Nested objects are partial too and are
+ * deep-merged by the reducer, so updating `audio.muted` can never drop
+ * `audio.volume` (and vice versa).
+ */
+export interface SettingsPatch {
+  audio?: {
+    muted?: boolean;
+    volume?: Partial<AudioSettings['volume']>;
+  };
+  textSpeed?: TextSpeed;
+  reducedMotion?: GameSettings['reducedMotion'];
+}
+
 export interface GameSettings {
   audio: AudioSettings;
   textSpeed: TextSpeed;

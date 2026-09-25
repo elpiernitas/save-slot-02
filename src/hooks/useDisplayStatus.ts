@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { evaluateDisplay, type DisplaySignals, type DisplayStatus } from '../lib/display';
+import {
+  evaluateDisplay,
+  nextDisplayGateState,
+  type DisplayGateState,
+  type DisplaySignals,
+} from '../lib/display';
 
 function readSignals(): DisplaySignals {
   const mq = (query: string) => window.matchMedia?.(query).matches ?? false;
@@ -13,19 +18,19 @@ function readSignals(): DisplaySignals {
   };
 }
 
-function sameStatus(a: DisplayStatus, b: DisplayStatus): boolean {
-  return JSON.stringify(a) === JSON.stringify(b);
-}
-
-/** Re-evaluates the display gate on resize / pointer changes. */
-export function useDisplayStatus(): DisplayStatus {
-  const [status, setStatus] = useState(() => evaluateDisplay(readSignals()));
+/**
+ * Display gate status plus the "has the game ever been allowed to start"
+ * latch. State only changes from the initializer and from resize / pointer
+ * events — never during render.
+ */
+export function useDisplayStatus(): DisplayGateState {
+  const [state, setState] = useState(() =>
+    nextDisplayGateState(null, evaluateDisplay(readSignals())),
+  );
 
   useEffect(() => {
-    const update = () => {
-      const next = evaluateDisplay(readSignals());
-      setStatus((prev) => (sameStatus(prev, next) ? prev : next));
-    };
+    const update = () =>
+      setState((prev) => nextDisplayGateState(prev, evaluateDisplay(readSignals())));
     const queries = ['(pointer: coarse)', '(any-pointer: fine)']
       .map((q) => window.matchMedia?.(q))
       .filter((mql): mql is MediaQueryList => Boolean(mql));
@@ -37,5 +42,5 @@ export function useDisplayStatus(): DisplayStatus {
     };
   }, []);
 
-  return status;
+  return state;
 }

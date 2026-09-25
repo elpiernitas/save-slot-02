@@ -6,8 +6,8 @@
 export interface PixelSpriteProps {
   rows: readonly string[];
   palette: Readonly<Record<string, string>>;
-  className?: string;
-  title?: string;
+  className?: string | undefined;
+  title?: string | undefined;
 }
 
 export function PixelSprite({ rows, palette, className, title }: PixelSpriteProps) {

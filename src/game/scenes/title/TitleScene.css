@@ -101,7 +101,7 @@
 }
 
 .title-settings {
-  width: calc(var(--px) * 200);
+  width: calc(var(--px) * 230);
   display: grid;
   gap: var(--space-3);
 }

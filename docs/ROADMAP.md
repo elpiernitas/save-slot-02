@@ -6,8 +6,8 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | ------- | ----------------------------------------- | ----------- |
 | GAME-00 | Constitución técnica y estructura         | ✅ Hecho    |
 | GAME-01 | Desktop-first + fullscreen + boot + title | ✅ Hecho    |
-| GAME-02 | Motor de diálogos retro                   | ⏭ Siguiente |
-| GAME-03 | Selección de clase                        | Pendiente   |
+| GAME-02 | Motor de diálogos retro                   | ✅ Hecho    |
+| GAME-03 | Selección de clase                        | ⏭ Siguiente |
 | GAME-04 | Mapa y exploración                        | Pendiente   |
 | GAME-05 | Inventario y cartas                       | Pendiente   |
 | GAME-06 | Puzzles / minijuegos                      | Pendiente   |
@@ -38,17 +38,23 @@ quests/logros, registro de escenas, viewport 16:9 con safe areas, shell mínimo.
 - Capa de input de teclado reutilizable; menú del título con teclado y ratón.
 - Fuente pixel OFL autoalojada, transición de escena reutilizable.
 
-### GAME-02 — Motor de diálogos retro
+### GAME-02 — Motor de diálogos retro ✅
 
-Implementar el contrato de `src/game/dialogue/types.ts`: caja RPG,
-typewriter, páginas, ▼ (ya existe `.more-indicator`), nombre/retrato,
-elecciones (reutilizar `useMenu`/`Menu`), efectos, condiciones, blips
-(`audio.playVoiceBlip`), velocidad de texto y movimiento reducido en SETTINGS.
+- Hardening: sin setState en render (transición y gate); fullscreen con
+  reintento sin opciones; merge profundo de settings.
+- Runtime puro de diálogo, markup seguro, typewriter con velocidades,
+  pausas y blips por voz, elecciones con opciones bloqueadas/ocultas y
+  Escape, efectos conectados al reducer, validador de scripts, retratos por
+  expresión.
+- SETTINGS: TEXT SPEED y MOTION. Demo `dialogueDemo` (en español) desde
+  CONTINUE.
 
 ### GAME-03 — Selección de clase
 
 Clases (idea: guerrero / tanque / curador u otras), estrechar
-`PlayerClassId`, nombre del jugador.
+`PlayerClassId`, nombre del jugador. Usar `DialoguePlayer` para la
+presentación. Poner `CONTINUE_OVERRIDE` a `null` (o apuntar a la nueva
+escena) y decidir si la demo se retira.
 
 ### GAME-04 — Mapa y exploración
 

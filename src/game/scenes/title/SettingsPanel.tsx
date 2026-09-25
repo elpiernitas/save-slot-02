@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { useFullscreen } from '../../../hooks/useFullscreen';
 import { INPUT_PRIORITY } from '../../input/inputRouter';
+import {
+  cycleOption,
+  MOTION_OPTIONS,
+  optionLabel,
+  TEXT_SPEED_OPTIONS,
+} from '../../state/settingsOptions';
 import { useGame } from '../../state/useGame';
 import { Menu } from '../../ui/Menu';
 import { useMenu, type MenuItem } from '../../ui/useMenu';
@@ -10,6 +16,7 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
   const { save, services, dispatch } = useGame();
   const fullscreen = useFullscreen(services.fullscreen);
   const [notice, setNotice] = useState<string | null>(null);
+  const { textSpeed, reducedMotion } = save.settings;
   const muted = save.settings.audio.muted;
 
   const toggleFullscreen = () => {
@@ -25,7 +32,7 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
   const toggleSound = () =>
     dispatch({
       type: 'settings/update',
-      settings: { audio: { ...save.settings.audio, muted: !muted } },
+      settings: { audio: { muted: !muted } },
     });
 
   const items: MenuItem[] = [
@@ -36,20 +43,37 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
       disabled: !fullscreen.supported,
     },
     { id: 'sound', label: 'SOUND', value: muted ? 'OFF' : 'ON' },
+    { id: 'textSpeed', label: 'TEXT SPEED', value: optionLabel(TEXT_SPEED_OPTIONS, textSpeed) },
+    { id: 'motion', label: 'MOTION', value: optionLabel(MOTION_OPTIONS, reducedMotion) },
     { id: 'back', label: 'BACK' },
   ];
 
-  const run = (item: MenuItem) => {
-    if (item.id === 'fullscreen') toggleFullscreen();
-    else if (item.id === 'sound') toggleSound();
-    else onClose();
+  const run = (item: MenuItem, dir: 1 | -1 = 1) => {
+    switch (item.id) {
+      case 'fullscreen':
+        return toggleFullscreen();
+      case 'sound':
+        return toggleSound();
+      case 'textSpeed':
+        return dispatch({
+          type: 'settings/update',
+          settings: { textSpeed: cycleOption(TEXT_SPEED_OPTIONS, textSpeed, dir) },
+        });
+      case 'motion':
+        return dispatch({
+          type: 'settings/update',
+          settings: { reducedMotion: cycleOption(MOTION_OPTIONS, reducedMotion, dir) },
+        });
+      default:
+        return onClose();
+    }
   };
 
   const menu = useMenu({
     items,
     priority: INPUT_PRIORITY.panel,
-    onConfirm: run,
-    onAdjust: (item) => item.id !== 'back' && run(item),
+    onConfirm: (item) => run(item),
+    onAdjust: (item, dir) => item.id !== 'back' && run(item, dir),
     onCancel: onClose,
   });
 

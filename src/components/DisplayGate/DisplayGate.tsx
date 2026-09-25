@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { InputBlocker } from '../../game/input/useInput';
 import { useDisplayStatus } from '../../hooks/useDisplayStatus';
 import type { DisplayStatus } from '../../lib/display';
@@ -13,15 +13,13 @@ import './DisplayGate.css';
  *   mounted underneath (state kept) with input blocked.
  */
 export function DisplayGate({ children }: { children: ReactNode }) {
-  const status = useDisplayStatus();
-  const [hasStarted, setHasStarted] = useState(status.kind === 'ok');
-  if (status.kind === 'ok' && !hasStarted) setHasStarted(true);
+  const { status, hasBeenOk } = useDisplayStatus();
 
   if (status.kind === 'incompatible') return <IncompatibleDisplay />;
 
   return (
     <>
-      {hasStarted && children}
+      {hasBeenOk && children}
       {status.kind === 'tooSmall' && (
         <>
           <WindowTooSmall status={status} />

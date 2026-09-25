@@ -86,3 +86,57 @@ describe('gameReducer — start-up / system (v2)', () => {
     expect(save.system.enteredGameAt).toBe(T1);
   });
 });
+
+describe('settings/update — nested settings are never lost', () => {
+  const initial = createInitialSave(T0);
+
+  it('muting keeps every volume', () => {
+    const save = gameReducer(initial, {
+      type: 'settings/update',
+      settings: { audio: { muted: true } },
+      at: T1,
+    });
+    expect(save.settings.audio).toEqual({ ...initial.settings.audio, muted: true });
+  });
+
+  it('changing one channel volume keeps the others and mute state', () => {
+    let save = gameReducer(initial, {
+      type: 'settings/update',
+      settings: { audio: { muted: true } },
+      at: T1,
+    });
+    save = gameReducer(save, {
+      type: 'settings/update',
+      settings: { audio: { volume: { sfx: 0.2 } } },
+      at: T2,
+    });
+    expect(save.settings.audio).toEqual({
+      muted: true,
+      volume: { ...initial.settings.audio.volume, sfx: 0.2 },
+    });
+  });
+
+  it('textSpeed and reducedMotion update independently', () => {
+    let save = gameReducer(initial, {
+      type: 'settings/update',
+      settings: { textSpeed: 'instant' },
+      at: T1,
+    });
+    save = gameReducer(save, {
+      type: 'settings/update',
+      settings: { reducedMotion: 'on' },
+      at: T2,
+    });
+    expect(save.settings).toEqual({
+      ...initial.settings,
+      textSpeed: 'instant',
+      reducedMotion: 'on',
+    });
+  });
+
+  it('does not mutate the previous settings object', () => {
+    const before = structuredClone(initial.settings);
+    gameReducer(initial, { type: 'settings/update', settings: { audio: { muted: true } }, at: T1 });
+    expect(initial.settings).toEqual(before);
+  });
+});

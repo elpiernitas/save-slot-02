@@ -67,3 +67,28 @@ export function evaluateDisplay(
   }
   return { kind: 'ok' };
 }
+
+/**
+ * Gate state over time. `hasBeenOk` latches the first time the display was
+ * fine: after that a too-small window only overlays the running game instead
+ * of preventing it from mounting. Pure; updated from resize events.
+ */
+export interface DisplayGateState {
+  status: DisplayStatus;
+  hasBeenOk: boolean;
+}
+
+export function nextDisplayGateState(
+  prev: DisplayGateState | null,
+  status: DisplayStatus,
+): DisplayGateState {
+  const hasBeenOk = (prev?.hasBeenOk ?? false) || status.kind === 'ok';
+  if (
+    prev &&
+    prev.hasBeenOk === hasBeenOk &&
+    JSON.stringify(prev.status) === JSON.stringify(status)
+  ) {
+    return prev; // unchanged: keep identity so React skips the re-render
+  }
+  return { status, hasBeenOk };
+}

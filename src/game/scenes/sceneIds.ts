@@ -17,6 +17,8 @@ export const SCENE_IDS = [
   'dateGate',
   'ending',
   'saveSlot',
+  // Development-only scenes (GAME-02 dialogue engine demo). Never resumed.
+  'dialogueDemo',
 ] as const;
 
 export type SceneId = (typeof SCENE_IDS)[number];
@@ -29,11 +31,14 @@ export const FIRST_GAMEPLAY_SCENE: SceneId = 'classSelect';
 
 export const STARTUP_SCENES: readonly SceneId[] = ['systemCheck', 'boot', 'saveDetected', 'title'];
 
+/** Test/demo scenes: reachable, but never stored as the CONTINUE point. */
+export const DEV_SCENES: readonly SceneId[] = ['dialogueDemo'];
+
 export function isSceneId(value: unknown): value is SceneId {
   return typeof value === 'string' && (SCENE_IDS as readonly string[]).includes(value);
 }
 
-/** Gameplay scenes are remembered as the CONTINUE point; start-up scenes are not. */
+/** Gameplay scenes are remembered as the CONTINUE point; start-up and dev scenes are not. */
 export function isResumableScene(id: SceneId): boolean {
-  return !STARTUP_SCENES.includes(id);
+  return !STARTUP_SCENES.includes(id) && !DEV_SCENES.includes(id);
 }

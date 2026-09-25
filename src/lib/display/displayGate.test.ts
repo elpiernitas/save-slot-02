@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { evaluateDisplay, type DisplaySignals } from './displayGate';
+import { evaluateDisplay, nextDisplayGateState, type DisplaySignals } from './displayGate';
 
 const desktop = (
   w: number,
@@ -68,5 +68,25 @@ describe('evaluateDisplay', () => {
 
   it('does not block when the screen size is unknown (0×0)', () => {
     expect(evaluateDisplay(desktop(1280, 720, [0, 0])).kind).toBe('ok');
+  });
+});
+
+describe('nextDisplayGateState (latch, no render-phase updates)', () => {
+  const ok = { kind: 'ok' } as const;
+  const small = { kind: 'tooSmall', requiredWidth: 800, requiredHeight: 450 } as const;
+
+  it('does not start the game while the first evaluation is too small', () => {
+    expect(nextDisplayGateState(null, small)).toEqual({ status: small, hasBeenOk: false });
+  });
+
+  it('latches once the display has been ok', () => {
+    const started = nextDisplayGateState(nextDisplayGateState(null, small), ok);
+    expect(started.hasBeenOk).toBe(true);
+    expect(nextDisplayGateState(started, small)).toEqual({ status: small, hasBeenOk: true });
+  });
+
+  it('keeps the same object when nothing changed (no extra re-render)', () => {
+    const state = nextDisplayGateState(null, ok);
+    expect(nextDisplayGateState(state, { kind: 'ok' })).toBe(state);
   });
 });

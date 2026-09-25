@@ -1,4 +1,5 @@
 import { BootScene } from './boot/BootScene';
+import { DialogueDemoScene } from './dialogueDemo/DialogueDemoScene';
 import { SaveDetectedScene } from './saveDetected/SaveDetectedScene';
 import type { SceneId } from './sceneIds';
 import { SystemCheckScene } from './systemCheck/SystemCheckScene';
@@ -15,6 +16,7 @@ export const SCENE_REGISTRY: Partial<Record<SceneId, SceneDefinition>> = {
   boot: { id: 'boot', component: BootScene },
   saveDetected: { id: 'saveDetected', component: SaveDetectedScene },
   title: { id: 'title', component: TitleScene },
+  dialogueDemo: { id: 'dialogueDemo', component: DialogueDemoScene },
 };
 
 export function getSceneDefinition(id: SceneId): SceneDefinition | undefined {

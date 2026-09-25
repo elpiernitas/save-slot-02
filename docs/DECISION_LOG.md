@@ -230,3 +230,134 @@ rasterizados (GAME-04).
 Solo CONTINUE y SETTINGS (FULLSCREEN, SOUND, BACK): ningún menú vacío.
 Velocidad de texto y movimiento reducido se añadirán a SETTINGS cuando haya
 diálogos (GAME-02).
+
+---
+
+## GAME-02
+
+### D-027 · 2026-09-25 · Hardening: sin actualizaciones de estado durante el render
+
+- `SceneRenderer`: la transición es ahora una **vista derivada pura**
+  (`getTransitionView` en `sceneTransition.ts`) a partir de `target`,
+  `shown`, `revealing` y `reduced`. El estado (`shown`, `revealing`) solo
+  cambia en callbacks de `setTimeout`. Comportamiento idéntico (cubrir 110 ms,
+  revelar 150 ms, input bloqueado, instantáneo con movimiento reducido); si el
+  destino cambia durante la revelación, vuelve a cubrir.
+- `DisplayGate`: el "latch" (¿el juego llegó a arrancar?) sale del render y
+  pasa a `nextDisplayGateState` (puro), aplicado desde el inicializador y los
+  eventos `resize`/`change` en `useDisplayStatus`.
+- Tests puros para ambos. Las reglas `react-hooks/set-state-in-render` y
+  `set-state-in-effect` están activas en ESLint.
+
+### D-028 · 2026-09-25 · Fullscreen: reintento sin opciones
+
+`request()` intenta `requestFullscreen({ navigationUI: 'hide' })`; si lanza o
+rechaza, y existe `requestFullscreen`, reintenta **una vez** sin opciones;
+solo entonces devuelve `denied`. Sin doble intento si la API no existe; el
+camino `webkit` no cambia. Limitación no verificada: si un navegador consumiera
+la activación de usuario en el primer intento fallido, el reintento también se
+denegaría (el juego continúa en ventana igualmente).
+
+### D-029 · 2026-09-25 · Arquitectura del diálogo
+
+- **Runtime puro** (`runtime.ts`): `startDialogue`, `advanceDialogue`,
+  `chooseOption`, `cancelChoice`. Recibe un `DialogueHost`
+  (`evaluate(condition)`, `apply(effect)`), sin React ni temporizadores.
+  Estados visibles: `line` y `choice`; los nodos invisibles se resuelven en
+  bucle con protección (`MAX_INVISIBLE_STEPS = 100`). Errores tipados
+  (`DialogueError`: nodo inexistente, bucle, elección sin opciones…).
+- **Recording host** (`effects.ts`): simula los comandos del juego con el
+  reducer real sobre una copia del save (una rama tras `setFlag` ve el flag)
+  y registra los efectos sin ejecutarlos.
+- **Capa React** (`ui/useDialogue`): cada paso se calcula con el recording
+  host; los efectos se ejecutan **después del commit** (dispatch, SFX,
+  acciones). Un `DialogueError` en contenido se registra en consola y cierra
+  el diálogo en vez de bloquear el juego.
+
+### D-030 · 2026-09-25 · Cambios en el contrato de diálogo
+
+Sin contenido previo que romper. Añadido: `NodeBase.skipTo` (destino cuando
+la condición es falsa; por defecto `next`/`fallback`/fin),
+`DialogueEffect.recordChoice`, `Speaker.tone` (`system`), `portrait` y
+`expression` en `ChoiceNode`. `TypewriterOptions` pasa a `delayMultiplier`
+(las velocidades se centralizan; los scripts no fijan caracteres/segundo).
+Eliminado el `DialogueRuntimeState` provisional (sustituido por
+`DialogueState`).
+
+### D-031 · 2026-09-25 · Markup mínimo y seguro
+
+Etiquetas cerradas: `[em]`, `[shake]`, `[sys]`, `[slow]`, `[fast]`,
+`[pause]`/`[pause=ms]` (50–2000), `\n`, `[[`. Se parsea a tokens y se pinta
+como spans de texto (nunca `dangerouslySetInnerHTML`). Etiquetas desconocidas
+o mal cerradas: se muestran literalmente y el validador da error. Preferido
+frente a tokens declarativos por legibilidad al escribir guion; el parser es
+estricto para compensar.
+
+### D-032 · 2026-09-25 · Typewriter e input
+
+- Velocidades (ms por carácter): slow 55, normal 30, fast 14, instant 0.
+  Espacios a mitad de coste. Pausas: 220 ms tras `. ! ? …`, 90 ms tras
+  `, ; :`, solo al final de una racha (`...` pausa una vez) y nunca tras el
+  último carácter. Escala de pausas: slow 1.2, normal 1, fast 0.5, instant 0.
+- Una pulsación = una acción: escribiendo → revela; completa → avanza.
+  Repetición de tecla ignorada; segunda confirmación a < 140 ms ignorada
+  (dobles clics). Probado: mantener Enter ~1 s avanza una sola página.
+- Todos los glifos se maquetan desde el principio y los no revelados solo se
+  ocultan: las palabras no saltan de línea mientras se escriben.
+- **Movimiento reducido:** no fuerza texto instantáneo (revelar texto no es
+  movimiento vestibular y el jugador tiene TEXT SPEED → INSTANT); desactiva
+  el temblor `[shake]`, el vaivén del ▼ y las transiciones.
+
+### D-033 · 2026-09-25 · Voces
+
+`speaker.voice` elige una nota sintetizada (`VOICE_BLIPS`: default,
+archivist, system, narrator) con ligera variación de tono cíclica. Suena solo
+en letras/dígitos, como máximo cada 65 ms (sin "metralleta"). Sin archivos.
+
+### D-034 · 2026-09-25 · Paginación y validación
+
+No hay división automática por caracteres. `validateDialogueScript` avisa a
+partir de 110 caracteres y da error a partir de 150 o con más de 3 líneas.
+Referencia medida en QA: una página de ~98 caracteres ocupa 2 líneas con
+retrato en el escenario 480×270, así que 3 líneas ≈ 150. La QA comprueba
+además que ningún `.dlg-text` desborde su caja. Todo script de contenido
+tiene un test de validación sin errores ni warnings.
+
+### D-035 · 2026-09-25 · Efectos
+
+Implementados de verdad: `setFlag`, `recordChoice`/`recordAs`,
+`unlockAchievement`, `goToScene` (acciones del reducer) y `playSfx`.
+`giveItem`, `takeItem`, `giveCard`, `setQuest` devuelven un resultado
+`unsupported` explícito (log de consola + warning del validador) hasta sus
+fases. `action` se resuelve con un `DialogueActionRegistry` por id (claves
+propias, nunca del prototipo); los scripts nunca contienen funciones.
+
+### D-036 · 2026-09-25 · Settings: TEXT SPEED, MOTION y merge profundo
+
+- SETTINGS añade TEXT SPEED (SLOW/NORMAL/FAST/INSTANT) y MOTION
+  (SYSTEM/ON/OFF). MOTION describe si hay animaciones, así que MOTION ON =
+  `reducedMotion: 'off'` y MOTION OFF = `'on'` (mapeo en `settingsOptions.ts`).
+- **Riesgo corregido:** `settings/update` hacía un merge superficial; pasar un
+  `audio` parcial podía perder `volume`. Ahora recibe un `SettingsPatch`
+  (anidado y parcial) y `mergeSettings` hace merge profundo. Tests incluidos.
+
+### D-037 · 2026-09-25 · Escena de demo
+
+`dialogueDemo` es una escena de desarrollo (`DEV_SCENES`): nunca se guarda
+como punto de CONTINUE. `CONTINUE_OVERRIDE` en `flow.ts` la abre
+temporalmente desde el título; **ponerlo a `null` en GAME-03**. Los datos de
+la demo usan el espacio `demo.*` en flags/elecciones/logros.
+
+### D-038 · 2026-09-25 · Fuente del diálogo
+
+Se mantiene Pixelify Sans: en capturas a 1366×768 y 1920×1080 el texto de 11
+px lógicos es legible y conserva personalidad pixel. No se ha cambiado de
+fuente; no se probó una alternativa en paralelo.
+
+### D-039 · 2026-09-25 · Retratos provisionales
+
+Sistema: base pixel + capa por expresión (`composePortrait`), expresión
+desconocida → `neutral`. El único retrato es un placeholder original (el
+Archivero, un monitor CRT) con neutral, happy, confused, annoyed, smug,
+surprised y `off` (arte de escena). Los retratos definitivos no están
+diseñados.

@@ -109,6 +109,22 @@ nunca con sprites, logos, música, sonidos o personajes protegidos.
 6. Nada de datos personales innecesarios: solo lo imprescindible dentro del
    contenido del juego, nunca en metadatos públicos.
 
+## 7b. Idioma y diálogo
+
+- **Dos capas de idioma, a propósito:**
+  - **SYSTEM / UI** en inglés retro: SYSTEM, SAVE, CONTINUE, SETTINGS,
+    QUEST, pantallas de arranque… No se traduce lo existente.
+  - **Diálogo de personajes y narrador** principalmente en **español**.
+- La caja de diálogo es la de un RPG portátil (tercio inferior, borde pixel
+  doble, pestaña con el nombre, retrato opcional, ▼), original: no se copia
+  ninguna UI concreta.
+- Cada página cabe entera en la caja (máx. 3 líneas cortas); nunca hay
+  scroll. Los scripts se validan en tests.
+- La expresividad se consigue con el markup mínimo (`[em]`, `[shake]`,
+  `[sys]`, `[slow]`, `[fast]`, `[pause]`), nunca con HTML.
+- La demo de GAME-02 (`dialogueDemo`, el Archivero) **no es contenido
+  final** y no revela nada de la historia.
+
 ## 8. Dirección artística (provisional)
 
 - Píxel perfecto cuando tenga sentido; `image-rendering: pixelated`.

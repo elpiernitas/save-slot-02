@@ -77,6 +77,36 @@ describe('fullscreen controller', () => {
     expect(fs.isActive()).toBe(false);
   });
 
+  it('retries once without options when the options object is rejected', async () => {
+    const doc = fakeDocument();
+    const calls: unknown[] = [];
+    const element = {} as Element;
+    doc.documentElement.requestFullscreen = (options?: FullscreenOptions) => {
+      calls.push(options);
+      if (options) return Promise.reject(new TypeError('navigationUI not supported'));
+      doc.fullscreenElement = element;
+      return Promise.resolve();
+    };
+    const fs = createFullscreenController(doc);
+    expect(await fs.request()).toBe('entered');
+    expect(calls).toEqual([{ navigationUI: 'hide' }, undefined]);
+    expect(fs.isActive()).toBe(true);
+  });
+
+  it('returns "denied" only after both attempts fail', async () => {
+    const doc = fakeDocument({ deny: true });
+    const spy = vi.spyOn(doc.documentElement, 'requestFullscreen');
+    expect(await createFullscreenController(doc).request()).toBe('denied');
+    expect(spy).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not retry through the unprefixed API when only webkit exists', async () => {
+    const doc = fakeDocument({ prefixedOnly: true });
+    const spy = vi.spyOn(doc.documentElement, 'webkitRequestFullscreen');
+    expect(await createFullscreenController(doc).request()).toBe('entered');
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
   it('supports the webkit-prefixed API', async () => {
     const fs = createFullscreenController(fakeDocument({ prefixedOnly: true }));
     expect(fs.isSupported()).toBe(true);

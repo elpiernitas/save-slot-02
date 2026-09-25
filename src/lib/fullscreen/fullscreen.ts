@@ -77,19 +77,34 @@ export function createFullscreenController(
     async request(target = doc.documentElement) {
       if (!isSupported()) return 'unsupported';
       if (isActive()) return 'already';
-      try {
-        if (target.requestFullscreen) {
+      if (target.requestFullscreen) {
+        try {
           await target.requestFullscreen({ navigationUI: 'hide' });
-        } else if (target.webkitRequestFullscreen) {
+          return 'entered';
+        } catch {
+          // Some engines support fullscreen but reject the options object.
+          // Retry exactly once without options before giving up. The retry
+          // still runs inside the same user activation in current browsers,
+          // but if a browser has consumed it, the retry is denied as well.
+          if (isActive()) return 'entered';
+          try {
+            await target.requestFullscreen();
+            return 'entered';
+          } catch {
+            return 'denied';
+          }
+        }
+      }
+      if (target.webkitRequestFullscreen) {
+        try {
           // Legacy Safari: no promise, no error reporting.
           target.webkitRequestFullscreen();
-        } else {
-          return 'unsupported';
+          return 'entered';
+        } catch {
+          return 'denied';
         }
-        return 'entered';
-      } catch {
-        return 'denied';
       }
+      return 'unsupported';
     },
 
     async exit() {

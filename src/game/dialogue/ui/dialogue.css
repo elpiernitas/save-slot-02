@@ -1,0 +1,143 @@
+/*
+ * Dialogue window. Sizes in logical px (--px) of the 480×270 stage.
+ * Layout: box = lower third; choices = small window above the box, right.
+ */
+.dlg-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.dlg-box {
+  --dlg-height: calc(var(--px) * 78);
+
+  position: absolute;
+  left: calc(var(--px) * 10);
+  right: calc(var(--px) * 10);
+  bottom: calc(var(--px) * 8);
+  height: var(--dlg-height);
+  display: flex;
+  gap: calc(var(--px) * 10);
+  padding: calc(var(--px) * 10) calc(var(--px) * 14) calc(var(--px) * 8);
+  background: var(--color-surface);
+  /* Double pixel border + hard shadow. */
+  border: var(--px) solid var(--color-border);
+  box-shadow:
+    inset 0 0 0 var(--px) var(--color-bg),
+    inset 0 0 0 calc(var(--px) * 2) var(--color-border-dim),
+    calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--color-shadow);
+  cursor: pointer;
+}
+
+/* Name tab sitting on the top edge of the box. */
+.dlg-name {
+  position: absolute;
+  left: calc(var(--px) * 12);
+  top: calc(var(--px) * -7);
+  padding: 0 calc(var(--px) * 5);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: calc(var(--px) * 12);
+  letter-spacing: calc(var(--px) * 0.5);
+  color: var(--color-select);
+  background: var(--color-surface);
+  border: var(--px) solid var(--color-border);
+  box-shadow: var(--px) var(--px) 0 var(--color-shadow);
+}
+
+.dlg-box[data-tone='system'] .dlg-name {
+  color: var(--color-system);
+  border-color: var(--color-system);
+}
+
+.dlg-box[data-tone='system'] .dlg-text {
+  color: var(--color-system);
+}
+
+.dlg-portrait {
+  flex: none;
+  align-self: center;
+  width: calc(var(--px) * 54);
+  height: calc(var(--px) * 54);
+  padding: calc(var(--px) * 3);
+  background: var(--color-bg);
+  border: var(--px) solid var(--color-border-dim);
+  box-shadow: inset 0 0 0 var(--px) var(--color-shadow);
+}
+
+.dlg-portrait svg {
+  width: 100%;
+  height: 100%;
+}
+
+.dlg-body {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden; /* never scrolls: pages are sized to fit (see validate.ts) */
+}
+
+.dlg-text {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: calc(var(--px) * 16);
+  color: var(--color-text);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.dlg-text [data-hidden] {
+  visibility: hidden;
+}
+
+.dlg-em {
+  color: var(--color-select);
+  font-weight: 700;
+}
+
+.dlg-sys {
+  color: var(--color-system);
+}
+
+.dlg-shake {
+  display: inline-block;
+  animation: dlg-shake 0.32s steps(2) infinite;
+  animation-delay: calc(var(--shake-i, 0) * -0.1s);
+}
+
+@keyframes dlg-shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(var(--px), calc(var(--px) * -1));
+  }
+  66% {
+    transform: translate(calc(var(--px) * -1), var(--px));
+  }
+}
+
+.dlg-more {
+  position: absolute;
+  right: calc(var(--px) * 12);
+  bottom: calc(var(--px) * 7);
+}
+
+/* ---- Choice window ---- */
+.dlg-choices {
+  position: absolute;
+  right: calc(var(--px) * 10);
+  bottom: calc(var(--px) * 94);
+  min-width: calc(var(--px) * 150);
+  max-width: calc(var(--px) * 230);
+  padding: calc(var(--px) * 6);
+}
+
+.dlg-choices .rpg-menu__item {
+  font-size: var(--text-md);
+}
+
+/* Locked options: greyed out, no reason given. */
+.dlg-choices .rpg-menu__item[aria-disabled] {
+  opacity: 0.35;
+  text-decoration: line-through;
+  text-decoration-thickness: var(--px);
+}

@@ -1,0 +1,57 @@
+.dialogue-demo {
+  background: var(--color-bg);
+}
+
+.dialogue-demo__label {
+  position: absolute;
+  top: calc(var(--px) * 8);
+  left: calc(var(--px) * 12);
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  letter-spacing: var(--px);
+}
+
+.dialogue-demo__stage {
+  position: absolute;
+  inset: 0 0 calc(var(--px) * 90);
+}
+
+.dialogue-demo__crt {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--px) * 30);
+  width: calc(var(--px) * 96);
+  height: calc(var(--px) * 96);
+  margin-left: calc(var(--px) * -48);
+  opacity: 0.55;
+}
+
+.dialogue-demo__crt[data-on] {
+  opacity: 1;
+  animation: demo-float 2s steps(2) infinite;
+}
+
+.dialogue-demo__crt svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes demo-float {
+  50% {
+    transform: translateY(calc(var(--px) * -2));
+  }
+}
+
+/* Pixel floor line with a dotted perspective hint. */
+.dialogue-demo__floor {
+  position: absolute;
+  left: calc(var(--px) * 60);
+  right: calc(var(--px) * 60);
+  bottom: calc(var(--px) * 30);
+  height: var(--px);
+  background: var(--color-border-dim);
+  box-shadow:
+    0 calc(var(--px) * 6) 0 var(--color-surface-raised),
+    0 calc(var(--px) * 14) 0 var(--color-surface);
+}

@@ -54,10 +54,12 @@ src/
                            systemCheck/, boot/, saveDetected/, title/
     input/                 keymap, InputRouter por capas, InputProvider, useInput, menú
     ui/                    Menu, useMenu, LeaderLine, PixelSprite, ui.css
-    audio/                 contrato AudioEngine, motor Web Audio (SFX sintetizados)
-    content/               datos de contenido (nombre del jugador…)
+    dialogue/              motor de diálogo: tipos, markup, typewriter, runtime puro,
+                           efectos, validación, retratos; ui/ = capa React
+    audio/                 contrato AudioEngine, motor Web Audio (SFX + voces sintetizadas)
+    content/               datos: jugador, reparto (cast), retratos, scripts de diálogo
     calendar/              fechas del proyecto (Europe/Madrid) + time gates
-    dialogue/, inventory/, quests/, achievements/   contratos (tipos) de fases futuras
+    inventory/, quests/, achievements/   contratos (tipos) de fases futuras
 docs/                      constitución, roadmap, decisiones, handoff, assets
 ```
 
@@ -69,13 +71,58 @@ el save y arranca la sesión → `SceneRenderer` pinta la escena de
 autosave.
 
 Secuencia de arranque: `systemCheck` → (`boot` → `saveDetected`, solo la
-primera vez) → `title`.
+primera vez) → `title`. Mientras no exista juego, CONTINUE abre la demo del
+motor de diálogo (`dialogueDemo`).
+
+## Diálogos (GAME-02)
+
+Un diálogo es un **grafo de datos** (`DialogueScript` en
+`src/game/dialogue/types.ts`): nodos `line` (páginas), `choice` (menú),
+`branch` (enrutado por condiciones) y `effect` (efectos sin UI). Nada de
+funciones ni JSX en los scripts.
+
+```
+script (datos) ──► runtime.ts (puro) ──► DialogueState: line | choice | finished
+                      │  evalúa Condition, emite DialogueEffect
+                      ▼
+               effects.ts: setFlag / recordChoice / unlockAchievement /
+               goToScene → acciones del reducer; playSfx → audio;
+               action → registro por id; giveItem/takeItem/giveCard/setQuest →
+               "unsupported" explícito (fases futuras)
+                      ▼
+ui/useDialogue ─► ui/DialoguePlayer ─► DialogueBox + DialogueText + Portrait + Menu
+```
+
+- **Markup** (`markup.ts`): `[em]…[/em]` destacado · `[shake]…[/shake]`
+  temblor · `[sys]…[/sys]` tono sistema · `[slow]`/`[fast]` ritmo ·
+  `[pause]` / `[pause=800]` pausa · `\n` salto · `[[` corchete literal.
+  Se parsea a tokens; etiquetas desconocidas se muestran literalmente y se
+  reportan.
+- **Typewriter** (`typewriter.ts`): velocidades centralizadas por
+  `settings.textSpeed` (slow 55 ms/car., normal 30, fast 14, instant 0),
+  pausas cortas tras `. ! ? …` y `, ; :`. Primer Enter/Espacio/clic revela
+  la página; el siguiente avanza. Repeticiones de tecla y dobles clics
+  (< 140 ms) se ignoran.
+- **Voces**: `speaker.voice` → blip sintetizado (`VOICE_BLIPS`), solo en
+  letras/dígitos y como máximo cada 65 ms.
+- **Hablantes y retratos**: reparto global en `content/cast.ts`, retratos
+  pixel en `content/portraits.ts` (base + capa por expresión). Una línea
+  solo indica `speaker` y `expression`.
+- **Validación**: `validateDialogueScript` (enlaces, hablantes, retratos,
+  markup, longitud de página, opciones, efectos, nodos inalcanzables). Todo
+  script de contenido debe tener un test que lo valide sin errores.
+
+Crear un diálogo nuevo: script en `src/game/content/dialogue/`, test con
+`validateDialogueScript`, y en la escena
+`<DialoguePlayer script={…} onFinish={…} />`.
 
 ## Convenciones
 
 - **Escenas:** una escena = una carpeta en `src/game/scenes/<id>/` +
   entrada en `SCENE_REGISTRY`. Cambiar de escena es
   `dispatch({ type: 'scene/goTo', scene })`, nunca un `if` en un componente.
+- **Diálogos:** contenido como datos en `src/game/content/dialogue/`,
+  validado en tests; texto de personajes en español, sistema en inglés.
 - **Input:** nunca `addEventListener('keydown')` en una pantalla. Usar
   `useInput` (entradas lógicas) o `useMenu` + `<Menu>`. Prioridades en
   `INPUT_PRIORITY`.

@@ -1,6 +1,6 @@
 import type { AchievementId } from '../achievements/types';
 import { INITIAL_SCENE, isResumableScene, type SceneId } from '../scenes/sceneIds';
-import type { ChoiceId, FlagId, FlagValue, GameSave, GameSettings } from './types';
+import type { ChoiceId, FlagId, FlagValue, GameSave, GameSettings, SettingsPatch } from './types';
 
 /**
  * The only way the running game mutates its save. Every action carries its own
@@ -15,7 +15,7 @@ export type GameAction =
   | { type: 'flag/set'; flag: FlagId; value: FlagValue; at: string }
   | { type: 'choice/record'; choice: ChoiceId; option: string; at: string }
   | { type: 'achievement/unlock'; achievement: AchievementId; at: string }
-  | { type: 'settings/update'; settings: Partial<GameSettings>; at: string }
+  | { type: 'settings/update'; settings: SettingsPatch; at: string }
   /** Once per page load: counts the session and restarts at the system check. */
   | { type: 'system/sessionStart'; at: string }
   | { type: 'system/bootCompleted'; at: string }
@@ -83,7 +83,7 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
       );
 
     case 'settings/update':
-      return touch({ ...save, settings: { ...save.settings, ...action.settings } }, action.at);
+      return touch({ ...save, settings: mergeSettings(save.settings, action.settings) }, action.at);
 
     case 'system/sessionStart':
       return touch(
@@ -110,4 +110,18 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
     case 'save/replace':
       return action.save;
   }
+}
+
+/** Deep merge that only overwrites the keys present in the patch. */
+export function mergeSettings(current: GameSettings, patch: SettingsPatch): GameSettings {
+  return {
+    ...current,
+    ...(patch.textSpeed !== undefined && { textSpeed: patch.textSpeed }),
+    ...(patch.reducedMotion !== undefined && { reducedMotion: patch.reducedMotion }),
+    audio: {
+      ...current.audio,
+      ...(patch.audio?.muted !== undefined && { muted: patch.audio.muted }),
+      volume: { ...current.audio.volume, ...patch.audio?.volume },
+    },
+  };
 }

@@ -1,4 +1,4 @@
-import { SYNTH_SFX, type SynthNote } from './synthSfx';
+import { SYNTH_SFX, voiceNote, type SynthNote } from './synthSfx';
 import { DEFAULT_AUDIO_SETTINGS, type AudioEngine, type AudioSettings } from './types';
 
 type AudioContextCtor = new () => AudioContext;
@@ -22,6 +22,7 @@ function getAudioContextCtor(): AudioContextCtor | null {
 export function createWebAudioEngine(): AudioEngine {
   let context: AudioContext | null = null;
   let settings: AudioSettings = DEFAULT_AUDIO_SETTINGS;
+  let blipCount = 0;
 
   function playNotes(notes: readonly SynthNote[], channelVolume: number) {
     if (!context || context.state !== 'running' || settings.muted || channelVolume <= 0) return;
@@ -71,9 +72,8 @@ export function createWebAudioEngine(): AudioEngine {
       const notes = SYNTH_SFX[sfx];
       if (notes) playNotes(notes, settings.volume.sfx);
     },
-    playVoiceBlip() {
-      const notes = SYNTH_SFX.blip;
-      if (notes) playNotes(notes, settings.volume.voice);
+    playVoiceBlip(voice) {
+      playNotes([voiceNote(voice, blipCount++)], settings.volume.voice);
     },
   };
 }
