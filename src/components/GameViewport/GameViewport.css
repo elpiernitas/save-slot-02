@@ -1,0 +1,30 @@
+/*
+ * Letterbox + 16:9 stage.
+ * The stage is the largest 16:9 box that fits inside the safe area.
+ * Inside the stage, size text/UI with `cqh`/`cqw` units (container queries)
+ * so the game scales like a fixed-resolution screen.
+ */
+.game-viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  background: var(--color-letterbox);
+  overflow: hidden;
+}
+
+.game-stage {
+  --stage-available-height: calc(var(--app-height) - var(--safe-top) - var(--safe-bottom));
+
+  position: relative;
+  aspect-ratio: var(--stage-aspect);
+  width: min(100%, calc(var(--stage-available-height) * var(--stage-aspect)));
+  max-height: 100%;
+  overflow: hidden;
+  container-type: size;
+  container-name: stage;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-pixel);
+}

@@ -1,0 +1,31 @@
+# Netlify configuration — see docs/DEPLOYMENT section in README.md.
+# Nothing is deployed in GAME-00; this file only makes the repo deploy-ready.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# SPA fallback. The game currently has a single route, but any deep link
+# (e.g. a future /save) must still load index.html instead of a 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Private project: keep it out of search engines.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Referrer-Policy = "no-referrer"
+    X-Content-Type-Options = "nosniff"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Vite fingerprints everything under /assets, so it can be cached forever.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

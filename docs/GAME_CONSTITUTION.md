@@ -1,0 +1,148 @@
+# SAVE SLOT 02 — Constitución del juego
+
+> Fuente de verdad del proyecto. Si otro documento o el código contradicen
+> esto, gana este archivo (o se actualiza aquí primero, con entrada en
+> `DECISION_LOG.md`).
+
+## 1. Qué es
+
+Un videojuego web **corto, real y jugable**, hecho por Manu para una única
+persona: Luis. Nombre provisional: **SAVE SLOT 02**.
+
+No es: una landing page, un cuestionario, un "Wrapped", una felicitación
+interactiva, una presentación ni una simulación superficial de videojuego.
+
+## 2. Visión
+
+Debe sentirse como un pequeño **RPG indie portátil** hecho expresamente para
+un jugador.
+
+Lenguaje visual de referencia (sensación, nunca copia):
+
+- RPG de Game Boy Advance / Nintendo DS
+- aventuras pixel-art
+- cajas de diálogo clásicas con indicador ▼
+- menús RPG, inventario, decisiones, secretos, progresión
+- humor autorreferencial
+
+## 3. Tono
+
+**Sí:** humor, sorpresa, ironía, pequeños momentos absurdos, referencias
+internas, cierto misterio, progresión, una parte emocional **sutil**.
+
+**No:** cursi, empalagoso, infantil, tarjeta romántica, encuesta,
+presentación, Wrapped, landing de San Valentín.
+
+**Regla narrativa clave:** la cita final es un **plot twist / recompensa**, no
+el propósito evidente desde el principio. Nada en las primeras escenas debe
+delatarlo.
+
+## 4. Fechas (zona horaria: `Europe/Madrid`)
+
+| Qué                    | Fecha                 | Estado en el juego                                                                     |
+| ---------------------- | --------------------- | -------------------------------------------------------------------------------------- |
+| Envío del juego        | lunes 28 sep 2026     | `LAUNCH_DATE`                                                                          |
+| Opción de cita         | miércoles 30 sep 2026 | seleccionable                                                                          |
+| Opción de cita         | jueves 1 oct 2026     | seleccionable                                                                          |
+| Plan real ya existente | viernes 2 oct 2026    | **MAIN QUEST ALREADY ACTIVE**, NO seleccionable (teatro 18:30, posible fiesta después) |
+| Opción de cita         | domingo 4 oct 2026    | seleccionable                                                                          |
+
+- Todas las fechas viven en `src/game/calendar/calendar.ts`. **Nunca** se
+  escriben fechas u horas a mano en componentes.
+- Todo "ahora" viene de un `Clock` inyectado (testeable, permite viajar en el
+  tiempo en debug).
+- Las reglas se evalúan siempre en hora de Madrid, esté donde esté el
+  dispositivo.
+
+## 5. Dispositivo objetivo
+
+- **Prioridad absoluta: smartphone en horizontal.** iPhone + Safari iOS primero,
+  Chrome móvil después.
+- Escenario de juego **16:9** (letterbox negro alrededor).
+- En vertical: pantalla específica **ROTATE DEVICE TO CONTINUE** con animación
+  de teléfono girando (GAME-01). Nunca una web vertical metida en el móvil.
+- Escritorio: debe funcionar (teclado), pero no es el objetivo de diseño.
+
+## 6. Jugador (contexto para fases posteriores)
+
+> Solo inspiración para easter eggs y mecánicas. **No** se usa todo; en
+> GAME-00 no se usa nada. Cada referencia que entre al juego debe ser original
+> en su ejecución (sin IP de terceros).
+
+- Muy aficionado a los videojuegos (~1.400 juegos en Steam, dato aproximado).
+- Juega online con amigos; usa Discord.
+- Colección antigua de cartas Pokémon (inspiración para un sistema de cartas
+  **propio**, nunca cartas/arte de Pokémon).
+- Minecraft, Clash Royale; ha hablado de jugar 2v2.
+- Conoce bien la cultura Nintendo (p. ej. reconoce a Birdo).
+- Entiende al instante roles RPG: guerrero, tanque, curador.
+- Usa referencias de videojuegos en conversaciones normales.
+- Nostalgia de Club Penguin.
+- Le gustan Spider-Man y Doctor Strange; le gusta el cine.
+- Recomendó "Los cronocrímenes".
+- Le atraen ocultismo, magia, tarot y similares (sin necesariamente creer).
+
+Las referencias a IP ajenas se hacen como **guiño** (texto, humor, alusión),
+nunca con sprites, logos, música, sonidos o personajes protegidos.
+
+## 7. Reglas creativas
+
+1. Todo asset es original o con licencia compatible documentada.
+2. Prohibido: sprites/música/sonidos/logos/fuentes/tilesets de Pokémon,
+   Nintendo o cualquier propiedad protegida.
+3. Humor antes que ternura. La emoción se gana, no se declara.
+4. Cada pantalla debe parecer parte de un videojuego, no de una web.
+5. Corto y denso: mejor 20 minutos memorables que una hora de relleno.
+6. Nada de datos personales innecesarios: solo lo imprescindible dentro del
+   contenido del juego, nunca en metadatos públicos.
+
+## 8. Dirección artística (provisional)
+
+- Píxel perfecto cuando tenga sentido; `image-rendering: pixelated`.
+- Bordes nítidos, sombras duras, sin blur ni degradados decorativos.
+- Cajas RPG, interfaz retro, tipografía bitmap (fuente por decidir; ver
+  DECISION_LOG D-011).
+- Buen contraste. Transiciones rápidas.
+- Nada de "web corporativa".
+- Tokens en `src/styles/tokens.css`. La paleta **no** está cerrada.
+
+## 9. Accesibilidad y UX (requisitos)
+
+- Objetivos táctiles ≥ 44 px CSS.
+- Respetar safe areas (notch / Dynamic Island / indicador de inicio): ningún
+  control interactivo fuera del área segura.
+- Evitar zoom accidental: `touch-action: manipulation` (sin bloquear el pinch
+  del sistema), inputs a ≥ 16 px para que iOS no haga auto-zoom.
+- Altura con `100dvh` (fallback `100vh`).
+- Sin scroll ni rebote durante el juego (`overflow: hidden`,
+  `overscroll-behavior: none`).
+- Respetar `prefers-reduced-motion` (animaciones decorativas desactivadas o
+  reducidas).
+- Contraste suficiente en todo el texto.
+- El audio se puede mutear siempre, y nunca suena antes de una interacción.
+
+## 10. Hosting
+
+- **Netlify** (build `npm run build`, publica `dist/`). Configurado en
+  `netlify.toml`. Sin despliegue hasta GAME-12 (o cuando Manu lo pida).
+- El sitio no se indexa (`noindex` en meta, cabecera y `robots.txt`).
+
+## 11. Seguridad y privacidad
+
+- Sin login, sin backend, sin analítica (por ahora).
+- Sin secretos, API keys, conversaciones completas ni datos sensibles en el
+  repositorio.
+- Sin nombres reales en `<title>`, meta tags ni cualquier metadato público.
+- El repositorio debe permanecer **privado** (contiene este documento).
+- `docs/` no se despliega: solo se publica `dist/`.
+
+## 12. Límites técnicos (principios)
+
+- Stack: React + TypeScript + Vite + CSS propio. Sin frameworks UI pesados,
+  sin Tailwind, sin Phaser (se evaluará en GAME-04/06 si se demuestra
+  necesario).
+- Persistencia inicial: `localStorage` detrás de una capa propia; sustituible
+  por Supabase sin rehacer el juego.
+- No sobrearquitectar: cada sistema se construye en la fase que lo necesita.
+- Todo lo que sea lógica (fechas, guardado, condiciones, reducer) es puro y
+  tiene tests.

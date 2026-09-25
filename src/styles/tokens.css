@@ -1,0 +1,79 @@
+/*
+ * SAVE SLOT 02 — visual tokens (PROVISIONAL).
+ * The palette is not final (see docs/GAME_CONSTITUTION.md §Art direction).
+ * Rules: hard edges, hard shadows, no blur, no gradients-as-decoration,
+ * fast transitions. Stage-relative sizes use `cqh` (1cqh = 1% of stage height).
+ */
+:root {
+  /* ---- Palette (provisional) ---- */
+  --color-letterbox: #000000;
+  --color-bg: #0e0d14;
+  --color-surface: #1b1a26;
+  --color-surface-raised: #2a2838;
+  --color-border: #f2efe6;
+  --color-text: #f2efe6;
+  --color-text-dim: #9d98ad;
+  --color-accent: #7ee2a8;
+  --color-accent-alt: #f2c14e;
+  --color-danger: #ef6f6c;
+  --color-shadow: #000000;
+
+  /* ---- Typography ----
+   * No bitmap font is bundled yet (see docs/DECISION_LOG.md D-011).
+   * System monospace is the safe fallback until an OFL font is chosen. */
+  --font-pixel:
+    ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  /* Stage-relative type scale */
+  --text-xs: 3.2cqh;
+  --text-sm: 4cqh;
+  --text-md: 5cqh;
+  --text-lg: 7cqh;
+  --text-xl: 10cqh;
+
+  /* ---- Spacing (stage-relative) ---- */
+  --space-1: 1.5cqh;
+  --space-2: 3cqh;
+  --space-3: 5cqh;
+  --space-4: 8cqh;
+
+  /* ---- Borders & shadows: crisp, never blurred ---- */
+  --border-width: max(2px, 0.8cqh);
+  --radius: 0;
+  --shadow-hard-sm: 0.5cqh 0.5cqh 0;
+  --shadow-hard-md: 1cqh 1cqh 0;
+
+  /* ---- Motion ---- */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --ease-snap: steps(4, end);
+
+  /* ---- Stage ---- */
+  --stage-aspect: 16 / 9;
+  /* Provisional logical resolution for future pixel art (480×270 = 16:9). */
+  --stage-logical-width: 480;
+  --stage-logical-height: 270;
+
+  /* ---- Touch ---- */
+  --touch-target-min: 44px;
+
+  /* ---- Viewport / safe areas ---- */
+  --app-height: 100vh;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --app-height: 100dvh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+  }
+}
