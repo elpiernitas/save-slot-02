@@ -1,7 +1,7 @@
 import type { DialogueScript, Speaker } from '../../dialogue/types';
 
 /**
- * GAME-04 vertical slice: La Muralla, afternoon. The slice shows the tone
+ * GAME-04 vertical slice: in front of La Muralla (the bar/café), afternoon. The slice shows the tone
  * (everyday things with RPG logic), it does not tell the story. Nothing here
  * explains why the place matters.
  */
@@ -27,25 +27,6 @@ export const MURALLA_ARRIVAL: DialogueScript = {
 };
 
 export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
-  'muralla.wall': {
-    id: 'muralla.wall',
-    start: 'a',
-    nodes: {
-      a: line('a', [
-        'Piedra muy antigua. Ha sobrevivido a siglos de viento, salitre y obras municipales.',
-        '[pause]Merece respeto.',
-      ]),
-    },
-  },
-
-  'muralla.gate': {
-    id: 'muralla.gate',
-    start: 'a',
-    nodes: {
-      a: line('a', ['Una puerta de madera. Empujas.[pause] No abre.', '[slow]Todavía.[/slow]']),
-    },
-  },
-
   'muralla.tree': {
     id: 'muralla.tree',
     start: 'a',
@@ -54,13 +35,54 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
     },
   },
 
-  'muralla.sign': {
-    id: 'muralla.sign',
+  'muralla.board': {
+    id: 'muralla.board',
     start: 'a',
     nodes: {
       a: line('a', [
-        '[sys]PROHIBIDO DAR DE COMER A LAS GAVIOTAS.[/sys]',
-        'Debajo, escrito a boli:[pause] «Ellas ya saben lo que han hecho».',
+        'Una pizarra en la puerta:[pause] [sys]HOY: LO DE SIEMPRE.[/sys]',
+        'Debajo, con otra letra:[pause] «MAÑANA: YA VEREMOS».',
+      ]),
+    },
+  },
+
+  'muralla.window': {
+    id: 'muralla.window',
+    start: 'a',
+    nodes: {
+      a: line('a', ['Dentro, alguien discute con la cafetera.[pause] Va ganando la cafetera.']),
+    },
+  },
+
+  'muralla.door': {
+    id: 'muralla.door',
+    start: 'a',
+    nodes: {
+      a: line('a', [
+        'Sale olor a café recién hecho y a conversación ajena.',
+        'Hoy toca terraza.[pause] Lo ha decidido el sol, no tú.',
+      ]),
+    },
+  },
+
+  'muralla.portal': {
+    id: 'muralla.portal',
+    start: 'a',
+    nodes: {
+      a: line('a', [
+        'Un portal con telefonillo. Pulsas un botón al azar.[pause] Nadie contesta.',
+        'La puerta no abre.[pause] [slow]Todavía.[/slow]',
+      ]),
+    },
+  },
+
+  'muralla.shutter': {
+    id: 'muralla.shutter',
+    start: 'a',
+    nodes: {
+      a: line('a', [
+        'Persiana bajada. Un papel pegado con celo:[pause] [sys]VUELVO EN 5 MIN.[/sys]',
+        'Por el color del papel, llevan años siendo cinco minutos.',
       ]),
     },
   },
@@ -94,7 +116,7 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
     nodes: {
       intro: {
         ...line('intro', [
-          'Un bolardo con dos franjas rojas. Firme, gris y muy convencido de su papel.',
+          'Un bolardo algo torcido, con una pegatina a medio arrancar. Muy convencido de su papel.',
         ]),
         next: 'route',
       } as DialogueScript['nodes'][string],

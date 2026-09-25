@@ -25,7 +25,8 @@ npm run lint         # ESLint
 npm run format       # Prettier (escribe)
 npm run build        # build de producción → dist/
 npm run preview      # servir dist/ localmente
-npm run check        # typecheck + lint + format:check + tests + build
+npm run art          # regenerar el arte del mundo (PNG + manifest)
+npm run check        # typecheck + lint + format:check + art:check + tests + build
 ```
 
 `npm run check` debe pasar antes de cerrar cualquier fase.
@@ -48,6 +49,7 @@ src/
   styles/                  fonts.css, tokens.css (tokens + --px), global.css
   types/                   tipos compartidos primitivos
   assets/fonts/            Pixelify Sans (OFL) autoalojada
+  assets/world/            PNG del mundo + manifest.json (generados por npm run art)
   game/
     state/                 GameSave (v2), reducer, condiciones, GameProvider, useGame
     save/                  StorageDriver, localStorage, SaveManager, migraciones
@@ -61,10 +63,11 @@ src/
     player/                clases de jugador (GUERRERO / TANQUE / CURADOR)
     world/                 exploración (GAME-04): tipos, mapas, colisión, movimiento,
                            cámara, interacción/zonas, checkpoints, WorldEngine,
-                           renderer Canvas 2D, arte pixel generado por código
+                           renderer Canvas 2D (blitea PNG), carga de sprites
     content/               datos: jugador, reparto (cast), retratos, sigilos, scripts de diálogo
     calendar/              fechas del proyecto (Europe/Madrid) + time gates
     inventory/, quests/, achievements/   contratos (tipos) de fases futuras
+tools/art/                 generador del arte del mundo (Node, sin dependencias) → PNG
 docs/                      constitución, world bible, roadmap, decisiones, handoff, assets
 ```
 
@@ -91,6 +94,13 @@ dueño del save, los diálogos y la UI. Un mapa es un `WorldMap` de datos
 checkpoints, spawns). Controles: WASD/flechas, E/Enter/Espacio para
 interactuar, Esc para el menú de pausa. En dev, `?worldRes=480` compara la
 resolución del mundo (por defecto 640×360).
+
+**Arte del mundo:** la geometría del slice vive en
+`src/game/world/maps/muralla.layout.json`, compartida por el mapa
+(colisiones) y por `tools/art` (píxeles). Tras cambiar el layout o el arte:
+`npm run art` y commitear los PNG; `npm run art:check` detecta PNG
+desactualizados. Un PNG dibujado a mano puede sustituir a uno generado si
+mantiene nombre, tamaño de frame y ancla del manifest.
 
 Añadir un interactuable: rectángulo en el mapa + script en
 `src/game/content/dialogue/` + test (el test del mapa comprueba que todo

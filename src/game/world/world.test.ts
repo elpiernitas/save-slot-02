@@ -3,7 +3,8 @@ import { cameraFor } from './camera';
 import { checkpointFor, spawnForCheckpoint } from './checkpoint';
 import { buildCollisionWorld } from './collision';
 import { worldViewFromQuery } from './config';
-import { findInteraction, probeRect, zoneAt } from './interaction';
+import { findInteraction, probeRect, REACH, zoneAt } from './interaction';
+import { SPRITES, SPRITE_URLS } from './art/assets';
 import { MURALLA_MAP } from './maps/muralla';
 import { feetRect, MAX_STEP_MS, stepMovement, WALK_SPEED } from './movement';
 import { TILE_SIZE, type Interactable, type WorldMap } from './types';
@@ -13,6 +14,7 @@ const ROOM: WorldMap = {
   id: 'room',
   displayName: 'ROOM',
   timeOfDay: 'morning',
+  background: 'room',
   widthTiles: 10,
   heightTiles: 8,
   tiles: [
@@ -123,7 +125,7 @@ describe('interaction and zones', () => {
   it('probes a short distance in front of the feet', () => {
     const p = probeRect({ x: 40, y: 40 }, 'right');
     expect(p.x).toBeGreaterThan(40);
-    expect(p.w).toBeLessThanOrEqual(12);
+    expect(p.w).toBeLessThanOrEqual(REACH);
   });
 
   it('detects the zone under the feet', () => {
@@ -187,6 +189,51 @@ describe('La Muralla map', () => {
       }
       expect(reachable, item.id).toBe(true);
     }
+  });
+
+  it('draws only sprites that exist in the art manifest', () => {
+    const ids = [
+      map.background,
+      'player',
+      ...map.props.map((p) => p.sprite),
+      ...map.npcs.map((n) => n.sprite),
+    ];
+    for (const id of ids) {
+      expect(SPRITES[id], id).toBeDefined();
+      expect(SPRITE_URLS[id], id).toBeDefined();
+    }
+    const bg = SPRITES[map.background]!;
+    expect([bg.width, bg.height]).toEqual([
+      map.widthTiles * TILE_SIZE,
+      map.heightTiles * TILE_SIZE,
+    ]);
+  });
+
+  it('uses a large, readable player sprite (32×48, 4 directions × 3 frames)', () => {
+    const player = SPRITES.player!;
+    expect([player.frameWidth, player.frameHeight]).toEqual([32, 48]);
+    expect([player.frames, player.rows]).toEqual([3, 4]);
+  });
+
+  it('is the bar and its terrace, not a fortress: no wall or gate left', () => {
+    const ids = map.interactables.map((i) => i.id);
+    expect(ids).toEqual(expect.arrayContaining(['barDoor', 'barWindowLeft', 'table', 'waitress']));
+    for (const banned of ['wall', 'gate']) expect(ids).not.toContain(banned);
+    expect(map.props.filter((p) => p.sprite.startsWith('tableSet')).length).toBeGreaterThanOrEqual(
+      3,
+    );
+  });
+
+  it('the terrace can be entered through the gap in the windbreak', () => {
+    let pos = { x: 352, y: 372 };
+    const visited = new Set<string | undefined>();
+    for (let i = 0; i < 60; i++) {
+      pos = stepMovement(pos, 'up', 'up', 50, world).pos;
+      visited.add(zoneAt(pos, map.zones)?.id);
+    }
+    expect(visited).toContain('terrace');
+    // …and straight on to the bar door on the sidewalk.
+    expect(findInteraction(pos, 'up', map.interactables)?.id).toBe('barDoor');
   });
 
   it('has at least 3 interactables and one generic NPC', () => {

@@ -64,28 +64,28 @@ describe('WorldEngine', () => {
   });
 
   it('applies a cooldown after resuming so the closing key cannot re-open', () => {
-    const { engine } = setup({ spawn: { ...spawnAt('gate'), facing: 'up' } });
+    const { engine } = setup({ spawn: { ...spawnAt('portal'), facing: 'up' } });
     engine.step(0);
-    expect(engine.tryInteract(0)?.id).toBe('gate');
+    expect(engine.tryInteract(0)?.id).toBe('portal');
     engine.setPaused(true, 0);
     engine.setPaused(false, 1000, 250);
     engine.step(1010);
     expect(engine.tryInteract(1100)).toBeNull();
-    expect(engine.tryInteract(1260)?.id).toBe('gate');
+    expect(engine.tryInteract(1260)?.id).toBe('portal');
   });
 
   it('reports target changes and entering a new zone (once)', () => {
-    const { engine, events } = setup({ spawn: { ...spawnAt('gate'), facing: 'up' } });
+    const { engine, events } = setup({ spawn: { ...spawnAt('portal'), facing: 'up' } });
     engine.step(0);
-    expect(events.target).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'gate' }));
+    expect(events.target).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'portal' }));
     expect(events.zone).not.toHaveBeenCalled(); // spawn zone is not "entered"
 
-    // Walk down from the gate into the arrival zone.
-    const walker = setup({ spawn: spawnAt('gate'), held: 'down' });
+    // Walk down from the arrival sidewalk into the street by the tree.
+    const walker = setup({ spawn: spawnAt('arrival'), held: 'down' });
     let t = 0;
     for (let i = 0; i < 80; i++) walker.engine.step((t += 50));
     const zones = walker.events.zone.mock.calls.map(([z]) => z.id);
-    expect(zones).toContain('arrival');
+    expect(zones).toContain('tree');
     expect(new Set(zones).size).toBe(zones.length);
   });
 

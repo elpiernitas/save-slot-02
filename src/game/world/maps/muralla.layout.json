@@ -1,0 +1,153 @@
+{
+  "$comment": "Single source of truth for the La Muralla slice. Read by tools/art (to paint the background) and by maps/muralla.ts (collisions, props, interactables). World px, 1 tile = 16 px.",
+  "tile": 16,
+  "widthTiles": 50,
+  "heightTiles": 26,
+  "facadeBottom": 160,
+  "sidewalkBottom": 180,
+  "curbTop": 400,
+  "buildings": [
+    {
+      "id": "west",
+      "x": 0,
+      "w": 190,
+      "style": "ochre"
+    },
+    {
+      "id": "bar",
+      "x": 190,
+      "w": 330,
+      "style": "cream"
+    },
+    {
+      "id": "east",
+      "x": 520,
+      "w": 280,
+      "style": "coral"
+    }
+  ],
+  "shutter": {
+    "x": 36,
+    "w": 116
+  },
+  "barWindowLeft": {
+    "x": 212,
+    "w": 108
+  },
+  "barDoor": {
+    "x": 332,
+    "w": 36
+  },
+  "barWindowRight": {
+    "x": 382,
+    "w": 118
+  },
+  "portal": {
+    "x": 556,
+    "w": 36
+  },
+  "shopWindow": {
+    "x": 640,
+    "w": 124
+  },
+  "terrace": {
+    "x": 206,
+    "y": 184,
+    "w": 304,
+    "h": 118,
+    "gapX": 330,
+    "gapW": 44
+  },
+  "tables": [
+    {
+      "id": "table1",
+      "x": 258,
+      "y": 230,
+      "umbrella": true
+    },
+    {
+      "id": "table2",
+      "x": 452,
+      "y": 230,
+      "umbrella": true
+    },
+    {
+      "id": "table3",
+      "x": 268,
+      "y": 280,
+      "umbrella": false
+    },
+    {
+      "id": "table4",
+      "x": 442,
+      "y": 280,
+      "umbrella": false
+    }
+  ],
+  "trees": [
+    {
+      "id": "treeWest",
+      "x": 112,
+      "y": 300
+    },
+    {
+      "id": "treeEast",
+      "x": 628,
+      "y": 318
+    }
+  ],
+  "bench": {
+    "x": 656,
+    "y": 346
+  },
+  "board": {
+    "x": 312,
+    "y": 330
+  },
+  "bin": {
+    "x": 612,
+    "y": 196
+  },
+  "pots": [
+    {
+      "x": 322,
+      "y": 200
+    },
+    {
+      "x": 378,
+      "y": 200
+    }
+  ],
+  "bollards": [
+    {
+      "x": 24,
+      "y": 384
+    },
+    {
+      "x": 72,
+      "y": 384
+    },
+    {
+      "x": 172,
+      "y": 384,
+      "marked": true
+    },
+    {
+      "x": 704,
+      "y": 384
+    },
+    {
+      "x": 752,
+      "y": 384
+    }
+  ],
+  "gull": {
+    "x": 168,
+    "y": 196
+  },
+  "waitress": {
+    "x": 396,
+    "y": 216,
+    "facing": "down"
+  }
+}

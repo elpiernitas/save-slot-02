@@ -46,20 +46,25 @@ export interface Interactable {
   label: string;
 }
 
-/** Something drawn in the world, y-sorted by `baseY` (its "feet"). */
+/**
+ * Something drawn in the world, y-sorted by `baseY`. `x`/`y` is the sprite's
+ * ground anchor (from the art manifest), not its top-left corner.
+ */
 export interface Prop {
   id: string;
   sprite: string;
-  /** Top-left of the sprite in world px. */
   x: number;
   y: number;
-  /** y used for depth sorting; defaults to the sprite bottom. */
+  /** y used for depth sorting; defaults to the anchor `y`. */
   baseY?: number;
+  /** Frame period for animated sprites (ms). */
+  animMs?: number;
 }
 
 export interface NpcDef {
   id: string;
   sprite: string;
+  /** Feet position. */
   x: number;
   y: number;
   facing: Facing;
@@ -70,6 +75,8 @@ export interface WorldMap {
   /** Visible name (UI banner). */
   displayName: string;
   timeOfDay: 'morning' | 'afternoon' | 'sunset' | 'night';
+  /** Pre-rendered ground/façade image (art manifest sprite id). */
+  background: string;
   widthTiles: number;
   heightTiles: number;
   /** One string per row, one char per tile (see the map's tile legend). */

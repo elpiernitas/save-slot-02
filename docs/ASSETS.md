@@ -22,17 +22,23 @@ Todo original, dibujado en código:
 - Cristal del título, horizonte y estrellas: `src/game/scenes/title/TitleBackdrop.tsx`
   (matrices de píxeles propias).
 - Indicador ▼: CSS (`clip-path`), sin glifo de fuente.
-- **Mundo (GAME-04)**, todo generado por código y determinista:
-  - Personajes de mapa 16×24 (`src/game/world/art/characters.ts`): PLAYER 1
-    **provisional** (pelo oscuro con raya al medio, camiseta blanca de manga
-    larga con corazón negro; sin likeness final) y una camarera genérica no
-    canon. 4 direcciones × 3 frames (idle + 2 pasos).
-  - Props (`src/game/world/art/props.ts`): bolardos, mesas con sillas,
-    sombrillas, farola, cartel (letras abstractas, sin rótulos reales),
-    jardineras, banco, gaviota (2 frames) y árbol procedural (2 frames).
-  - Suelo, muralla, puerta, fachada del café, calle y sombras
-    (`src/game/world/render/canvasRenderer.ts`): pintado procedural con ruido
-    determinista (`hash2`).
+- **Mundo (GAME-04, revisión visual; D-054–D-056)**: PNG originales en
+  `src/assets/world/muralla/`, generados por `npm run art` (`tools/art/`) de
+  forma determinista y verificados por `npm run art:check`. Nada calcado de
+  fotos ni de Street View; rótulos inventados con fuentes pixel propias.
+  - `background.png` (800×416): fachadas (edificio ocre con persiana
+    "MERCERIA" y nota "VUELVO EN 5 MIN", bar "LA MURALLA" en madera verde con
+    escaparates cálidos, edificio coral con portal nº 7 y frutería), mirador
+    blanco, balcones, acera, adoquín de granito, canaleta, rejillas, bordillo
+    y sombras horneadas (luz de tarde desde el oeste).
+  - `player.png` / `waitress.png`: hojas 96×192 (frames 32×48, 4 direcciones
+    × 3 frames). PLAYER 1 **provisional** (pelo oscuro con raya al medio,
+    camiseta blanca de manga larga con corazón negro, vaqueros; sin likeness
+    final). Camarera genérica, no canon.
+  - Props: `tree` (2 frames), `tableSet` (mesa, 4 sillas, sombrilla beige
+    abierta), `tableSetFolded` (sombrilla plegada), `windbreakWest`/`East`/
+    `Side` (cortavientos de cristal), `board` (pizarra), `bollard`,
+    `bollardMarked`, `bench`, `bin`, `gull` (2 frames), `pot`.
 - Referencia (no asset de producción): `docs/art/visual-concept-v1.jpg` +
   `docs/ART_DIRECTION_V1.md`, aportados por Manu. No se recortan ni se usan
   como textura. Nota: el JPEG del repo está truncado (ver DECISION_LOG D-053).

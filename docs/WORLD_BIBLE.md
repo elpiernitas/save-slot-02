@@ -48,7 +48,7 @@ Lugares de referencia actuales:
 
 | Lugar                       | Uso previsto (orientativo)                     |
 | --------------------------- | ---------------------------------------------- |
-| La Muralla                  | referencia reconocible, posible zona o hito    |
+| La Muralla (bar/café)       | la terraza del slice de GAME-04 (tarde)        |
 | Cimavilla                   | barrio con cuestas, terrazas, vida de tarde    |
 | Cuesta del Cholo            | punto de encuentro de tarde                    |
 | Paseo / costa / San Lorenzo | atardecer, mar, momento tranquilo              |
@@ -111,18 +111,19 @@ No:
 **Resolución y escala (cerrado en GAME-04, D-049):**
 
 - **Mundo explorable: 640×360** lógicos (16:9). Tiles de 16 px; personajes
-  de mapa de 16×24 px. Así un encuadre muestra un lugar entero (fachada,
-  terraza, árbol, calle) y el fondo lleva más detalle que los sprites, como
-  pide `ART_DIRECTION_V1.md`.
+  de mapa de **32×48 px** (D-056). Así un encuadre muestra un tramo de calle
+  entero (fachada, terraza, árbol) y el personaje se lee bien.
+- Arte del mundo: **PNG raster** generado offline y commiteado (D-055); el
+  renderer solo blitea imágenes.
 - **UI** (cajas, menús, textos): sigue en su rejilla de 480×270 (`--px`),
   independiente del mundo.
-- Contrapartida conocida: en portátiles 1366×768 el personaje mide ≈51 px en
-  pantalla (legible, pequeño). Si en QA real se queda corto, la opción
-  prevista es un zoom de cámara, no cambiar la resolución.
+- En portátiles 1366×768 el personaje mide ≈102 px en pantalla (antes ≈51
+  con 16×24). No hace falta zoom de cámara.
 
 **Referencias de arte:** `docs/ART_DIRECTION_V1.md` (concepto aprobado,
 north star; no se recorta ni se usa como textura). El primer slice es
-`La Muralla · tarde` (GAME-04).
+`La Muralla · tarde` (GAME-04): **La Muralla es el bar/café** (no una
+muralla) y su terraza en una calle peatonal de Cimavilla (D-054).
 
 ## 6. Paleta
 
@@ -227,7 +228,7 @@ Sirve **solo como referencia estética privada**.
 
 ## 11. Qué no se construye todavía
 
-Hecho en GAME-04: un único vertical slice (La Muralla / borde de
+Hecho en GAME-04: un único vertical slice (la calle del bar La Muralla,
 Cimavilla, tarde) con PLAYER 1 provisional (sin likeness final) y una
 camarera genérica. Siguen pendientes: el resto de Gijón, otras franjas
 horarias, sprites y retratos finales de Luis/Manu/Randy (según referencias de

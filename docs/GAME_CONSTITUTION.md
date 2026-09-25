@@ -201,6 +201,9 @@ solo referencia estética privada (nada de audio comercial).
   GAME-04 frente a Phaser (D-048). Es un subsistema: **React es dueño del
   save, los diálogos, las quests y la UI**; el motor solo guarda estado
   efímero (posición, animación) y comunica por callbacks. Un solo motor.
+- **Arte del mundo: PNG raster** commiteados (`src/assets/world/`); el
+  renderer solo blitea imágenes. Hoy se generan con `npm run art` (D-055) y
+  pueden sustituirse por PNG dibujados a mano con el mismo nombre y ancla.
 - Persistencia inicial: `localStorage` detrás de una capa propia; sustituible
   por Supabase sin rehacer el juego.
 - No sobrearquitectar: cada sistema se construye en la fase que lo necesita.

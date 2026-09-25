@@ -516,6 +516,10 @@ otra escena de juego). Sin cambio de forma JSON → `SAVE_VERSION` sigue en 2.
 
 ### D-052 · 2026-09-25 · Arte del slice
 
+> **Sustituida por D-054/D-055/D-056** tras la revisión visual de Manu: la
+> "muralla con puerta" fue una interpretación errónea y el arte procedural no
+> alcanzaba el nivel pedido.
+
 Todo original y generado por código (personajes y props como datos pixel,
 suelo/fachadas procedurales con ruido determinista), coherente con
 `ART_DIRECTION_V1.md`: adoquines, muralla, terraza con sombrillas, árbol
@@ -531,3 +535,56 @@ movimiento reducido, salvo los pasos).
 sin marcador de fin de imagen y solo 2 scans progresivos; ni Chromium lo
 decodifica. GAME-04 se ha guiado por `ART_DIRECTION_V1.md`. Pendiente: volver
 a subir la imagen completa y revisar el slice contra ella.
+
+## GAME-04 · revisión visual
+
+### D-054 · 2026-09-25 · La Muralla es el bar, no una muralla
+
+Revisión visual de Manu (comentario en el PR): **GAME-04 no aceptado
+visualmente**. "La Muralla" es el **bar/café** donde Manu y Luis se
+conocieron, no una muralla defensiva. Se elimina por completo la idea de
+muro, puerta de piedra y almenas. El slice pasa a ser una **calle peatonal
+urbana de Gijón (Cimavilla, tarde)**: fachada del bar con rótulo LA MURALLA,
+terraza con sombrillas beige y cortavientos de cristal, dos árboles grandes,
+fachadas de viviendas detrás, adoquín/losa de granito, bolardos, un portal,
+una persiana bajada y una frutería. Recorrido compacto (800×416 px), no una
+plaza gigante. El juego sigue **sin explicar** por qué el sitio importa.
+
+Motor, movimiento, colisiones, cámara, interacción, puente de diálogos,
+checkpoints y 640×360 se mantienen. Interactuables: se quitan `wall`, `gate`
+y `sign`; entran `board` (pizarra), `portal`, `shutter`, `barWindowLeft`/
+`barWindowRight`, `barDoor`. Se conservan árbol, mesa libre, bolardo
+(variante por clase) y camarera. Los checkpoints antiguos `muralla:gate`
+vuelven al spawn por defecto (fallback existente); no cambia la forma del
+save (`SAVE_VERSION` sigue en 2).
+
+### D-055 · 2026-09-25 · Arte raster (PNG) generado offline
+
+El renderer ya no pinta rectángulos en tiempo de ejecución: solo **blitea
+PNG**. El arte se genera de forma determinista con scripts Node propios
+(`tools/art/*.mjs`: lienzo con mezcla alfa, rampas con dithering ordenado,
+contorno selectivo, fuentes pixel propias 3×5 y 5×7) y se **commitea** en
+`src/assets/world/muralla/` con un `manifest.json` (tamaño de frame, anclas).
+`muralla.layout.json` es la fuente única de la geometría: la usan el
+generador de arte y el mapa (colisiones), así que no pueden desalinearse.
+`npm run art` regenera; `npm run art:check` (dentro de `npm run check`)
+falla si los PNG del repo no coinciden píxel a píxel con el generador.
+
+Limitación honesta: no hay editor de pixel art en este entorno, así que los
+assets siguen siendo **arte generado por código**, aunque ahora como imágenes
+raster con sombreado, dithering, contorno selectivo y luz de tarde. Si Manu
+aporta PNG dibujados a mano, sustituyen a los generados con el mismo nombre y
+ancla (y se retira el generador para ese asset).
+
+### D-056 · 2026-09-25 · Escala del personaje: 32×48
+
+Los personajes de mapa pasan de 16×24 a **32×48** (a 640×360: ≈144 px de
+alto en 1080p, ≈102 px en 1366×768). Pies de colisión 14×6 y alcance de
+interacción 14 px. Se descarta el zoom de cámara: con 32×48 el personaje es
+legible sin perder encuadre. PLAYER 1 sigue siendo **provisional**: pelo
+oscuro con raya al medio, camiseta blanca de manga larga con corazón negro,
+vaqueros; sin afirmar likeness.
+
+La referencia visual `docs/art/visual-concept-v1.jpg` sigue truncada (D-053):
+esta reconstrucción se ha guiado por el comentario de revisión y
+`ART_DIRECTION_V1.md`, no por la imagen.

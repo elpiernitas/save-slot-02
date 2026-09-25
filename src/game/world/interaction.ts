@@ -3,7 +3,7 @@ import { feetRect } from './movement';
 import type { Facing, Interactable, Rect, Vec2, Zone } from './types';
 
 /** How far in front of the feet the player can reach. */
-export const REACH = 12;
+export const REACH = 14;
 
 /** The area in front of the player that selects an interactable. */
 export function probeRect(pos: Vec2, facing: Facing): Rect {

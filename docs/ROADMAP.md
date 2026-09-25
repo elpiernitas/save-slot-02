@@ -2,21 +2,21 @@
 
 Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 
-| Fase    | Contenido                                  | Estado      |
-| ------- | ------------------------------------------ | ----------- |
-| GAME-00 | Constitución técnica y estructura          | ✅ Hecho    |
-| GAME-01 | Desktop-first + fullscreen + boot + title  | ✅ Hecho    |
-| GAME-02 | Motor de diálogos retro                    | ✅ Hecho    |
-| GAME-03 | World bible + selección de clase           | ✅ Hecho    |
-| GAME-04 | Mundo explorable / vertical slice de Gijón | ✅ Hecho    |
-| GAME-05 | Inventario y cartas                        | ⏭ Siguiente |
-| GAME-06 | Puzzles / minijuegos                       | Pendiente   |
-| GAME-07 | Boss + aparición PLAYER 2                  | Pendiente   |
-| GAME-08 | Portales y selección de fecha              | Pendiente   |
-| GAME-09 | Final + save slot                          | Pendiente   |
-| GAME-10 | Desbloqueos posteriores                    | Pendiente   |
-| GAME-11 | Easter eggs, sonido, animaciones y pulido  | Pendiente   |
-| GAME-12 | QA en ordenador + producción Netlify       | Pendiente   |
+| Fase    | Contenido                                  | Estado                 |
+| ------- | ------------------------------------------ | ---------------------- |
+| GAME-00 | Constitución técnica y estructura          | ✅ Hecho               |
+| GAME-01 | Desktop-first + fullscreen + boot + title  | ✅ Hecho               |
+| GAME-02 | Motor de diálogos retro                    | ✅ Hecho               |
+| GAME-03 | World bible + selección de clase           | ✅ Hecho               |
+| GAME-04 | Mundo explorable / vertical slice de Gijón | 🔁 Revisión visual     |
+| GAME-05 | Inventario y cartas                        | ⏸ Tras aprobar GAME-04 |
+| GAME-06 | Puzzles / minijuegos                       | Pendiente              |
+| GAME-07 | Boss + aparición PLAYER 2                  | Pendiente              |
+| GAME-08 | Portales y selección de fecha              | Pendiente              |
+| GAME-09 | Final + save slot                          | Pendiente              |
+| GAME-10 | Desbloqueos posteriores                    | Pendiente              |
+| GAME-11 | Easter eggs, sonido, animaciones y pulido  | Pendiente              |
+| GAME-12 | QA en ordenador + producción Netlify       | Pendiente              |
 
 ## Detalle por fase
 
@@ -59,14 +59,19 @@ quests/logros, registro de escenas, viewport 16:9 con safe areas, shell mínimo.
   `overworld` provisional ("LOADING WORLD..."). Demo de GAME-02 fuera del
   flujo.
 
-### GAME-04 — Mundo explorable / vertical slice de Gijón ✅
+### GAME-04 — Mundo explorable / vertical slice de Gijón 🔁
+
+Técnicamente aceptado; **visualmente rechazado** en la primera versión
+(La Muralla se interpretó como una muralla). Reconstruida la capa visual
+(D-054–D-056); pendiente de la aprobación visual de Manu.
 
 - Motor propio Canvas 2D (D-048), mundo a 640×360 (D-049).
-- Slice: La Muralla / borde de Cimavilla por la tarde; muralla con puerta,
-  café con terraza, árbol, bolardos, cartel, calle; camarera genérica.
-- 7 interactuables (descriptivos, absurdos, variante por clase en el bolardo),
-  prompt contextual, pausa (Esc), checkpoints por zona, resume tras refresh.
-- PLAYER 1 provisional; arte original generado por código.
+- Slice: la calle del **bar La Muralla** en Cimavilla por la tarde: fachada
+  del bar, terraza con sombrillas y cortavientos, árboles, portal, persiana,
+  frutería, bolardos; camarera genérica.
+- 10 interactuables (descriptivos, absurdos, variante por clase en el
+  bolardo), prompt contextual, pausa (Esc), checkpoints por zona, resume.
+- PLAYER 1 provisional a 32×48; arte raster PNG generado por `npm run art`.
 
 ### GAME-05 — Inventario y cartas
 

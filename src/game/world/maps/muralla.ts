@@ -1,166 +1,185 @@
-import { TILE_SIZE as T, type Rect, type WorldMap } from '../types';
+import { TILE_SIZE as T, type Interactable, type Prop, type Rect, type WorldMap } from '../types';
+import LAYOUT from './muralla.layout.json';
 
 /**
- * GAME-04 vertical slice: an original, simplified take on La Muralla /
- * edge of Cimavilla in the afternoon (WORLD_BIBLE §3–4, ART_DIRECTION_V1).
- * Not a map of the real place: an old stone wall with a closed gate to the
- * north, a café with a terrace to the east, a big tree to the west, cobbles
- * in between and the street (not walkable) to the south.
+ * GAME-04 vertical slice: the street in front of La Muralla — the bar/café,
+ * NOT a defensive wall — on an ordinary afternoon in Cimavilla, Gijón.
+ * Original and simplified (no real signage, no photo tracing): bar frontage
+ * and terrace with beige umbrellas and a glass windbreak, two big street
+ * trees, apartment façades, granite paving, bollards along the curb.
  *
- * Tile legend:
- *   T wall top   W stone wall   G gate (closed)   F café building
- *   . cobbles    , stone slabs  " planting strip
- *   _ curb       = road         z zebra crossing
+ * `muralla.layout.json` is the single source of truth shared with the art
+ * generator (tools/art), so collisions always match the pixels.
+ *
+ * Tile legend:  B façade (solid)   . paving (walkable)   _ curb + road (solid)
  */
-export const MURALLA_W = 48;
-export const MURALLA_H = 30;
+export const MURALLA_W = LAYOUT.widthTiles;
+export const MURALLA_H = LAYOUT.heightTiles;
 
-type Fill = [char: string, x0: number, y0: number, x1: number, y1: number];
+const FACADE_ROWS = LAYOUT.facadeBottom / T;
+const CURB_ROW = LAYOUT.curbTop / T;
 
-function paint(fills: readonly Fill[]): string[] {
-  const grid = Array.from({ length: MURALLA_H }, () => Array<string>(MURALLA_W).fill('.'));
-  for (const [char, x0, y0, x1, y1] of fills) {
-    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) grid[y]![x] = char;
-  }
-  return grid.map((row) => row.join(''));
-}
+const TILES = Array.from({ length: MURALLA_H }, (_, row) =>
+  (row < FACADE_ROWS ? 'B' : row >= CURB_ROW ? '_' : '.').repeat(MURALLA_W),
+);
 
-const TILES = paint([
-  ['T', 0, 0, 34, 0],
-  ['W', 0, 1, 34, 5],
-  ['G', 22, 3, 25, 5],
-  ['F', 35, 0, 47, 12],
-  ['"', 0, 6, 34, 6],
-  [',', 22, 6, 25, 23],
-  ['_', 0, 24, 47, 24],
-  ['=', 0, 25, 47, 29],
-  ['z', 21, 25, 26, 29],
-]);
-
-const px = (tiles: number) => tiles * T;
-
-/** Terrace tables: sprite 24×14, collision on the table + chairs footprint. */
-const TABLES = [
-  { id: 'table1', x: px(34) + 4, y: px(14) + 6 },
-  { id: 'table2', x: px(39) + 4, y: px(14) + 6 },
-  { id: 'table3', x: px(44) + 2, y: px(14) + 6 },
-  { id: 'table4', x: px(36) + 8, y: px(18) + 2 },
-  { id: 'table5', x: px(42) + 4, y: px(18) + 2 },
-] as const;
-
-const tableCollider = (t: { x: number; y: number }): Rect => ({
-  x: t.x + 1,
-  y: t.y + 5,
-  w: 22,
-  h: 8,
+/** Footprint (collider) centred on a ground anchor. */
+const foot = (x: number, y: number, w: number, h: number): Rect => ({
+  x: x - w / 2,
+  y: y - h,
+  w,
+  h,
 });
 
-const BOLLARD_XS = [2, 6, 10, 14, 18, 29, 33, 37, 41, 45];
-const bollardX = (tx: number) => px(tx) + 5;
-const BOLLARD_Y = px(23) + 1; // sprite 6×14, base on row 23
+const TR = LAYOUT.terrace;
+const TERRACE_FRONT = TR.y + TR.h;
 
-/** The bollard that talks back (class variant) sits by the slab path. */
-const CLASS_BOLLARD = { x: px(20) + 5, y: BOLLARD_Y };
+/** Table + four chairs (sprite `tableSet`); umbrella shares the anchor. */
+const tableFoot = (t: { x: number; y: number }) => foot(t.x, t.y + 2, 56, 14);
+const EMPTY_TABLE = LAYOUT.tables.find((t) => t.id === 'table3')!;
 
-const PLANTERS = [3, 8, 13, 28, 32];
+const TREE_WEST = LAYOUT.trees.find((t) => t.id === 'treeWest')!;
+const trunk = (t: { x: number; y: number }) => foot(t.x, t.y, 14, 8);
 
-const TREE_TRUNK = { x: px(9) + 10, y: px(14) + 6, w: 14, h: 8 };
-/** Tree sprite is 72×88 with the roots on row 82. */
-const TREE = { x: px(8), y: TREE_TRUNK.y + TREE_TRUNK.h - 83, trunk: TREE_TRUNK };
-const LAMP = { x: px(29) + 4, y: px(10) };
-const SIGN = { x: px(16), y: px(18) - 2 };
-const BENCH = { x: px(12) + 4, y: px(15) + 4 };
+const CLASS_BOLLARD = LAYOUT.bollards.find((b) => b.marked)!;
+const FACADE_Y = LAYOUT.facadeBottom;
+
+/** Something on the façade you look at from the sidewalk (facing up). */
+const onFacade = (x: number, w: number): Rect => ({ x, y: FACADE_Y - 6, w, h: 6 });
+
+const WAITRESS = LAYOUT.waitress;
+
+const windbreakSides: Prop[] = [TR.x, TR.x + TR.w - 4].flatMap((x, side) =>
+  Array.from({ length: Math.ceil(TR.h / 16) }, (_, i) => ({
+    id: `windbreakSide${side}_${i}`,
+    sprite: 'windbreakSide',
+    x: x + 2,
+    y: Math.min(TR.y + (i + 1) * 16, TERRACE_FRONT),
+  })),
+);
+
+const interactables: Interactable[] = [
+  {
+    id: 'tree',
+    label: 'árbol',
+    script: 'muralla.tree',
+    rect: foot(TREE_WEST.x, TREE_WEST.y + 1, 18, 10),
+  },
+  {
+    id: 'board',
+    label: 'pizarra',
+    script: 'muralla.board',
+    rect: foot(LAYOUT.board.x, LAYOUT.board.y + 1, 20, 8),
+  },
+  { id: 'table', label: 'mesa libre', script: 'muralla.table', rect: tableFoot(EMPTY_TABLE) },
+  {
+    id: 'bollard',
+    label: 'bolardo',
+    script: 'muralla.bollard',
+    rect: foot(CLASS_BOLLARD.x, CLASS_BOLLARD.y + 1, 12, 8),
+  },
+  {
+    id: 'portal',
+    label: 'portal',
+    script: 'muralla.portal',
+    rect: onFacade(LAYOUT.portal.x, LAYOUT.portal.w),
+  },
+  {
+    id: 'shutter',
+    label: 'persiana',
+    script: 'muralla.shutter',
+    rect: onFacade(LAYOUT.shutter.x, LAYOUT.shutter.w),
+  },
+  {
+    id: 'barWindowLeft',
+    label: 'escaparate del bar',
+    script: 'muralla.window',
+    rect: onFacade(LAYOUT.barWindowLeft.x, LAYOUT.barWindowLeft.w),
+  },
+  {
+    id: 'barWindowRight',
+    label: 'escaparate del bar',
+    script: 'muralla.window',
+    rect: onFacade(LAYOUT.barWindowRight.x, LAYOUT.barWindowRight.w),
+  },
+  {
+    id: 'barDoor',
+    label: 'puerta del bar',
+    script: 'muralla.door',
+    rect: onFacade(LAYOUT.barDoor.x, LAYOUT.barDoor.w),
+  },
+  {
+    id: 'waitress',
+    label: 'camarera',
+    script: 'muralla.waitress',
+    rect: foot(WAITRESS.x, WAITRESS.y + 4, 18, 14),
+  },
+];
 
 export const MURALLA_MAP: WorldMap = {
   id: 'muralla',
   displayName: 'LA MURALLA',
   timeOfDay: 'afternoon',
+  background: 'background',
   widthTiles: MURALLA_W,
   heightTiles: MURALLA_H,
   tiles: TILES,
-  solidTiles: 'TWGF_=z',
+  solidTiles: 'B_',
   colliders: [
-    ...TABLES.map(tableCollider),
-    ...BOLLARD_XS.map((tx) => ({ x: bollardX(tx), y: BOLLARD_Y + 8, w: 6, h: 5 })),
-    { x: CLASS_BOLLARD.x, y: CLASS_BOLLARD.y + 8, w: 6, h: 5 },
-    ...PLANTERS.map((tx) => ({ x: px(tx), y: px(7) - 2, w: 18, h: 8 })),
-    TREE.trunk,
-    { x: LAMP.x + 2, y: LAMP.y + 40, w: 4, h: 4 },
-    { x: SIGN.x + 4, y: SIGN.y + 24, w: 14, h: 4 },
-    { x: BENCH.x, y: BENCH.y + 6, w: 30, h: 6 },
-    // Waitress
-    { x: px(33) + 2, y: px(16) + 2, w: 10, h: 6 },
+    // Glass windbreak: front (with the entrance gap) and both sides.
+    { x: TR.x, y: TERRACE_FRONT - 4, w: TR.gapX - TR.x, h: 4 },
+    { x: TR.gapX + TR.gapW, y: TERRACE_FRONT - 4, w: TR.x + TR.w - TR.gapX - TR.gapW, h: 4 },
+    { x: TR.x - 1, y: TR.y, w: 6, h: TR.h },
+    { x: TR.x + TR.w - 5, y: TR.y, w: 6, h: TR.h },
+    ...LAYOUT.tables.map(tableFoot),
+    ...LAYOUT.trees.map(trunk),
+    ...LAYOUT.pots.map((p) => foot(p.x, p.y, 14, 8)),
+    ...LAYOUT.bollards.map((b) => foot(b.x, b.y, 8, 5)),
+    foot(LAYOUT.bench.x, LAYOUT.bench.y, 44, 10),
+    foot(LAYOUT.board.x, LAYOUT.board.y, 18, 5),
+    foot(LAYOUT.bin.x, LAYOUT.bin.y, 12, 6),
+    foot(LAYOUT.gull.x, LAYOUT.gull.y, 10, 4),
+    foot(WAITRESS.x, WAITRESS.y, 12, 6),
   ],
   props: [
-    { id: 'tree', sprite: 'tree', x: TREE.x, y: TREE.y, baseY: TREE.trunk.y + TREE.trunk.h },
-    { id: 'bench', sprite: 'bench', x: BENCH.x, y: BENCH.y },
-    { id: 'lamp', sprite: 'lamp', x: LAMP.x, y: LAMP.y },
-    { id: 'sign', sprite: 'sign', x: SIGN.x, y: SIGN.y },
-    ...PLANTERS.map((tx, i) => ({ id: `planter${i}`, sprite: 'planter', x: px(tx), y: px(7) - 8 })),
-    ...BOLLARD_XS.map((tx, i) => ({
-      id: `bollard${i}`,
-      sprite: 'bollard',
-      x: bollardX(tx),
-      y: BOLLARD_Y,
+    ...LAYOUT.trees.map((t) => ({ id: t.id, sprite: 'tree', x: t.x, y: t.y, animMs: 1700 })),
+    ...LAYOUT.tables.map((t) => ({
+      id: t.id,
+      // Back row open, front row folded: keeps the terrace readable from 3/4 view.
+      sprite: t.umbrella ? 'tableSet' : 'tableSetFolded',
+      x: t.x,
+      y: t.y,
     })),
-    { id: 'classBollard', sprite: 'bollardMarked', x: CLASS_BOLLARD.x, y: CLASS_BOLLARD.y },
-    ...TABLES.flatMap((t) => [
-      { id: t.id, sprite: 'tableSet', x: t.x, y: t.y },
-      // Parasol shares the table's base so they sort together.
-      { id: `${t.id}Parasol`, sprite: 'parasol', x: t.x - 4, y: t.y - 24, baseY: t.y + 14 },
-    ]),
+    { id: 'windbreakWest', sprite: 'windbreakWest', x: TR.x, y: TERRACE_FRONT },
+    { id: 'windbreakEast', sprite: 'windbreakEast', x: TR.gapX + TR.gapW, y: TERRACE_FRONT },
+    ...windbreakSides,
+    ...LAYOUT.pots.map((p, i) => ({ id: `pot${i}`, sprite: 'pot', x: p.x, y: p.y })),
+    ...LAYOUT.bollards.map((b, i) => ({
+      id: b.marked ? 'classBollard' : `bollard${i}`,
+      sprite: b.marked ? 'bollardMarked' : 'bollard',
+      x: b.x,
+      y: b.y,
+    })),
+    { id: 'bench', sprite: 'bench', x: LAYOUT.bench.x, y: LAYOUT.bench.y },
+    { id: 'board', sprite: 'board', x: LAYOUT.board.x, y: LAYOUT.board.y },
+    { id: 'bin', sprite: 'bin', x: LAYOUT.bin.x, y: LAYOUT.bin.y },
+    { id: 'gull', sprite: 'gull', x: LAYOUT.gull.x, y: LAYOUT.gull.y, animMs: 1300 },
   ],
-  npcs: [{ id: 'waitress', sprite: 'waitress', x: px(33) + 7, y: px(16) + 8, facing: 'left' }],
-  interactables: [
-    {
-      id: 'wall',
-      label: 'muralla',
-      script: 'muralla.wall',
-      rect: { x: px(4), y: px(5) + 8, w: px(6), h: 8 },
-    },
-    {
-      id: 'gate',
-      label: 'puerta',
-      script: 'muralla.gate',
-      rect: { x: px(22), y: px(5) + 8, w: px(4), h: 8 },
-    },
-    {
-      id: 'tree',
-      label: 'árbol',
-      script: 'muralla.tree',
-      rect: { ...TREE.trunk, x: TREE.trunk.x - 2, w: TREE.trunk.w + 4 },
-    },
-    {
-      id: 'sign',
-      label: 'cartel',
-      script: 'muralla.sign',
-      rect: { x: SIGN.x, y: SIGN.y + 20, w: 22, h: 10 },
-    },
-    { id: 'table', label: 'mesa libre', script: 'muralla.table', rect: tableCollider(TABLES[3]) },
-    {
-      id: 'bollard',
-      label: 'bolardo',
-      script: 'muralla.bollard',
-      rect: { x: CLASS_BOLLARD.x - 2, y: CLASS_BOLLARD.y + 6, w: 10, h: 9 },
-    },
-    {
-      id: 'waitress',
-      label: 'camarera',
-      script: 'muralla.waitress',
-      rect: { x: px(33), y: px(16) - 2, w: 14, h: 12 },
-    },
-  ],
+  npcs: [{ id: 'waitress', sprite: 'waitress', x: WAITRESS.x, y: WAITRESS.y, facing: 'down' }],
+  interactables,
   zones: [
-    { id: 'arrival', rect: { x: px(18), y: px(19), w: px(12), h: px(5) }, spawn: 'arrival' },
-    { id: 'gate', rect: { x: px(18), y: px(6), w: px(12), h: px(5) }, spawn: 'gate' },
-    { id: 'tree', rect: { x: 0, y: px(8), w: px(17), h: px(15) }, spawn: 'tree' },
-    { id: 'terrace', rect: { x: px(31), y: px(13), w: px(17), h: px(10) }, spawn: 'terrace' },
+    // Arrival: west end of the sidewalk, looking down the street at the bar
+    // (high on screen, so the arrival text box never hides PLAYER 1).
+    { id: 'arrival', rect: { x: 0, y: FACADE_Y, w: 200, h: 24 }, spawn: 'arrival' },
+    { id: 'terrace', rect: { x: TR.x + 6, y: TR.y, w: TR.w - 12, h: TR.h - 4 }, spawn: 'terrace' },
+    { id: 'tree', rect: { x: 0, y: FACADE_Y + 24, w: 200, h: 216 }, spawn: 'tree' },
+    { id: 'portal', rect: { x: 520, y: 160, w: 280, h: 240 }, spawn: 'portal' },
   ],
   spawns: [
-    { id: 'arrival', x: px(24), y: px(22), facing: 'up' },
-    { id: 'gate', x: px(24), y: px(6) + 8, facing: 'up' },
-    { id: 'tree', x: px(14), y: px(19), facing: 'left' },
-    { id: 'terrace', x: px(31), y: px(17), facing: 'right' },
+    { id: 'arrival', x: 96, y: 176, facing: 'right' },
+    { id: 'terrace', x: 352, y: 262, facing: 'up' },
+    { id: 'tree', x: 150, y: 250, facing: 'left' },
+    { id: 'portal', x: 574, y: 176, facing: 'up' },
   ],
   defaultSpawn: 'arrival',
 };

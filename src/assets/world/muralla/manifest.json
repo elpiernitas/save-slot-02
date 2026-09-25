@@ -1,0 +1,181 @@
+{
+  "generatedBy": "tools/art/build.mjs",
+  "sprites": {
+    "background": {
+      "file": "background.png",
+      "width": 800,
+      "height": 416,
+      "frameWidth": 800,
+      "frameHeight": 416,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 0
+    },
+    "player": {
+      "file": "player.png",
+      "width": 96,
+      "height": 192,
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frames": 3,
+      "rows": 4,
+      "anchorX": 16,
+      "anchorY": 45
+    },
+    "waitress": {
+      "file": "waitress.png",
+      "width": 96,
+      "height": 192,
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "frames": 3,
+      "rows": 4,
+      "anchorX": 16,
+      "anchorY": 45
+    },
+    "tree": {
+      "file": "tree.png",
+      "width": 224,
+      "height": 136,
+      "frameWidth": 112,
+      "frameHeight": 136,
+      "frames": 2,
+      "rows": 1,
+      "anchorX": 56,
+      "anchorY": 130
+    },
+    "tableSet": {
+      "file": "tableSet.png",
+      "width": 96,
+      "height": 100,
+      "frameWidth": 96,
+      "frameHeight": 100,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 48,
+      "anchorY": 94
+    },
+    "tableSetFolded": {
+      "file": "tableSetFolded.png",
+      "width": 96,
+      "height": 100,
+      "frameWidth": 96,
+      "frameHeight": 100,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 48,
+      "anchorY": 94
+    },
+    "windbreakWest": {
+      "file": "windbreakWest.png",
+      "width": 124,
+      "height": 36,
+      "frameWidth": 124,
+      "frameHeight": 36,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 35
+    },
+    "windbreakEast": {
+      "file": "windbreakEast.png",
+      "width": 136,
+      "height": 36,
+      "frameWidth": 136,
+      "frameHeight": 36,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 35
+    },
+    "windbreakSide": {
+      "file": "windbreakSide.png",
+      "width": 6,
+      "height": 46,
+      "frameWidth": 6,
+      "frameHeight": 46,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 2,
+      "anchorY": 45
+    },
+    "board": {
+      "file": "board.png",
+      "width": 22,
+      "height": 32,
+      "frameWidth": 22,
+      "frameHeight": 32,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 11,
+      "anchorY": 30
+    },
+    "bollard": {
+      "file": "bollard.png",
+      "width": 14,
+      "height": 24,
+      "frameWidth": 14,
+      "frameHeight": 24,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 7,
+      "anchorY": 22
+    },
+    "bollardMarked": {
+      "file": "bollardMarked.png",
+      "width": 14,
+      "height": 24,
+      "frameWidth": 14,
+      "frameHeight": 24,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 7,
+      "anchorY": 22
+    },
+    "bench": {
+      "file": "bench.png",
+      "width": 48,
+      "height": 30,
+      "frameWidth": 48,
+      "frameHeight": 30,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 24,
+      "anchorY": 28
+    },
+    "bin": {
+      "file": "bin.png",
+      "width": 16,
+      "height": 28,
+      "frameWidth": 16,
+      "frameHeight": 28,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 8,
+      "anchorY": 26
+    },
+    "gull": {
+      "file": "gull.png",
+      "width": 36,
+      "height": 16,
+      "frameWidth": 18,
+      "frameHeight": 16,
+      "frames": 2,
+      "rows": 1,
+      "anchorX": 8,
+      "anchorY": 14
+    },
+    "pot": {
+      "file": "pot.png",
+      "width": 18,
+      "height": 28,
+      "frameWidth": 18,
+      "frameHeight": 28,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 9,
+      "anchorY": 26
+    }
+  }
+}

@@ -42,6 +42,9 @@ Reference image: `docs/art/visual-concept-v1.jpg`
 
 The lower-left panel is a **style study for La Muralla**, based on Manu's Street View references.
 
+> **La Muralla is the bar/café** (terrace, frontage, street), **not** a
+> defensive wall. See DECISION_LOG D-054.
+
 Keep:
 
 - pedestrian stone/cobble paving

@@ -8,6 +8,7 @@ import { useGame } from '../../state/useGame';
 import { Menu } from '../../ui/Menu';
 import { useMenu } from '../../ui/useMenu';
 import { useReducedMotion } from '../../ui/useReducedMotion';
+import { loadSpriteImages, type SpriteImages } from '../../world/art/assets';
 import { checkpointFor, spawnForCheckpoint } from '../../world/checkpoint';
 import { worldViewFromQuery } from '../../world/config';
 import { WorldEngine } from '../../world/engine/WorldEngine';
@@ -20,6 +21,10 @@ import './OverworldScene.css';
 
 /** Keeps the key that closed a dialogue from re-opening it at once. */
 const RESUME_COOLDOWN_MS = 250;
+
+/** World art is loaded once per session and shared by every mount. */
+let spriteImages: Promise<SpriteImages> | null = null;
+const loadWorldArt = () => (spriteImages ??= loadSpriteImages());
 
 const TIME_LABEL = { morning: 'MAÑANA', afternoon: 'TARDE', sunset: 'ATARDECER', night: 'NOCHE' };
 
@@ -43,6 +48,18 @@ export function OverworldScene(_: SceneProps) {
   );
   const [menuOpen, setMenuOpen] = useState(false);
   const [spawn] = useState(() => spawnForCheckpoint(map, save.progress.checkpoint));
+  const [images, setImages] = useState<SpriteImages | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    loadWorldArt().then(
+      (loaded) => alive && setImages(loaded),
+      (error: unknown) => console.error('World art failed to load', error),
+    );
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   // Latest values for the long-lived engine/input callbacks.
   const live = useRef({ dialogue, menuOpen, reduced });
@@ -69,9 +86,9 @@ export function OverworldScene(_: SceneProps) {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !images) return;
     const view = worldViewFromQuery(window.location.search, import.meta.env.DEV);
-    const renderer = createWorldRenderer(canvas, map, view, {
+    const renderer = createWorldRenderer(canvas, map, view, images, {
       reducedMotion: () => live.current.reduced,
     });
 
@@ -126,7 +143,7 @@ export function OverworldScene(_: SceneProps) {
       removeLayer();
       renderer.destroy();
     };
-  }, [router, dispatch, map, spawn]);
+  }, [router, dispatch, map, spawn, images]);
 
   const showPrompt = target && !dialogue && !menuOpen;
 
