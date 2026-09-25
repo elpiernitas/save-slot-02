@@ -59,6 +59,9 @@ src/
                            efectos, validación, retratos; ui/ = capa React
     audio/                 contrato AudioEngine, motor Web Audio (SFX + voces sintetizadas)
     player/                clases de jugador (GUERRERO / TANQUE / CURADOR)
+    world/                 exploración (GAME-04): tipos, mapas, colisión, movimiento,
+                           cámara, interacción/zonas, checkpoints, WorldEngine,
+                           renderer Canvas 2D, arte pixel generado por código
     content/               datos: jugador, reparto (cast), retratos, sigilos, scripts de diálogo
     calendar/              fechas del proyecto (Europe/Madrid) + time gates
     inventory/, quests/, achievements/   contratos (tipos) de fases futuras
@@ -74,11 +77,24 @@ autosave.
 
 Secuencia de arranque: `systemCheck` → (`boot` → `saveDetected`, solo la
 primera vez) → `title`. CONTINUE → `classSelect` (solo si aún no hay clase)
-→ `overworld` (provisional hasta GAME-04).
+→ `overworld` (exploración: La Muralla · tarde).
 
 La demo del motor de diálogo (`dialogueDemo`) es una escena de desarrollo:
 no aparece en el flujo del jugador y solo se abre en `npm run dev` con
 `http://localhost:5173/?devScene=dialogueDemo`.
+
+## Exploración (GAME-04)
+
+Motor propio ligero (Canvas 2D) en `src/game/world/`; React sigue siendo
+dueño del save, los diálogos y la UI. Un mapa es un `WorldMap` de datos
+(tiles, colisiones, props, NPCs, interactuables → scripts de diálogo, zonas →
+checkpoints, spawns). Controles: WASD/flechas, E/Enter/Espacio para
+interactuar, Esc para el menú de pausa. En dev, `?worldRes=480` compara la
+resolución del mundo (por defecto 640×360).
+
+Añadir un interactuable: rectángulo en el mapa + script en
+`src/game/content/dialogue/` + test (el test del mapa comprueba que todo
+interactuable es alcanzable y que cada script existe y valida).
 
 ## Clases (GAME-03)
 

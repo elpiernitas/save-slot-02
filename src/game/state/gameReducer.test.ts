@@ -158,3 +158,38 @@ describe('player/assignClass (GAME-03)', () => {
     expect(again.player.classId).toBe('warrior');
   });
 });
+
+describe('checkpoints (GAME-04)', () => {
+  const initial = createInitialSave(T0);
+  const inWorld = () => {
+    let save = gameReducer(initial, { type: 'scene/goTo', scene: 'overworld', at: T1 });
+    save = gameReducer(save, {
+      type: 'progress/checkpoint',
+      checkpoint: 'muralla:terrace',
+      at: T1,
+    });
+    return save;
+  };
+
+  it('stores the checkpoint and ignores repeats', () => {
+    const save = inWorld();
+    expect(save.progress.checkpoint).toBe('muralla:terrace');
+    expect(
+      gameReducer(save, { type: 'progress/checkpoint', checkpoint: 'muralla:terrace', at: T2 }),
+    ).toBe(save);
+  });
+
+  it('survives going to the title and back, and a new session', () => {
+    let save = gameReducer(inWorld(), { type: 'scene/goTo', scene: 'title', at: T2 });
+    expect(save.progress.checkpoint).toBe('muralla:terrace');
+    save = gameReducer(save, { type: 'system/sessionStart', at: T2 });
+    expect(save.progress.checkpoint).toBe('muralla:terrace');
+    save = gameReducer(save, { type: 'scene/goTo', scene: 'overworld', at: T2 });
+    expect(save.progress.checkpoint).toBe('muralla:terrace');
+  });
+
+  it('is reset when entering a different gameplay scene', () => {
+    const save = gameReducer(inWorld(), { type: 'scene/goTo', scene: 'dungeon', at: T2 });
+    expect(save.progress.checkpoint).toBeNull();
+  });
+});

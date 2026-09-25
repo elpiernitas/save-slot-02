@@ -17,11 +17,31 @@ export function InputProvider({ children }: { children: ReactNode }) {
       if (isEditable(event.target)) return;
       const input = inputFromKey(event);
       if (!input) return;
+      router.press(input);
       // Stop Space/arrows from scrolling and Enter from re-clicking a focused button.
       if (router.dispatch(input, { repeat: event.repeat })) event.preventDefault();
     };
+    const onKeyUp = (event: KeyboardEvent) => {
+      // Release even with modifiers held, so a direction never gets stuck.
+      const input = inputFromKey({
+        ...event,
+        code: event.code,
+        key: event.key,
+        altKey: false,
+        ctrlKey: false,
+        metaKey: false,
+      });
+      if (input) router.release(input);
+    };
+    const onBlur = () => router.releaseAll();
     window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    window.addEventListener('blur', onBlur);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+      window.removeEventListener('blur', onBlur);
+    };
   }, [router]);
 
   return <InputContext value={router}>{children}</InputContext>;

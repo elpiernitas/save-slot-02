@@ -16,6 +16,7 @@ Reference image: `docs/art/visual-concept-v1.jpg`
 ## Character direction
 
 ### Luis — PLAYER 1
+
 - Dark hair with centre-part / curtain shape.
 - Canon outfit: white long-sleeve top with a black heart centered on the chest.
 - Map sprite + dialogue portrait.
@@ -23,6 +24,7 @@ Reference image: `docs/art/visual-concept-v1.jpg`
 - Do not lock facial likeness from this concept alone; use Manu's supplied reference photos for final assets.
 
 ### Manu — PLAYER 2
+
 - Dark voluminous hair.
 - Black rectangular glasses.
 - Canon outfit: black hoodie with white layer visible underneath.
@@ -31,6 +33,7 @@ Reference image: `docs/art/visual-concept-v1.jpg`
 - PLAYER 2 still does not enter the narrative until GAME-07.
 
 ### Randy
+
 - Light/cream golden retriever.
 - Secondary recognizable NPC / easter egg, not magical mascot.
 - Map sprite states can include standing, sitting, attentive, sleeping.
@@ -40,6 +43,7 @@ Reference image: `docs/art/visual-concept-v1.jpg`
 The lower-left panel is a **style study for La Muralla**, based on Manu's Street View references.
 
 Keep:
+
 - pedestrian stone/cobble paving
 - terrace tables
 - large leafy tree
@@ -55,6 +59,7 @@ Build original environment art from reference.
 This composite was generated as a visual north star. It must **not** be sliced blindly into final production assets.
 
 GAME-04 should use it to:
+
 1. decide exploration technology and logical resolution,
 2. build one vertical slice,
 3. create/recreate clean production sprites separately,

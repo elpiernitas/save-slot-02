@@ -196,8 +196,11 @@ solo referencia estética privada (nada de audio comercial).
 ## 12. Límites técnicos (principios)
 
 - Stack: React + TypeScript + Vite + CSS propio. Sin frameworks UI pesados,
-  sin Tailwind, sin Phaser (se evaluará en GAME-04/06 si se demuestra
-  necesario).
+  sin Tailwind.
+- **Exploración: motor propio ligero** (Canvas 2D + lógica pura), decidido en
+  GAME-04 frente a Phaser (D-048). Es un subsistema: **React es dueño del
+  save, los diálogos, las quests y la UI**; el motor solo guarda estado
+  efímero (posición, animación) y comunica por callbacks. Un solo motor.
 - Persistencia inicial: `localStorage` detrás de una capa propia; sustituible
   por Supabase sin rehacer el juego.
 - No sobrearquitectar: cada sistema se construye en la fase que lo necesita.

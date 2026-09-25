@@ -2,7 +2,7 @@ import { BootScene } from './boot/BootScene';
 import { ClassSelectScene } from './classSelect/ClassSelectScene';
 import { DialogueDemoScene } from './dialogueDemo/DialogueDemoScene';
 import { SaveDetectedScene } from './saveDetected/SaveDetectedScene';
-import { WorldLoadingScene } from './overworld/WorldLoadingScene';
+import { OverworldScene } from './overworld/OverworldScene';
 import type { SceneId } from './sceneIds';
 import { SystemCheckScene } from './systemCheck/SystemCheckScene';
 import { TitleScene } from './title/TitleScene';
@@ -19,8 +19,8 @@ export const SCENE_REGISTRY: Partial<Record<SceneId, SceneDefinition>> = {
   saveDetected: { id: 'saveDetected', component: SaveDetectedScene },
   title: { id: 'title', component: TitleScene },
   classSelect: { id: 'classSelect', component: ClassSelectScene },
-  /** Provisional diegetic loading screen until GAME-04 builds the world. */
-  overworld: { id: 'overworld', component: WorldLoadingScene },
+  /** Exploration (GAME-04 vertical slice: La Muralla, afternoon). */
+  overworld: { id: 'overworld', component: OverworldScene },
   dialogueDemo: { id: 'dialogueDemo', component: DialogueDemoScene },
 };
 

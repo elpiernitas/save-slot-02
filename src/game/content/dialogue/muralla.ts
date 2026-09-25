@@ -1,0 +1,166 @@
+import type { DialogueScript, Speaker } from '../../dialogue/types';
+
+/**
+ * GAME-04 vertical slice: La Muralla, afternoon. The slice shows the tone
+ * (everyday things with RPG logic), it does not tell the story. Nothing here
+ * explains why the place matters.
+ */
+const WAITRESS: Speaker = { id: 'waitress', displayName: 'CAMARERA', voice: 'default' };
+
+export const MURALLA_FLAGS = {
+  tableSeen: 'muralla.tableSeen',
+  metWaitress: 'muralla.metWaitress',
+  arrived: 'muralla.arrived',
+} as const;
+
+const line = (id: string, pages: string[], extra: Partial<DialogueScript['nodes'][string]> = {}) =>
+  ({ id, type: 'line', pages, ...extra }) as DialogueScript['nodes'][string];
+
+export const MURALLA_ARRIVAL: DialogueScript = {
+  id: 'muralla.arrival',
+  start: 'a',
+  nodes: {
+    a: line('a', ['Cimavilla, por la tarde.[pause] La ciudad huele a sal y a terraza.'], {
+      effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.arrived, value: true }],
+    }),
+  },
+};
+
+export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
+  'muralla.wall': {
+    id: 'muralla.wall',
+    start: 'a',
+    nodes: {
+      a: line('a', [
+        'Piedra muy antigua. Ha sobrevivido a siglos de viento, salitre y obras municipales.',
+        '[pause]Merece respeto.',
+      ]),
+    },
+  },
+
+  'muralla.gate': {
+    id: 'muralla.gate',
+    start: 'a',
+    nodes: {
+      a: line('a', ['Una puerta de madera. Empujas.[pause] No abre.', '[slow]Todavía.[/slow]']),
+    },
+  },
+
+  'muralla.tree': {
+    id: 'muralla.tree',
+    start: 'a',
+    nodes: {
+      a: line('a', ['Un árbol enorme. Da sombra gratis,[pause] que por aquí es lo único gratis.']),
+    },
+  },
+
+  'muralla.sign': {
+    id: 'muralla.sign',
+    start: 'a',
+    nodes: {
+      a: line('a', [
+        '[sys]PROHIBIDO DAR DE COMER A LAS GAVIOTAS.[/sys]',
+        'Debajo, escrito a boli:[pause] «Ellas ya saben lo que han hecho».',
+      ]),
+    },
+  },
+
+  'muralla.table': {
+    id: 'muralla.table',
+    start: 'route',
+    nodes: {
+      route: {
+        id: 'route',
+        type: 'branch',
+        branches: [{ when: { kind: 'flag', flag: MURALLA_FLAGS.tableSeen }, next: 'again' }],
+        fallback: 'first',
+      },
+      first: line(
+        'first',
+        [
+          'Una mesa libre en una terraza, a esta hora.',
+          'Esto no pasa.[pause] Algo va [em]muy[/em] mal en el mundo.',
+        ],
+        { effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.tableSeen, value: true }] },
+      ),
+      again: line('again', ['Sigue libre.[pause] Empieza a dar un poco de miedo.']),
+    },
+  },
+
+  /** Class micro-variation (tests the `playerClass` condition). */
+  'muralla.bollard': {
+    id: 'muralla.bollard',
+    start: 'intro',
+    nodes: {
+      intro: {
+        ...line('intro', [
+          'Un bolardo con dos franjas rojas. Firme, gris y muy convencido de su papel.',
+        ]),
+        next: 'route',
+      } as DialogueScript['nodes'][string],
+      route: {
+        id: 'route',
+        type: 'branch',
+        branches: [
+          { when: { kind: 'playerClass', classId: 'warrior' }, next: 'warrior' },
+          { when: { kind: 'playerClass', classId: 'tank' }, next: 'tank' },
+          { when: { kind: 'playerClass', classId: 'healer' }, next: 'healer' },
+        ],
+        fallback: 'none',
+      },
+      warrior: line('warrior', [
+        'Lo empujas para ver si cede.[pause] No cede. Este asalto lo gana él.',
+      ]),
+      tank: line('tank', [
+        'Te apoyas en él.[pause] Aguantáis los dos sin moveros. Hay respeto mutuo.',
+      ]),
+      healer: line('healer', [
+        'Tiene un arañazo en la pintura. Le quitas el polvo con la manga.',
+        '[pause]Nadie te lo había pedido.',
+      ]),
+      none: line('none', ['Lo miras. Te mira.[pause] No pasa nada más.']),
+    },
+  },
+
+  'muralla.waitress': {
+    id: 'muralla.waitress',
+    start: 'route',
+    speakers: [WAITRESS],
+    nodes: {
+      route: {
+        id: 'route',
+        type: 'branch',
+        branches: [{ when: { kind: 'flag', flag: MURALLA_FLAGS.metWaitress }, next: 'again' }],
+        fallback: 'hello',
+      },
+      hello: {
+        id: 'hello',
+        type: 'choice',
+        speaker: 'waitress',
+        prompt: '¡Buenas! ¿Vas a tomar algo?',
+        recordAs: 'muralla.waitressAnswer',
+        cancelOptionId: 'looking',
+        effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.metWaitress, value: true }],
+        options: [
+          { id: 'coffee', label: 'Un café.', next: 'coffee' },
+          { id: 'table', label: '¿Hay mesa?', next: 'table' },
+          { id: 'looking', label: 'Solo estoy mirando.', next: 'looking' },
+        ],
+      },
+      coffee: line(
+        'coffee',
+        ['Marchando.[pause] Bueno, cuando la cafetera vuelva de su descanso, que va por libre.'],
+        { speaker: 'waitress' },
+      ),
+      table: line('table', ['Hay una libre ahí delante.[pause] No me preguntes cómo.'], {
+        speaker: 'waitress',
+      }),
+      looking: line('looking', ['Mirar es gratis.[pause] Sentarse ya es otra conversación.'], {
+        speaker: 'waitress',
+      }),
+      again: line('again', ['¿Otra vez por aquí?[pause] La cafetera sigue a lo suyo.'], {
+        speaker: 'waitress',
+      }),
+    },
+  },
+};

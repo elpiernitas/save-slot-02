@@ -447,3 +447,87 @@ escudos ni cruces médicas) y una silueta genérica sin rasgos que **no** es
 Luis. Tokens `--world-*` (marino, costa, crema, piedra, coral, cálido) y
 acentos de clase añadidos a `tokens.css`. Sprites reales de Luis, Manu y
 Randy: más adelante, a partir de referencias de Manu.
+
+---
+
+## GAME-04
+
+### D-048 · 2026-09-25 · Motor de exploración: propio (Canvas 2D), no Phaser
+
+Spike: Phaser 4.2.1 pesa ~1,38 MB minificado (~355 KB gzip), unas 4× el
+juego entero (~89 KB gzip antes de GAME-04), y trae bucle, gestor de
+escenas, input y estado propios que competirían con el `InputRouter` y con
+React como dueño del save; sus tests necesitarían DOM/canvas.
+
+Motor propio (`src/game/world/`), comparado con los criterios:
+
+| Criterio                       | Cómo lo cubre                                               |
+| ------------------------------ | ----------------------------------------------------------- |
+| WASD/flechas, 4 direcciones    | `InputRouter.heldDirection()` + `stepMovement`              |
+| Colisión sólida                | `buildCollisionWorld` (tiles + rectángulos + bordes)        |
+| Cámara                         | `cameraFor` (centrada, limitada, píxeles enteros)           |
+| Zonas / triggers               | `zoneAt` + `onZoneEnter`                                    |
+| Interacción E/Enter/Espacio    | `findInteraction` frontal + `tryInteract`                   |
+| Pausa con DialoguePlayer       | capa de input `world` por debajo + `setPaused` + cooldown   |
+| Añadir mapas/NPCs/puzzles      | mapas como datos (`WorldMap`), scripts por id               |
+| No duplicar estado persistente | el motor solo tiene estado efímero; eventos → reducer       |
+| Teardown limpio                | `destroy()` cancela el frame; la escena quita capa/observer |
+
+Toda la lógica es pura y se testea en Node. Coste medido: el bundle pasa de ~89 a ~99 KB gzip (motor, mapa, arte y escena incluidos). Un solo
+motor; Phaser queda descartado salvo que un minijuego futuro lo justifique
+(se documentaría como decisión nueva).
+
+### D-049 · 2026-09-25 · Resolución del mundo: 640×360
+
+Comparación con el slice real (mismo arte, `?worldRes=480` en dev):
+
+- **480×270**: sprites grandes (≈96 px a 1080p) pero el encuadre recorta el
+  lugar: fachada y árbol casi fuera; se lee como un fragmento.
+- **640×360**: el encuadre muestra fachada, terraza, árbol y calle a la vez;
+  el entorno tiene más detalle que los personajes (lo que pide la dirección de
+  arte). Escala entera ×3 a 1080p. Personaje ≈72 px a 1080p y ≈51 px a
+  1366×768: legible.
+
+Se adopta 640×360 solo para el mundo; la UI sigue en su rejilla 480×270.
+Render: backing store = vista × ⌈escala⌉ con vecino más cercano y el
+navegador lo reduce un poco hasta el tamaño del escenario (sin píxeles
+desiguales; ligera suavidad en tamaños no enteros). Si la QA real pide
+personajes más grandes en portátiles: zoom de cámara, no otra resolución.
+
+### D-050 · 2026-09-25 · Arquitectura de exploración
+
+Separado en: datos de mapa (`maps/`), colisión (`collision.ts`), movimiento,
+cámara, interacción/zonas, checkpoints, motor (`engine/WorldEngine.ts`),
+render (`render/canvasRenderer.ts`), arte (`art/`), puente mundo → diálogo
+(`scripts.ts`) y adaptador React (`scenes/overworld/OverworldScene.tsx`).
+Input: el router guarda teclas mantenidas (keyup/blur) y la capa `world`
+tiene prioridad propia por debajo de las escenas, para que cualquier diálogo
+o menú tenga el input (bug encontrado en QA: con la misma prioridad el mundo
+se tragaba el Enter del diálogo de llegada). `E` = confirmar/interactuar.
+
+### D-051 · 2026-09-25 · Checkpoints sin cambiar el save
+
+Se reutiliza `progress.checkpoint` como `"<mapa>:<spawn>"`, actualizado al
+entrar en una zona (acción `progress/checkpoint`). No se guarda posición
+exacta ni estado del motor. **Corrección:** antes ir al título o empezar
+sesión ponía el checkpoint a `null`; ahora pertenece a la escena de
+reanudación y sobrevive al título y al refresh (solo se resetea al entrar en
+otra escena de juego). Sin cambio de forma JSON → `SAVE_VERSION` sigue en 2.
+
+### D-052 · 2026-09-25 · Arte del slice
+
+Todo original y generado por código (personajes y props como datos pixel,
+suelo/fachadas procedurales con ruido determinista), coherente con
+`ART_DIRECTION_V1.md`: adoquines, muralla, terraza con sombrillas, árbol
+frondoso, fachada de café con luz cálida, calle; luz de tarde desde el oeste
+(sombras al este) y un leve tinte cálido. Sin CRT/scanlines. PLAYER 1 es un
+sprite provisional inspirado en el vestuario canónico de Luis sin afirmar
+likeness. Animaciones: pasos, árbol, gaviotas y guirnalda (congeladas con
+movimiento reducido, salvo los pasos).
+
+### D-053 · 2026-09-25 · Imagen de concepto ilegible
+
+`docs/art/visual-concept-v1.jpg` (commit `c2dd94e`) está **truncado**: 7,5 KB,
+sin marcador de fin de imagen y solo 2 scans progresivos; ni Chromium lo
+decodifica. GAME-04 se ha guiado por `ART_DIRECTION_V1.md`. Pendiente: volver
+a subir la imagen completa y revisar el slice contra ella.

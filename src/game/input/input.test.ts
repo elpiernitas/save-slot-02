@@ -24,6 +24,7 @@ describe('inputFromKey', () => {
     ['KeyD', 'right'],
     ['Enter', 'confirm'],
     ['NumpadEnter', 'confirm'],
+    ['KeyE', 'confirm'],
     ['Space', 'confirm'],
     ['Escape', 'cancel'],
   ])('%s → %s', (code, input) => {
@@ -108,5 +109,52 @@ describe('menu navigation', () => {
     expect(moveSelection([{ disabled: true }], 0, 1)).toBe(0);
     expect(firstEnabledIndex([{ disabled: true }, {}])).toBe(1);
     expect(firstEnabledIndex([])).toBe(0);
+  });
+});
+
+describe('held directions (continuous movement)', () => {
+  it('tracks the most recently pressed direction still held', () => {
+    const router = new InputRouter();
+    expect(router.heldDirection()).toBeNull();
+    router.press('right');
+    router.press('up');
+    expect(router.heldDirection()).toBe('up');
+    router.release('up');
+    expect(router.heldDirection()).toBe('right');
+  });
+
+  it('ignores non-directions and forgets everything on blur', () => {
+    const router = new InputRouter();
+    router.press('confirm');
+    expect(router.heldDirection()).toBeNull();
+    router.press('left');
+    router.releaseAll();
+    expect(router.heldDirection()).toBeNull();
+  });
+
+  it('reports which layer owns input', () => {
+    const router = new InputRouter();
+    const world = vi.fn();
+    const dialogue = vi.fn();
+    router.add(world);
+    expect(router.isTop(world)).toBe(true);
+    const close = router.add(dialogue);
+    expect(router.isTop(world)).toBe(false);
+    close();
+    expect(router.isTop(world)).toBe(true);
+  });
+});
+
+describe('world input layer', () => {
+  it('sits below scenes, so any dialogue or menu owns input', () => {
+    const router = new InputRouter();
+    const dialogue = vi.fn();
+    router.add(dialogue, INPUT_PRIORITY.scene); // mounted first (child layout effect)
+    const world = vi.fn();
+    router.add(world, INPUT_PRIORITY.world); // registered later by the scene
+    router.dispatch('confirm', { repeat: false });
+    expect(dialogue).toHaveBeenCalled();
+    expect(world).not.toHaveBeenCalled();
+    expect(router.isTop(world)).toBe(false);
   });
 });

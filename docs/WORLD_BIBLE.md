@@ -108,8 +108,21 @@ No:
 - filtros CRT exagerados, scanlines constantes, exceso de glitch;
 - nostalgia falsa por nostalgia.
 
-**Resolución:** se mantiene la lógica 480×270 mientras funcione; se
-**reevalúa en GAME-04** cuando existan sprites y fondos reales.
+**Resolución y escala (cerrado en GAME-04, D-049):**
+
+- **Mundo explorable: 640×360** lógicos (16:9). Tiles de 16 px; personajes
+  de mapa de 16×24 px. Así un encuadre muestra un lugar entero (fachada,
+  terraza, árbol, calle) y el fondo lleva más detalle que los sprites, como
+  pide `ART_DIRECTION_V1.md`.
+- **UI** (cajas, menús, textos): sigue en su rejilla de 480×270 (`--px`),
+  independiente del mundo.
+- Contrapartida conocida: en portátiles 1366×768 el personaje mide ≈51 px en
+  pantalla (legible, pequeño). Si en QA real se queda corto, la opción
+  prevista es un zoom de cámara, no cambiar la resolución.
+
+**Referencias de arte:** `docs/ART_DIRECTION_V1.md` (concepto aprobado,
+north star; no se recorta ni se usa como textura). El primer slice es
+`La Muralla · tarde` (GAME-04).
 
 ## 6. Paleta
 
@@ -214,6 +227,8 @@ Sirve **solo como referencia estética privada**.
 
 ## 11. Qué no se construye todavía
 
-GAME-03 solo fija la dirección y la selección de clase. El mapa de Gijón,
-los lugares concretos, los sprites de personajes, Randy, la OST y cualquier
-localización comercial llegan a partir de GAME-04.
+Hecho en GAME-04: un único vertical slice (La Muralla / borde de
+Cimavilla, tarde) con PLAYER 1 provisional (sin likeness final) y una
+camarera genérica. Siguen pendientes: el resto de Gijón, otras franjas
+horarias, sprites y retratos finales de Luis/Manu/Randy (según referencias de
+Manu), Randy en el mundo, la OST y cualquier localización comercial.

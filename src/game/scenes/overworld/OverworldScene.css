@@ -1,0 +1,79 @@
+.overworld {
+  background: #1b1a22;
+}
+
+.overworld__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Backing store is an integer multiple of the logical view; the browser
+   * only ever downsizes it slightly to fit (see DECISION_LOG D-049). */
+  image-rendering: auto;
+}
+
+.overworld__hud {
+  position: absolute;
+  top: calc(var(--px) * 6);
+  left: calc(var(--px) * 8);
+  padding: calc(var(--px) * 1) calc(var(--px) * 5);
+  font-size: var(--text-xs);
+  letter-spacing: var(--px);
+  color: var(--world-cream);
+  background: rgb(20 18 30 / 0.7);
+  border: var(--px) solid rgb(241 230 207 / 0.35);
+}
+
+.overworld__hints {
+  position: absolute;
+  right: calc(var(--px) * 8);
+  bottom: calc(var(--px) * 6);
+  padding: calc(var(--px) * 1) calc(var(--px) * 4);
+  background: rgb(20 18 30 / 0.7);
+}
+
+.overworld__prompt {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--px) * 26);
+  transform: translateX(-50%);
+  padding: calc(var(--px) * 2) calc(var(--px) * 8);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: var(--px) solid var(--color-border);
+  box-shadow: var(--shadow-hard) var(--color-shadow);
+  white-space: nowrap;
+}
+
+.overworld__prompt kbd {
+  font: inherit;
+  color: var(--color-select);
+}
+
+.overworld__menu-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.45);
+}
+
+.overworld__menu {
+  width: calc(var(--px) * 170);
+  display: grid;
+  gap: calc(var(--px) * 5);
+}
+
+.overworld__menu-title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--color-system);
+}
+
+.overworld__menu-note {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}

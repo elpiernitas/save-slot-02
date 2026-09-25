@@ -22,6 +22,20 @@ Todo original, dibujado en código:
 - Cristal del título, horizonte y estrellas: `src/game/scenes/title/TitleBackdrop.tsx`
   (matrices de píxeles propias).
 - Indicador ▼: CSS (`clip-path`), sin glifo de fuente.
+- **Mundo (GAME-04)**, todo generado por código y determinista:
+  - Personajes de mapa 16×24 (`src/game/world/art/characters.ts`): PLAYER 1
+    **provisional** (pelo oscuro con raya al medio, camiseta blanca de manga
+    larga con corazón negro; sin likeness final) y una camarera genérica no
+    canon. 4 direcciones × 3 frames (idle + 2 pasos).
+  - Props (`src/game/world/art/props.ts`): bolardos, mesas con sillas,
+    sombrillas, farola, cartel (letras abstractas, sin rótulos reales),
+    jardineras, banco, gaviota (2 frames) y árbol procedural (2 frames).
+  - Suelo, muralla, puerta, fachada del café, calle y sombras
+    (`src/game/world/render/canvasRenderer.ts`): pintado procedural con ruido
+    determinista (`hash2`).
+- Referencia (no asset de producción): `docs/art/visual-concept-v1.jpg` +
+  `docs/ART_DIRECTION_V1.md`, aportados por Manu. No se recortan ni se usan
+  como textura. Nota: el JPEG del repo está truncado (ver DECISION_LOG D-053).
 
 ## Audio
 

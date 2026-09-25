@@ -16,6 +16,8 @@ const CODE_TO_INPUT: Readonly<Record<string, GameInput>> = {
   KeyD: 'right',
   Enter: 'confirm',
   NumpadEnter: 'confirm',
+  // E = interact in the world; acts as confirm everywhere else.
+  KeyE: 'confirm',
   Space: 'confirm',
   Escape: 'cancel',
 };

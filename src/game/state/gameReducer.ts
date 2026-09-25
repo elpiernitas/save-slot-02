@@ -20,6 +20,8 @@ import type {
 export type GameAction =
   | { type: 'scene/goTo'; scene: SceneId; checkpoint?: string | null; at: string }
   | { type: 'scene/complete'; scene: SceneId; at: string }
+  /** Finer resume point inside the current gameplay scene (e.g. "muralla:terrace"). */
+  | { type: 'progress/checkpoint'; checkpoint: string; at: string }
   | { type: 'flag/set'; flag: FlagId; value: FlagValue; at: string }
   | { type: 'choice/record'; choice: ChoiceId; option: string; at: string }
   | { type: 'achievement/unlock'; achievement: AchievementId; at: string }
@@ -53,12 +55,27 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
           progress: {
             ...save.progress,
             sceneId: action.scene,
-            checkpoint: action.checkpoint ?? null,
+            // The checkpoint belongs to the resume scene: it survives trips to
+            // the title (or dev scenes) and is only reset when entering a
+            // different gameplay scene without an explicit checkpoint.
+            checkpoint:
+              action.checkpoint !== undefined
+                ? action.checkpoint
+                : isResumableScene(action.scene) && action.scene !== save.progress.resumeSceneId
+                  ? null
+                  : save.progress.checkpoint,
             resumeSceneId: isResumableScene(action.scene)
               ? action.scene
               : save.progress.resumeSceneId,
           },
         },
+        action.at,
+      );
+
+    case 'progress/checkpoint':
+      if (save.progress.checkpoint === action.checkpoint) return save;
+      return touch(
+        { ...save, progress: { ...save.progress, checkpoint: action.checkpoint } },
         action.at,
       );
 
@@ -119,7 +136,8 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
       return touch(
         {
           ...save,
-          progress: { ...save.progress, sceneId: INITIAL_SCENE, checkpoint: null },
+          // Keep the checkpoint: after the system check, CONTINUE resumes there.
+          progress: { ...save.progress, sceneId: INITIAL_SCENE },
           system: {
             ...save.system,
             sessionCount: save.system.sessionCount + 1,

@@ -8,8 +8,8 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | GAME-01 | Desktop-first + fullscreen + boot + title  | ✅ Hecho    |
 | GAME-02 | Motor de diálogos retro                    | ✅ Hecho    |
 | GAME-03 | World bible + selección de clase           | ✅ Hecho    |
-| GAME-04 | Mundo explorable / vertical slice de Gijón | ⏭ Siguiente |
-| GAME-05 | Inventario y cartas                        | Pendiente   |
+| GAME-04 | Mundo explorable / vertical slice de Gijón | ✅ Hecho    |
+| GAME-05 | Inventario y cartas                        | ⏭ Siguiente |
 | GAME-06 | Puzzles / minijuegos                       | Pendiente   |
 | GAME-07 | Boss + aparición PLAYER 2                  | Pendiente   |
 | GAME-08 | Portales y selección de fecha              | Pendiente   |
@@ -59,17 +59,21 @@ quests/logros, registro de escenas, viewport 16:9 con safe areas, shell mínimo.
   `overworld` provisional ("LOADING WORLD..."). Demo de GAME-02 fuera del
   flujo.
 
-### GAME-04 — Mundo explorable / vertical slice de Gijón
+### GAME-04 — Mundo explorable / vertical slice de Gijón ✅
 
-Primera zona jugable siguiendo `WORLD_BIBLE.md`: decidir motor (canvas
-propio vs Phaser), reevaluar la resolución 480×270 con sprites/fondos
-reales, movimiento, colisiones, NPCs con `DialoguePlayer`, una franja
-horaria y su paleta. Sustituye el `overworld` provisional.
+- Motor propio Canvas 2D (D-048), mundo a 640×360 (D-049).
+- Slice: La Muralla / borde de Cimavilla por la tarde; muralla con puerta,
+  café con terraza, árbol, bolardos, cartel, calle; camarera genérica.
+- 7 interactuables (descriptivos, absurdos, variante por clase en el bolardo),
+  prompt contextual, pausa (Esc), checkpoints por zona, resume tras refresh.
+- PLAYER 1 provisional; arte original generado por código.
 
 ### GAME-05 — Inventario y cartas
 
 Contenido de items y cartas originales, UI de inventario y binder, acciones
-de reducer (`item/give`, `card/give`…), primeros logros.
+de reducer (`item/give`, `card/give`…) y soporte real para los efectos de
+diálogo `giveItem`/`takeItem`/`giveCard` (hoy `unsupported`), primeros
+logros. Puede engancharse a interactuables del slice de La Muralla.
 
 ### GAME-06 — Puzzles / minijuegos
 
