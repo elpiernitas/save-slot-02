@@ -55,7 +55,11 @@ if (!existsSync(manifestPath)) {
         ];
         for (const key of requiredInts) {
           const value = info[key];
-          if (!Number.isInteger(value) || value < 0 || (key !== 'anchorX' && key !== 'anchorY' && value === 0)) {
+          if (
+            !Number.isInteger(value) ||
+            value < 0 ||
+            (key !== 'anchorX' && key !== 'anchorY' && value === 0)
+          ) {
             fail(`${prefix}: ${key} must be a valid integer`);
           }
         }
@@ -90,7 +94,9 @@ if (!existsSync(manifestPath)) {
             );
           }
         } catch (error) {
-          fail(`${prefix}: PNG failed to decode: ${error instanceof Error ? error.message : String(error)}`);
+          fail(
+            `${prefix}: PNG failed to decode: ${error instanceof Error ? error.message : String(error)}`,
+          );
         }
       }
 
