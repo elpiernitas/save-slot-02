@@ -93,7 +93,8 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
 - GAME-07 queda especialmente cerrado para producción: además del spec base,
   incluye `GAME_07_BOSS_PATTERN_SPEC.md` (secuencia/timing determinista),
   `GAME_07_REVEAL_UI_SPEC.md` (staging de PLAYER 2),
-  `GAME_07_ASSET_REQUESTS.md` y `GAME_07_SCOPE_CUT.md`. La línea humana
+  `GAME_07_ASSET_REQUESTS.md`, `GAME_07_SCOPE_CUT.md`,
+  `GAME_07_TECHNICAL_CONTRACT.md` y `GAME_07_COPY.md`. La línea humana
   de reveal queda fijada a "¿me ha cargado bien por lo menos?". GAME-07→12
   tienen paquetes de spec/orden/tests/skills preparados. Índice completo:
   `docs/PROJECT_INDEX.md`. El critical path real está en
