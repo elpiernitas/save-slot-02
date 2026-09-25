@@ -95,6 +95,8 @@ Skills:
 - `RELEASE_QA_MATRIX.md`
 - `NETLIFY_RELEASE.md`
 - `RELEASE_CHECKLIST.md`
+- `RELEASE_RISK_REGISTER.md`
+- `QA_SAVE_FIXTURES.md`
 - skill: `save-slot-release`
 
 ## 4. Planning/backlog
