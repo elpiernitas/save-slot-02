@@ -8,6 +8,7 @@ pantalla diegética. Proyecto personal, repositorio privado.
 > Visión, tono, fechas y reglas: [`docs/GAME_CONSTITUTION.md`](docs/GAME_CONSTITUTION.md).
 > Universo (Gijón, estilo, personajes, clases): [`docs/WORLD_BIBLE.md`](docs/WORLD_BIBLE.md).
 > Estado actual y siguiente paso: [`docs/HANDOFF.md`](docs/HANDOFF.md).
+> Índice de fuentes y fases: [`docs/PROJECT_INDEX.md`](docs/PROJECT_INDEX.md).
 
 ## Requisitos
 
@@ -25,7 +26,9 @@ npm run lint         # ESLint
 npm run format       # Prettier (escribe)
 npm run build        # build de producción → dist/
 npm run preview      # servir dist/ localmente
-npm run art          # regenerar el arte del mundo (PNG + manifest)
+npm run art          # regenerar los placeholders procedurales actuales
+npm run art:check    # validar PNG runtime + manifest (permite arte externo aprobado)
+npm run art:check-generated # compara contra el generador procedural (solo placeholders)
 npm run check        # typecheck + lint + format:check + art:check + tests + build
 ```
 
@@ -49,7 +52,7 @@ src/
   styles/                  fonts.css, tokens.css (tokens + --px), global.css
   types/                   tipos compartidos primitivos
   assets/fonts/            Pixelify Sans (OFL) autoalojada
-  assets/world/            PNG del mundo + manifest.json (generados por npm run art)
+  assets/world/            PNG runtime del mundo + manifest.json (externos o generados)
   game/
     state/                 GameSave (v2), reducer, condiciones, GameProvider, useGame
     save/                  StorageDriver, localStorage, SaveManager, migraciones
@@ -67,7 +70,7 @@ src/
     content/               datos: jugador, reparto (cast), retratos, sigilos, scripts de diálogo
     calendar/              fechas del proyecto (Europe/Madrid) + time gates
     inventory/, quests/, achievements/   contratos (tipos) de fases futuras
-tools/art/                 generador del arte del mundo (Node, sin dependencias) → PNG
+tools/art/                 generador placeholder + validador de PNG runtime
 docs/                      constitución, world bible, roadmap, decisiones, handoff, assets
 ```
 
@@ -96,11 +99,14 @@ interactuar, Esc para el menú de pausa. En dev, `?worldRes=480` compara la
 resolución del mundo (por defecto 640×360).
 
 **Arte del mundo:** la geometría del slice vive en
-`src/game/world/maps/muralla.layout.json`, compartida por el mapa
-(colisiones) y por `tools/art` (píxeles). Tras cambiar el layout o el arte:
-`npm run art` y commitear los PNG; `npm run art:check` detecta PNG
-desactualizados. Un PNG dibujado a mano puede sustituir a uno generado si
-mantiene nombre, tamaño de frame y ancla del manifest.
+`src/game/world/maps/muralla.layout.json`. El runtime solo blitea PNG.
+`tools/art` mantiene un generador **placeholder** útil para prototipos, pero
+los assets de producción pueden ser externos/hand-authored/AI-assisted y
+sustituir esos PNG. `npm run art:check` valida que todos los PNG decodifican y
+coinciden con las dimensiones/anclas del manifest; no exige identidad de
+píxeles con el generador. Para comprobar específicamente los placeholders
+procedurales: `npm run art:check-generated`. Dirección visual activa:
+`docs/GAME_04R_VISUAL_REBUILD.md` + `docs/art/chatgpt-v2/`.
 
 Añadir un interactuable: rectángulo en el mapa + script en
 `src/game/content/dialogue/` + test (el test del mapa comprueba que todo
