@@ -1,8 +1,9 @@
 # SAVE SLOT 02
 
-Videojuego web privado, corto y jugable: un pequeño RPG portátil de estilo
-retro pensado para jugarse en **iPhone en horizontal**. Proyecto personal,
-repositorio privado.
+Videojuego web privado, corto y jugable: un pequeño RPG de estilo portátil
+retro pensado para jugarse **en ordenador** (teclado, pantalla 16:9,
+preferiblemente en pantalla completa). El móvil queda bloqueado con una
+pantalla diegética. Proyecto personal, repositorio privado.
 
 > Visión, tono, fechas y reglas: [`docs/GAME_CONSTITUTION.md`](docs/GAME_CONSTITUTION.md).
 > Estado actual y siguiente paso: [`docs/HANDOFF.md`](docs/HANDOFF.md).
@@ -17,7 +18,6 @@ repositorio privado.
 ```bash
 npm install          # instalar dependencias
 npm run dev          # servidor de desarrollo (http://localhost:5173)
-npm run dev -- --host  # exponer en la red local para probar desde el móvil
 npm test             # tests (Vitest)
 npm run typecheck    # TypeScript
 npm run lint         # ESLint

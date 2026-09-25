@@ -115,3 +115,26 @@ no-referrer`; `<title>` neutro. Sin analítica.
 Documentación en español; código, identificadores y comentarios en inglés.
 El idioma del contenido del juego se decidirá con la narrativa (probablemente
 español con UI "retro" en inglés, p. ej. `SYSTEM INITIALIZED`).
+
+---
+
+## GAME-01
+
+### D-017 · 2026-09-25 · Pivote a desktop-first (sustituye la prioridad mobile-first)
+
+**Sustituye:** la prioridad "smartphone en horizontal / iPhone-first" de la
+constitución de GAME-00, la pantalla `ROTATE DEVICE TO CONTINUE` prevista para
+GAME-01 y la prioridad de controles táctiles. D-010 (escenario 16:9) sigue
+vigente, pero las safe areas dejan de ser un requisito de diseño.
+
+**Decisión:** SAVE SLOT 02 se diseña para ordenador (portátil/sobremesa,
+teclado, pantalla horizontal, preferiblemente fullscreen). Se pedirá a Luis
+jugar desde un ordenador. El móvil no necesita ser jugable: se bloquea con una
+pantalla diegética antes del juego.
+
+**Motivo:** decisión de producto de Manu. Teclado + pantalla grande permiten
+un RPG más rico (menús, diálogos largos, minijuegos) sin comprometer el diseño
+por controles táctiles.
+
+**Se conserva** (no molesta): `viewport-fit=cover`, safe areas vía `env()`,
+`100dvh`, bloqueo de scroll/zoom.

@@ -2,7 +2,7 @@
   "name": "save-slot-02",
   "private": true,
   "version": "0.0.0",
-  "description": "Private, short web RPG. Landscape-first, mobile-first.",
+  "description": "Private, short retro web RPG. Desktop-first (keyboard, 16:9, fullscreen).",
   "type": "module",
   "engines": {
     "node": ">=22"

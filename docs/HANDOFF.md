@@ -4,7 +4,10 @@
 > Después: `docs/GAME_CONSTITUTION.md` (reglas) y `docs/DECISION_LOG.md` (por qué).
 
 **Última fase cerrada:** GAME-00 — constitución técnica y estructura (2026-09-25)
-**Próxima fase:** **GAME-01 — orientación horizontal + boot + title screen**
+**Próxima fase:** **GAME-01 — desktop-first + fullscreen + boot + title screen**
+
+> ⚠️ Pivote D-017: el juego pasa a ser desktop-first. Ignorar cualquier plan
+> mobile-first / `ROTATE DEVICE` más abajo; GAME-01 lo sustituye.
 
 ## Qué se ha hecho (GAME-00)
 

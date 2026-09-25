@@ -2,21 +2,21 @@
 
 Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 
-| Fase    | Contenido                                    | Estado      |
-| ------- | -------------------------------------------- | ----------- |
-| GAME-00 | Constitución técnica y estructura            | ✅ Hecho    |
-| GAME-01 | Orientación horizontal + boot + title screen | ⏭ Siguiente |
-| GAME-02 | Motor de diálogos retro                      | Pendiente   |
-| GAME-03 | Selección de clase                           | Pendiente   |
-| GAME-04 | Mapa y exploración                           | Pendiente   |
-| GAME-05 | Inventario y cartas                          | Pendiente   |
-| GAME-06 | Puzzles / minijuegos                         | Pendiente   |
-| GAME-07 | Boss + aparición PLAYER 2                    | Pendiente   |
-| GAME-08 | Portales y selección de fecha                | Pendiente   |
-| GAME-09 | Final + save slot                            | Pendiente   |
-| GAME-10 | Desbloqueos posteriores                      | Pendiente   |
-| GAME-11 | Easter eggs, sonido, animaciones y pulido    | Pendiente   |
-| GAME-12 | QA móvil + producción Netlify                | Pendiente   |
+| Fase    | Contenido                                 | Estado      |
+| ------- | ----------------------------------------- | ----------- |
+| GAME-00 | Constitución técnica y estructura         | ✅ Hecho    |
+| GAME-01 | Desktop-first + fullscreen + boot + title | ⏭ Siguiente |
+| GAME-02 | Motor de diálogos retro                   | Pendiente   |
+| GAME-03 | Selección de clase                        | Pendiente   |
+| GAME-04 | Mapa y exploración                        | Pendiente   |
+| GAME-05 | Inventario y cartas                       | Pendiente   |
+| GAME-06 | Puzzles / minijuegos                      | Pendiente   |
+| GAME-07 | Boss + aparición PLAYER 2                 | Pendiente   |
+| GAME-08 | Portales y selección de fecha             | Pendiente   |
+| GAME-09 | Final + save slot                         | Pendiente   |
+| GAME-10 | Desbloqueos posteriores                   | Pendiente   |
+| GAME-11 | Easter eggs, sonido, animaciones y pulido | Pendiente   |
+| GAME-12 | QA móvil + producción Netlify             | Pendiente   |
 
 ## Detalle por fase
 
@@ -27,14 +27,16 @@ modelo `GameSave`, capa de guardado con migraciones, utilidades de tiempo
 Europe/Madrid, time gates, condiciones, contratos de diálogo/audio/inventario/
 quests/logros, registro de escenas, viewport 16:9 con safe areas, shell mínimo.
 
-### GAME-01 — Orientación horizontal + boot + title screen
+### GAME-01 — Desktop-first + fullscreen + boot + title screen
 
-- Pantalla `ROTATE DEVICE TO CONTINUE` con animación de teléfono girando
-  (usar `useOrientation`, respetar reduced motion).
-- Secuencia de boot real (sustituye `BootScene` del GAME-00).
-- Title screen (escena `title`), primera interacción → desbloqueo de audio.
-- Decidir fuente bitmap (D-011) y primera versión de paleta.
-- Transición entre escenas en `SceneRenderer`.
+(Redefinida por D-017: sustituye "orientación horizontal móvil".)
+
+- Gate de pantalla: `INCOMPATIBLE DISPLAY` (móvil) y `WINDOW TOO SMALL`.
+- Abstracción Fullscreen API; el primer gesto desbloquea audio + fullscreen.
+- Secuencia: system check → boot → save detectado → title screen.
+- Save v2 (flags de arranque) con migración.
+- Capa de input de teclado reutilizable; menú del título con teclado y ratón.
+- Fuente pixel OFL autoalojada, transición de escena reutilizable.
 
 ### GAME-02 — Motor de diálogos retro
 
@@ -79,5 +81,6 @@ con el mismo contrato `AudioEngine`. Botón de mute visible.
 
 ### GAME-12 — QA móvil + producción Netlify
 
-QA en iPhone real (Safari + Chrome), safe areas reales, modo "Añadir a
-pantalla de inicio" (evaluar meta tags), rendimiento, despliegue.
+QA en ordenador real (Chrome, Safari, Firefox, Edge; fullscreen real,
+portátil 1366×768 y monitores grandes), comprobación del bloqueo en móvil,
+rendimiento, despliegue.

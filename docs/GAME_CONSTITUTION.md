@@ -56,12 +56,25 @@ delatarlo.
 
 ## 5. Dispositivo objetivo
 
-- **Prioridad absoluta: smartphone en horizontal.** iPhone + Safari iOS primero,
-  Chrome móvil después.
-- Escenario de juego **16:9** (letterbox negro alrededor).
-- En vertical: pantalla específica **ROTATE DEVICE TO CONTINUE** con animación
-  de teléfono girando (GAME-01). Nunca una web vertical metida en el móvil.
-- Escritorio: debe funcionar (teclado), pero no es el objetivo de diseño.
+> Sustituye a la versión mobile-first de GAME-00 (ver DECISION_LOG D-017).
+
+- **Prioridad: ordenador** (portátil o sobremesa), navegador moderno, teclado,
+  pantalla horizontal, preferiblemente en **pantalla completa**.
+- A Luis se le pedirá explícitamente jugar desde un ordenador.
+- Escenario de juego **16:9** que ocupa el máximo espacio disponible, con
+  letterbox negro cuando la ventana no es 16:9. Resolución lógica provisional
+  **480×270**.
+- Controles: **teclado primero** (flechas / WASD, Enter / Espacio, Escape) y
+  ratón como alternativa en menús. El táctil no es un objetivo.
+- **Móvil no jugable:** en pantallas claramente inadecuadas (dispositivo solo
+  táctil con pantalla pequeña) aparece una pantalla diegética
+  `INCOMPATIBLE DISPLAY` antes de cargar el juego.
+- **Ventana de escritorio demasiado pequeña** (< 800×450 CSS px): pantalla
+  `WINDOW TOO SMALL`; el juego continúa solo en cuanto la ventana crece.
+- La compatibilidad móvil se conserva técnicamente donde no molesta (safe
+  areas, `100dvh`), pero **no condiciona el diseño**.
+- Fullscreen: se ofrece en el primer gesto; nunca es obligatorio ni atrapa al
+  jugador (Escape siempre sale, y el juego sigue en ventana).
 
 ## 6. Jugador (contexto para fases posteriores)
 
@@ -100,25 +113,30 @@ nunca con sprites, logos, música, sonidos o personajes protegidos.
 
 - Píxel perfecto cuando tenga sentido; `image-rendering: pixelated`.
 - Bordes nítidos, sombras duras, sin blur ni degradados decorativos.
-- Cajas RPG, interfaz retro, tipografía bitmap (fuente por decidir; ver
-  DECISION_LOG D-011).
+- Cajas RPG, interfaz retro, tipografía pixel **Pixelify Sans** (SIL OFL,
+  autoalojada; ver DECISION_LOG D-021 y `docs/ASSETS.md`).
+- Negro y tonos oscuros al inicio, pequeños acentos de color, sensación
+  misteriosa. Animaciones discretas.
+- Evitar: glassmorphism, degradados decorativos, estética SaaS, botones
+  redondeados, emojis en la UI, componentes tipo app móvil.
 - Buen contraste. Transiciones rápidas.
 - Nada de "web corporativa".
 - Tokens en `src/styles/tokens.css`. La paleta **no** está cerrada.
 
 ## 9. Accesibilidad y UX (requisitos)
 
-- Objetivos táctiles ≥ 44 px CSS.
-- Respetar safe areas (notch / Dynamic Island / indicador de inicio): ningún
-  control interactivo fuera del área segura.
-- Evitar zoom accidental: `touch-action: manipulation` (sin bloquear el pinch
-  del sistema), inputs a ≥ 16 px para que iOS no haga auto-zoom.
-- Altura con `100dvh` (fallback `100vh`).
-- Sin scroll ni rebote durante el juego (`overflow: hidden`,
-  `overscroll-behavior: none`).
-- Respetar `prefers-reduced-motion` (animaciones decorativas desactivadas o
-  reducidas).
+- **Teclado completo** para todas las acciones principales; ratón como
+  alternativa en menús.
+- Selección / foco siempre visible (cursor `>` + inversión de color).
 - Contraste suficiente en todo el texto.
+- Respetar `prefers-reduced-motion` (animaciones decorativas y transiciones
+  desactivadas o instantáneas).
+- Fullscreen nunca obligatorio: si el navegador no lo permite o el jugador lo
+  rechaza, se explica y se continúa en ventana, con opción de reintentar.
+- Escape nunca rompe el estado del juego (salir de fullscreen o volver atrás en
+  un menú son acciones seguras).
+- Sin scroll ni selección de texto durante el juego; cursor normal en menús
+  (ocultarlo por inactividad queda como posible mejora futura).
 - El audio se puede mutear siempre, y nunca suena antes de una interacción.
 
 ## 10. Hosting
