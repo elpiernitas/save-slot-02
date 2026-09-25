@@ -3,8 +3,9 @@
 > Léeme primero. Resumen para que una sesión nueva continúe sin contexto previo.
 > Después: `docs/GAME_CONSTITUTION.md` (reglas), `docs/WORLD_BIBLE.md`
 > (universo), `docs/ART_DIRECTION_V1.md` (dirección),
-> `docs/GAME_04R_VISUAL_REBUILD.md` (**gate visual actual**) y
-> `docs/DECISION_LOG.md` (por qué).
+> `docs/GAME_04R_VISUAL_REBUILD.md` (**gate visual actual**),
+> `docs/STORY_BIBLE.md` (estructura narrativa), `docs/CONTENT_BACKLOG.md`
+> (ideas futuras) y `docs/DECISION_LOG.md` (por qué).
 
 **Fase actual:** GAME-04 — **reconstrucción visual** del slice tras la
 revisión de Manu (2026-09-25). Técnicamente aceptado; pendiente de
@@ -70,6 +71,14 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
   de todo, `E` = confirmar.
 - **Save**: checkpoint `"muralla:<spawn>"` por zona (acción
   `progress/checkpoint`); ahora sobrevive a título y refresh.
+
+## Trabajo de planificación preparado durante el bloqueo de Claude
+
+- `docs/STORY_BIBLE.md`: estructura ACT 0–VI, reveal de PLAYER 2, date gate y
+  reglas para usar referencias personales sin convertirlo en un álbum.
+- `docs/CONTENT_BACKLOG.md`: candidatos para inventario/cartas, puzzles,
+  boss, portales, post-game, OST y backlog de assets. **Planning only**;
+  no desbloquea GAME-05.
 
 ## Qué NO está hecho (a propósito)
 
