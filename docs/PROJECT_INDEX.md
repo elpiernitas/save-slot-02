@@ -63,6 +63,8 @@ Skills:
 - `GAME_07_REVEAL_UI_SPEC.md`
 - `GAME_07_ASSET_REQUESTS.md`
 - `GAME_07_SCOPE_CUT.md`
+- `GAME_07_TECHNICAL_CONTRACT.md`
+- `GAME_07_COPY.md`
 - `GAME_07_TEST_MATRIX.md`
 - `GAME_07_IMPLEMENTATION_ORDER.md`
 - skill: `save-slot-boss-player2`
