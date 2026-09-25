@@ -588,3 +588,62 @@ vaqueros; sin afirmar likeness.
 La referencia visual `docs/art/visual-concept-v1.jpg` sigue truncada (D-053):
 esta reconstrucción se ha guiado por el comentario de revisión y
 `ART_DIRECTION_V1.md`, no por la imagen.
+
+
+### D-057 · 2026-09-26 · Arte final externo al generador procedural
+
+D-055 sigue describiendo la **tubería raster** útil, pero deja de ser la
+fuente estética final. Los PNG producidos por `tools/art` son placeholders
+de integración/regresión mientras se sustituyen por assets aprobados.
+
+La dirección visual activa se encuentra en:
+- `docs/art/chatgpt-v2/`
+- `GAME_04R_VISUAL_REBUILD.md`
+- `ASSET_IMPORT_CONTRACT.md`
+- `ASSET_MANIFEST_V2.md`
+
+Claude Code integra assets, anclas, colisiones y QA; no debe recrear el
+resultado final íntegramente con rectángulos/procedural art. Los assets
+externos pueden sustituirse archivo a archivo sin cambiar la lógica del
+motor.
+
+### D-058 · 2026-09-26 · Modelo de colaboración ChatGPT ↔ Claude
+
+El PR #1 funciona como canal operativo compartido.
+
+- Manu: owner y veto de decisiones grandes.
+- ChatGPT: producto, narrativa, dirección visual y QA/acceptance.
+- Claude Code: implementación principal dentro del repo.
+
+Flujo:
+spec → implementación → screenshots/tests → revisión ACCEPT/FIXES/NEXT.
+
+Manu no hace de mensajero para decisiones rutinarias.
+
+Fuente: `docs/AI_COLLABORATION.md`.
+
+### D-059 · 2026-09-26 · CI del PR
+
+Se añade `.github/workflows/ci.yml` para ejecutar `npm ci` +
+`npm run check` en pull requests y ramas de trabajo. Un milestone no debe
+entregarse como verde si CI está rojo.
+
+Esto corrige la carencia repetida de "no CI configured" detectada durante
+GAME-00→04.
+
+### D-060 · 2026-09-26 · Critical path de release
+
+Objetivo de envío: 28-09-2026.
+
+Se prioriza completar el arco:
+GAME-04R → core 05 → core 06 → 07 → 08 → 09 → polish P0 → 12.
+
+Si falta tiempo se recorta **cantidad**, no la calidad visual del primer
+slice:
+- GAME-10 es totalmente cortable;
+- SEAGULL PROTOCOL y extras de GAME-06 son cortables;
+- GAME-05 puede reducirse a CITY CARDS;
+- boss puede simplificarse pero PLAYER 2 reveal no se elimina;
+- date gate y ending no se eliminan.
+
+Fuente: `docs/RELEASE_CRITICAL_PATH.md`.
