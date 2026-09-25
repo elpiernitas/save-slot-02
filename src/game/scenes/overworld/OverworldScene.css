@@ -1,5 +1,39 @@
+/*
+ * World UI grammar (docs/UI_SYSTEM_V2.md): deep navy panels, warm cream text,
+ * gold selection, coral accent edge, green SYSTEM tone. Scoped to the
+ * overworld by overriding the shared tokens, so DialoguePlayer and the pause
+ * menu inherit it without changing their behaviour.
+ */
 .overworld {
+  --color-bg: #0e1a2c;
+  --color-surface: #16243d;
+  --color-surface-raised: #1f3354;
+  --color-border: #f1e6cf;
+  --color-border-dim: #3c5a82;
+  --color-text: #f4ecda;
+  --color-text-dim: #a9b4c6;
+  --color-select: #f2c14e;
+  --color-system: #8fd6a8;
+  --color-shadow: #081020;
+  --world-accent: #e8735a;
+
   background: #1b1a22;
+}
+
+/* Coral accent edge on world panels (dialogue box, pause panel). */
+.overworld .dlg-box::before,
+.overworld .overworld__menu::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--px) * 2);
+  right: calc(var(--px) * 2);
+  top: calc(var(--px) * 2);
+  height: var(--px);
+  background: var(--world-accent);
+}
+
+.overworld .overworld__menu {
+  position: relative;
 }
 
 .overworld__canvas {
@@ -16,12 +50,21 @@
   position: absolute;
   top: calc(var(--px) * 6);
   left: calc(var(--px) * 8);
-  padding: calc(var(--px) * 1) calc(var(--px) * 5);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--px) * 4);
+  padding: calc(var(--px) * 1) calc(var(--px) * 5) calc(var(--px) * 1) calc(var(--px) * 4);
   font-size: var(--text-xs);
   letter-spacing: var(--px);
-  color: var(--world-cream);
-  background: rgb(20 18 30 / 0.7);
-  border: var(--px) solid rgb(241 230 207 / 0.35);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: var(--px) solid var(--color-border);
+  border-left: calc(var(--px) * 2) solid var(--world-accent);
+  box-shadow: var(--px) var(--px) 0 var(--color-shadow);
+}
+
+.overworld__hud-time {
+  color: var(--color-select);
 }
 
 .overworld__hints {
@@ -29,26 +72,41 @@
   right: calc(var(--px) * 8);
   bottom: calc(var(--px) * 6);
   padding: calc(var(--px) * 1) calc(var(--px) * 4);
-  background: rgb(20 18 30 / 0.7);
+  background: rgb(14 26 44 / 0.75);
+  transition: opacity 0.6s steps(4);
 }
 
+/* Controls help steps aside once the player has moved. */
+.overworld__hints[data-faded] {
+  opacity: 0;
+}
+
+/* Floats above PLAYER 1; left/top are set every frame by the scene. */
 .overworld__prompt {
   position: absolute;
-  left: 50%;
-  bottom: calc(var(--px) * 26);
-  transform: translateX(-50%);
-  padding: calc(var(--px) * 2) calc(var(--px) * 8);
-  font-size: var(--text-sm);
+  transform: translate(-50%, -100%);
+  padding: calc(var(--px) * 1) calc(var(--px) * 4);
+  font-size: var(--text-xs);
+  letter-spacing: calc(var(--px) * 0.5);
   color: var(--color-text);
   background: var(--color-surface);
   border: var(--px) solid var(--color-border);
-  box-shadow: var(--shadow-hard) var(--color-shadow);
+  box-shadow: var(--px) var(--px) 0 var(--color-shadow);
   white-space: nowrap;
+  pointer-events: none;
+}
+
+.overworld__prompt[hidden] {
+  display: none;
 }
 
 .overworld__prompt kbd {
   font: inherit;
-  color: var(--color-select);
+  font-weight: 700;
+  color: var(--color-bg);
+  background: var(--color-select);
+  padding: 0 calc(var(--px) * 1.5);
+  margin-right: calc(var(--px) * 2);
 }
 
 .overworld__menu-layer {

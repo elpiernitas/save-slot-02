@@ -36,7 +36,11 @@ const sprites = {
   ...drawProps(layout),
 };
 
-const manifest = { generatedBy: 'tools/art/build.mjs', sprites: {} };
+const manifest = {
+  generatedBy: 'tools/art/build.mjs',
+  note: 'status placeholder = not approved art; replace file + set status to final',
+  sprites: {},
+};
 let failures = 0;
 if (!check) mkdirSync(outDir, { recursive: true });
 
@@ -47,6 +51,8 @@ for (const [id, sprite] of Object.entries(sprites)) {
   const file = `${id}.png`;
   manifest.sprites[id] = {
     file,
+    // Every generated sprite is a WIP placeholder (ASSET_IMPORT_CONTRACT.md).
+    status: 'placeholder',
     width: canvas.w,
     height: canvas.h,
     frameWidth: canvas.w / frames,

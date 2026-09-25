@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cameraFor } from './camera';
+import { CAMERA_DEAD_ZONE, cameraFor, followCamera } from './camera';
 import { checkpointFor, spawnForCheckpoint } from './checkpoint';
 import { buildCollisionWorld } from './collision';
 import { worldViewFromQuery } from './config';
@@ -97,6 +97,23 @@ describe('camera', () => {
     expect(cameraFor({ x: 5, y: 5 }, view, map)).toEqual({ x: 0, y: 0 });
     expect(cameraFor({ x: 299, y: 199 }, view, map)).toEqual({ x: 200, y: 140 });
   });
+  it('soft follow: stays still inside the dead zone', () => {
+    const cam = cameraFor({ x: 150, y: 100 }, view, map);
+    const nudged = { x: 150 + CAMERA_DEAD_ZONE.x - 1, y: 100 - CAMERA_DEAD_ZONE.y + 1 };
+    expect(followCamera(cam, nudged, view, map, 16)).toEqual(cam);
+  });
+
+  it('soft follow: eases towards the target and never overshoots the clamp', () => {
+    const cam = { x: 0, y: 0 };
+    const far = { x: 299, y: 199 };
+    const step = followCamera(cam, far, view, map, 16);
+    expect(step.x).toBeGreaterThan(0);
+    expect(step.x).toBeLessThan(200);
+    let c = cam;
+    for (let i = 0; i < 200; i++) c = followCamera(c, far, view, map, 16);
+    expect(c).toEqual({ x: 200, y: 140 }); // settles on the clamped edge
+  });
+
   it('centres maps smaller than the view', () => {
     expect(cameraFor({ x: 0, y: 0 }, view, { width: 80, height: 40 })).toEqual({ x: -10, y: -10 });
   });
@@ -207,6 +224,12 @@ describe('La Muralla map', () => {
       map.widthTiles * TILE_SIZE,
       map.heightTiles * TILE_SIZE,
     ]);
+  });
+
+  it('every sprite declares whether it is a placeholder or approved art', () => {
+    for (const [id, info] of Object.entries(SPRITES)) {
+      expect(['placeholder', 'final'], id).toContain(info.status);
+    }
   });
 
   it('uses a large, readable player sprite (32×48, 4 directions × 3 frames)', () => {

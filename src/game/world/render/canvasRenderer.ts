@@ -97,10 +97,7 @@ export function createWorldRenderer(
     list.sort((a, b) => a.baseY - b.baseY);
     for (const d of list) d.draw();
 
-    // Warm late-afternoon grade over everything (functional lighting).
-    ctx.setTransform(scale, 0, 0, scale, 0, 0);
-    ctx.fillStyle = 'rgba(255, 176, 96, 0.06)';
-    ctx.fillRect(0, 0, view.w, view.h);
+    // No global colour grade: lighting lives in the art (GAME_04R_VISUAL_REBUILD §8).
   };
 
   return { resize, draw, destroy: () => undefined };

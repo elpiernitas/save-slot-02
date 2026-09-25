@@ -22,10 +22,18 @@ export interface DialoguePlayerProps {
   onFinish?: () => void;
   /** Optional scene art behind the box, driven by who is speaking. */
   stage?: (speaker: SpeakerView | null) => ReactNode;
+  /** Where the box sits; `top` keeps the world character visible below it. */
+  placement?: 'bottom' | 'top';
 }
 
 /** Plays a dialogue script: runtime + typewriter + input + rendering. */
-export function DialoguePlayer({ script, actions, onFinish, stage }: DialoguePlayerProps) {
+export function DialoguePlayer({
+  script,
+  actions,
+  onFinish,
+  stage,
+  placement = 'bottom',
+}: DialoguePlayerProps) {
   const dialogue = useDialogue(script, {
     ...(actions && { actions }),
     ...(onFinish && { onFinish }),
@@ -39,7 +47,7 @@ export function DialoguePlayer({ script, actions, onFinish, stage }: DialoguePla
     node && (node.type === 'line' || node.type === 'choice') ? describeSpeaker(script, node) : null;
 
   return (
-    <div className="dlg-layer">
+    <div className="dlg-layer" data-placement={placement}>
       {stage?.(speaker)}
       {state.status === 'line' && node?.type === 'line' && speaker && (
         <LineView

@@ -25,6 +25,8 @@ import type { Facing } from '../types';
  */
 export interface SpriteInfo {
   file: string;
+  /** `placeholder` until approved external art replaces the file. */
+  status: string;
   width: number;
   height: number;
   frameWidth: number;

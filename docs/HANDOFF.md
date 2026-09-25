@@ -146,6 +146,15 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
 | `src/game/dialogue/effects.ts`                 | `giveItem`/`giveCard` aún `unsupported` |
 | `src/game/inventory/types.ts`                  | contrato de inventario/cartas (GAME-05) |
 
+## GAME-04R · iteración 1 (D-060)
+
+- Referencias `docs/art/chatgpt-v2/*.jpg` corruptas: pendiente volver a
+  subirlas (o subir directamente los PNG de runtime).
+- Hecho: cámara suave con zona muerta, UI navy/crema, prompt sobre PLAYER 1,
+  diálogo arriba cuando el jugador está abajo, sin tinte global, manifest con
+  `status`. Capturas en `docs/art/review/game-04r-iter1/`.
+- Todo el arte del mundo sigue siendo **placeholder**.
+
 ## Próximo paso exacto
 
 1. Ejecutar **GAME-04R** siguiendo `docs/GAME_04R_VISUAL_REBUILD.md`.

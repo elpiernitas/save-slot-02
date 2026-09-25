@@ -647,3 +647,32 @@ slice:
 - date gate y ending no se eliminan.
 
 Fuente: `docs/RELEASE_CRITICAL_PATH.md`.
+
+### D-060 · 2026-09-26 · GAME-04R iteración 1: integración sin arte aprobado
+
+Las tres referencias de `docs/art/chatgpt-v2/` **no se pueden usar**:
+`visual-bible.jpg` y `ui-flow-storyboard.jpg` no decodifican (datos corruptos
+desde el byte 158) y `ui-reference-board.jpg` decodifica a 1200×500 pero
+en blanco (solo llegó parte del primer scan progresivo). Por
+`ASSET_IMPORT_CONTRACT.md` no se ha generado arte nuevo: los PNG siguen
+siendo los placeholders de `npm run art`, ahora marcados
+`status: "placeholder"` en `manifest.json` (un test exige
+`placeholder | final` en cada sprite).
+
+Implementado sin depender del arte:
+
+- Cámara con **seguimiento suave y zona muerta** (±24/±16 px), que llega a
+  los bordes del mapa (`followCamera`, tests).
+- UI del mundo con la gramática de `UI_SYSTEM_V2.md`: panel navy, texto
+  crema, selección dorada, borde coral, SYSTEM en verde (tokens
+  sobrescritos solo dentro de `.overworld`).
+- Prompt `E INTERACT` **anclado encima de PLAYER 1**; la ayuda de controles
+  desaparece tras el primer movimiento.
+- La caja de diálogo **sube arriba** cuando PLAYER 1 está en la mitad
+  inferior de la pantalla (`placement` en `DialoguePlayer`): el diálogo
+  nunca lo tapa.
+- Huella de colisión de la camarera más profunda: PLAYER 1 se queda un paso
+  por delante y no tapa su sprite.
+- Fuera el tinte naranja global (`GAME_04R_VISUAL_REBUILD` §8).
+
+Capturas de revisión: `docs/art/review/game-04r-iter1/`.

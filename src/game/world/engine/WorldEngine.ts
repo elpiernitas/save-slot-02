@@ -1,4 +1,4 @@
-import { cameraFor } from '../camera';
+import { cameraFor, followCamera } from '../camera';
 import { buildCollisionWorld, type CollisionWorld } from '../collision';
 import { findInteraction, zoneAt } from '../interaction';
 import { stepMovement } from '../movement';
@@ -61,11 +61,14 @@ export class WorldEngine {
   private zoneId: string | null;
   private destroyed = false;
   private timeMs = 0;
+  private camera: Vec2;
 
   constructor(private readonly options: WorldEngineOptions) {
     this.collision = buildCollisionWorld(options.map);
     this.pos = { x: options.spawn.x, y: options.spawn.y };
     this.facing = options.spawn.facing;
+    // Start framed on the spawn; afterwards the camera follows softly.
+    this.camera = cameraFor(this.pos, options.view, this.collision);
     // The spawn zone is already "entered": no checkpoint event on load.
     this.zoneId = zoneAt(this.pos, options.map.zones)?.id ?? null;
   }
@@ -113,13 +116,12 @@ export class WorldEngine {
   }
 
   snapshot(): WorldSnapshot {
-    const { view } = this.options;
     return {
       pos: { ...this.pos },
       facing: this.facing,
       moving: this.moving,
       walkFrame: this.moving ? (((Math.floor(this.walked / STEP_PX) % 2) + 1) as 1 | 2) : 0,
-      camera: cameraFor(this.pos, view, this.collision),
+      camera: { ...this.camera },
       timeMs: this.timeMs,
       target: this.target,
     };
@@ -139,6 +141,7 @@ export class WorldEngine {
     this.facing = result.facing;
     this.moving = result.moving;
     this.walked = this.moving ? this.walked + dx : 0;
+    this.camera = followCamera(this.camera, this.pos, this.options.view, this.collision, dt);
 
     const zone = zoneAt(this.pos, map.zones);
     if (zone && zone.id !== this.zoneId) this.options.onZoneEnter?.(zone);

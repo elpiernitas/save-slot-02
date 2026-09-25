@@ -139,7 +139,8 @@ export const MURALLA_MAP: WorldMap = {
     foot(LAYOUT.board.x, LAYOUT.board.y, 18, 5),
     foot(LAYOUT.bin.x, LAYOUT.bin.y, 12, 6),
     foot(LAYOUT.gull.x, LAYOUT.gull.y, 10, 4),
-    foot(WAITRESS.x, WAITRESS.y, 12, 6),
+    // Deep footprint: PLAYER 1 stops a step away instead of covering her sprite.
+    foot(WAITRESS.x, WAITRESS.y + 10, 16, 16),
   ],
   props: [
     ...LAYOUT.trees.map((t) => ({ id: t.id, sprite: 'tree', x: t.x, y: t.y, animMs: 1700 })),

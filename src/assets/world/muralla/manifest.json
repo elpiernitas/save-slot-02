@@ -1,8 +1,10 @@
 {
   "generatedBy": "tools/art/build.mjs",
+  "note": "status placeholder = not approved art; replace file + set status to final",
   "sprites": {
     "background": {
       "file": "background.png",
+      "status": "placeholder",
       "width": 800,
       "height": 416,
       "frameWidth": 800,
@@ -14,6 +16,7 @@
     },
     "player": {
       "file": "player.png",
+      "status": "placeholder",
       "width": 96,
       "height": 192,
       "frameWidth": 32,
@@ -25,6 +28,7 @@
     },
     "waitress": {
       "file": "waitress.png",
+      "status": "placeholder",
       "width": 96,
       "height": 192,
       "frameWidth": 32,
@@ -36,6 +40,7 @@
     },
     "tree": {
       "file": "tree.png",
+      "status": "placeholder",
       "width": 224,
       "height": 136,
       "frameWidth": 112,
@@ -47,6 +52,7 @@
     },
     "tableSet": {
       "file": "tableSet.png",
+      "status": "placeholder",
       "width": 96,
       "height": 100,
       "frameWidth": 96,
@@ -58,6 +64,7 @@
     },
     "tableSetFolded": {
       "file": "tableSetFolded.png",
+      "status": "placeholder",
       "width": 96,
       "height": 100,
       "frameWidth": 96,
@@ -69,6 +76,7 @@
     },
     "windbreakWest": {
       "file": "windbreakWest.png",
+      "status": "placeholder",
       "width": 124,
       "height": 36,
       "frameWidth": 124,
@@ -80,6 +88,7 @@
     },
     "windbreakEast": {
       "file": "windbreakEast.png",
+      "status": "placeholder",
       "width": 136,
       "height": 36,
       "frameWidth": 136,
@@ -91,6 +100,7 @@
     },
     "windbreakSide": {
       "file": "windbreakSide.png",
+      "status": "placeholder",
       "width": 6,
       "height": 46,
       "frameWidth": 6,
@@ -102,6 +112,7 @@
     },
     "board": {
       "file": "board.png",
+      "status": "placeholder",
       "width": 22,
       "height": 32,
       "frameWidth": 22,
@@ -113,6 +124,7 @@
     },
     "bollard": {
       "file": "bollard.png",
+      "status": "placeholder",
       "width": 14,
       "height": 24,
       "frameWidth": 14,
@@ -124,6 +136,7 @@
     },
     "bollardMarked": {
       "file": "bollardMarked.png",
+      "status": "placeholder",
       "width": 14,
       "height": 24,
       "frameWidth": 14,
@@ -135,6 +148,7 @@
     },
     "bench": {
       "file": "bench.png",
+      "status": "placeholder",
       "width": 48,
       "height": 30,
       "frameWidth": 48,
@@ -146,6 +160,7 @@
     },
     "bin": {
       "file": "bin.png",
+      "status": "placeholder",
       "width": 16,
       "height": 28,
       "frameWidth": 16,
@@ -157,6 +172,7 @@
     },
     "gull": {
       "file": "gull.png",
+      "status": "placeholder",
       "width": 36,
       "height": 16,
       "frameWidth": 18,
@@ -168,6 +184,7 @@
     },
     "pot": {
       "file": "pot.png",
+      "status": "placeholder",
       "width": 18,
       "height": 28,
       "frameWidth": 18,

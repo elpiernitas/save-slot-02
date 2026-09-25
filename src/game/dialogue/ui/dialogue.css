@@ -141,3 +141,15 @@
   text-decoration: line-through;
   text-decoration-thickness: var(--px);
 }
+
+/* ---- Top placement: the box moves up when the speaker's world sprite is
+ * in the lower half of the screen (never hide PLAYER 1). ---- */
+.dlg-layer[data-placement='top'] .dlg-box {
+  top: calc(var(--px) * 8);
+  bottom: auto;
+}
+
+.dlg-layer[data-placement='top'] .dlg-choices {
+  top: calc(var(--px) * 94);
+  bottom: auto;
+}
