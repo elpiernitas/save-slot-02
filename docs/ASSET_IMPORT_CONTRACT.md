@@ -96,3 +96,11 @@ Do not substitute paid generation, generic stock art, or new procedural art.
 
 Technical work may continue only when it does not advance GAME-05 or alter
 the approved visual target.
+
+
+## Runtime filename stability
+
+GAME-04R should minimise code churn. The easiest approved-art integration is
+to preserve sprite ids and runtime filenames, update the PNG bytes + manifest
+metadata if dimensions change, then realign map geometry/colliders. A visual
+rebuild does not require renaming every asset.
