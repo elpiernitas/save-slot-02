@@ -11,6 +11,8 @@ export interface SpriteInfo {
   file: string;
   /** `placeholder` until approved external art replaces the file. */
   status: string;
+  /** Contract: sprites need an alpha background, full-frame images are opaque. */
+  transparent: boolean;
   width: number;
   height: number;
   frameWidth: number;
@@ -48,6 +50,17 @@ export const CHARACTER_ROWS: Readonly<Record<Facing, number>> = {
 
 export type SpriteImages = ReadonlyMap<string, HTMLImageElement>;
 
+/**
+ * Describes a mismatch between a decoded image and its manifest entry, or
+ * null. A wrong-sized PNG would otherwise be sliced into garbled frames.
+ */
+export function spriteSizeProblem(id: string, width: number, height: number): string | null {
+  const info = SPRITES[id];
+  if (!info) return `Unknown sprite: ${id}`;
+  if (width === info.width && height === info.height) return null;
+  return `Sprite "${id}" is ${width}×${height}, manifest expects ${info.width}×${info.height}`;
+}
+
 /** Loads every sprite once; resolves when all images are decoded. */
 export function loadSpriteImages(
   ids: Iterable<string> = Object.keys(SPRITE_URLS),
@@ -58,6 +71,8 @@ export function loadSpriteImages(
     const img = new Image();
     img.src = url;
     await img.decode();
+    const problem = spriteSizeProblem(id, img.naturalWidth, img.naturalHeight);
+    if (problem) console.error(problem);
     return [id, img] as const;
   });
   return Promise.all(entries).then((list) => new Map(list));

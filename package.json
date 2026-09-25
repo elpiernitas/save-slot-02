@@ -18,10 +18,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "art": "npm run art:generate",
-    "art:check": "node tools/art/check.mjs",
+    "art:check": "node tools/art/png.selftest.mjs && node tools/art/check.mjs",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run art:check && npm run test && npm run build",
     "art:generate": "node tools/art/build.mjs",
-    "art:check-generated": "node tools/art/build.mjs --check"
+    "art:check-generated": "node tools/art/build.mjs --check",
+    "art:import": "node tools/art/import.mjs"
   },
   "dependencies": {
     "react": "^19.3.0",

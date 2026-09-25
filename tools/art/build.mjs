@@ -79,6 +79,8 @@ for (const [id, sprite] of Object.entries(sprites)) {
     rows,
     anchorX: sprite.anchorX,
     anchorY: sprite.anchorY,
+    // Contract for replacement art: full-frame images are opaque, sprites are not.
+    transparent: !['background'].includes(id),
   };
   const path = join(outDir, file);
   if (check) {

@@ -12,7 +12,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 0,
-      "anchorY": 0
+      "anchorY": 0,
+      "transparent": false
     },
     "foreground": {
       "file": "foreground.png",
@@ -24,7 +25,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 0,
-      "anchorY": 0
+      "anchorY": 0,
+      "transparent": true
     },
     "player": {
       "file": "player.png",
@@ -36,7 +38,8 @@
       "frames": 3,
       "rows": 4,
       "anchorX": 20,
-      "anchorY": 57
+      "anchorY": 57,
+      "transparent": true
     },
     "waitress": {
       "file": "waitress.png",
@@ -48,7 +51,8 @@
       "frames": 3,
       "rows": 4,
       "anchorX": 20,
-      "anchorY": 57
+      "anchorY": 57,
+      "transparent": true
     },
     "walkerA": {
       "file": "walkerA.png",
@@ -60,7 +64,8 @@
       "frames": 3,
       "rows": 4,
       "anchorX": 20,
-      "anchorY": 57
+      "anchorY": 57,
+      "transparent": true
     },
     "walkerB": {
       "file": "walkerB.png",
@@ -72,7 +77,8 @@
       "frames": 3,
       "rows": 4,
       "anchorX": 20,
-      "anchorY": 57
+      "anchorY": 57,
+      "transparent": true
     },
     "walkerC": {
       "file": "walkerC.png",
@@ -84,7 +90,8 @@
       "frames": 3,
       "rows": 4,
       "anchorX": 20,
-      "anchorY": 57
+      "anchorY": 57,
+      "transparent": true
     },
     "tree": {
       "file": "tree.png",
@@ -96,7 +103,8 @@
       "frames": 2,
       "rows": 1,
       "anchorX": 112,
-      "anchorY": 250
+      "anchorY": 250,
+      "transparent": true
     },
     "umbrella": {
       "file": "umbrella.png",
@@ -108,7 +116,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 74,
-      "anchorY": 114
+      "anchorY": 114,
+      "transparent": true
     },
     "tableOccupiedA": {
       "file": "tableOccupiedA.png",
@@ -120,7 +129,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 46,
-      "anchorY": 64
+      "anchorY": 64,
+      "transparent": true
     },
     "tableOccupiedB": {
       "file": "tableOccupiedB.png",
@@ -132,7 +142,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 46,
-      "anchorY": 64
+      "anchorY": 64,
+      "transparent": true
     },
     "tableOccupiedC": {
       "file": "tableOccupiedC.png",
@@ -144,7 +155,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 46,
-      "anchorY": 64
+      "anchorY": 64,
+      "transparent": true
     },
     "tableEmpty": {
       "file": "tableEmpty.png",
@@ -156,7 +168,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 46,
-      "anchorY": 64
+      "anchorY": 64,
+      "transparent": true
     },
     "windbreakWest": {
       "file": "windbreakWest.png",
@@ -168,7 +181,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 0,
-      "anchorY": 45
+      "anchorY": 45,
+      "transparent": true
     },
     "windbreakEast": {
       "file": "windbreakEast.png",
@@ -180,7 +194,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 0,
-      "anchorY": 45
+      "anchorY": 45,
+      "transparent": true
     },
     "windbreakSide": {
       "file": "windbreakSide.png",
@@ -192,7 +207,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 2,
-      "anchorY": 55
+      "anchorY": 55,
+      "transparent": true
     },
     "board": {
       "file": "board.png",
@@ -204,7 +220,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 15,
-      "anchorY": 44
+      "anchorY": 44,
+      "transparent": true
     },
     "bollard": {
       "file": "bollard.png",
@@ -216,7 +233,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 9,
-      "anchorY": 33
+      "anchorY": 33,
+      "transparent": true
     },
     "bollardMarked": {
       "file": "bollardMarked.png",
@@ -228,7 +246,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 9,
-      "anchorY": 33
+      "anchorY": 33,
+      "transparent": true
     },
     "planter": {
       "file": "planter.png",
@@ -240,7 +259,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 17,
-      "anchorY": 43
+      "anchorY": 43,
+      "transparent": true
     },
     "bench": {
       "file": "bench.png",
@@ -252,7 +272,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 38,
-      "anchorY": 54
+      "anchorY": 54,
+      "transparent": true
     },
     "bike": {
       "file": "bike.png",
@@ -264,7 +285,8 @@
       "frames": 1,
       "rows": 1,
       "anchorX": 32,
-      "anchorY": 39
+      "anchorY": 39,
+      "transparent": true
     },
     "gull": {
       "file": "gull.png",
@@ -276,7 +298,8 @@
       "frames": 2,
       "rows": 1,
       "anchorX": 11,
-      "anchorY": 19
+      "anchorY": 19,
+      "transparent": true
     }
   }
 }

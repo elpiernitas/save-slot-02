@@ -177,6 +177,11 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
   `status: "final"` en el manifest → `npm run art:check` → `npm run check` →
   capturas → PR para ACCEPT / FIXES / NEXT.
 - `npm run art` **nunca toca** sprites con `status: "final"`.
+- Importar arte aprobado: `npm run art:import -- <spriteId> <archivo.png>
+  [--anchor X,Y]` valida el contrato (tamaño exacto, fondo transparente u
+  opaco, ningún frame vacío), normaliza a RGBA, sustituye el placeholder y lo
+  marca `final`. `art:check` decodifica cualquier PNG estándar (autotest de
+  tipos de color, profundidades, filtros y Adam7).
 
 ## Estado GAME-04R (D-062)
 

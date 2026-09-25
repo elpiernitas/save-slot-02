@@ -4,7 +4,7 @@ import { checkpointFor, spawnForCheckpoint } from './checkpoint';
 import { buildCollisionWorld } from './collision';
 import { worldViewFromQuery } from './config';
 import { findInteraction, probeRect, REACH, zoneAt } from './interaction';
-import { SPRITES, SPRITE_URLS } from './art/assets';
+import { SPRITES, SPRITE_URLS, spriteSizeProblem } from './art/assets';
 import { MURALLA_MAP } from './maps/muralla';
 import { walkerPose } from './render/canvasRenderer';
 import { feetRect, MAX_STEP_MS, stepMovement, WALK_SPEED } from './movement';
@@ -225,6 +225,20 @@ describe('La Muralla map', () => {
       map.widthTiles * TILE_SIZE,
       map.heightTiles * TILE_SIZE,
     ]);
+  });
+
+  it('flags a replacement PNG whose size does not match the manifest', () => {
+    expect(spriteSizeProblem('player', 120, 240)).toBeNull();
+    expect(spriteSizeProblem('player', 128, 240)).toMatch(/expects 120×240/);
+    expect(spriteSizeProblem('nope', 1, 1)).toMatch(/Unknown sprite/);
+  });
+
+  it('every sprite declares its transparency contract', () => {
+    for (const [id, info] of Object.entries(SPRITES)) {
+      expect(typeof info.transparent, id).toBe('boolean');
+    }
+    expect(SPRITES.background!.transparent).toBe(false);
+    expect(SPRITES.player!.transparent).toBe(true);
   });
 
   it('every sprite declares whether it is a placeholder or approved art', () => {

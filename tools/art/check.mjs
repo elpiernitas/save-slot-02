@@ -93,6 +93,20 @@ if (!existsSync(manifestPath)) {
               `${prefix}: PNG is ${png.width}×${png.height}, manifest says ${info.width}×${info.height}`,
             );
           }
+          // Alpha contract: sprites need real transparency, full-frame images none.
+          let transparentPixels = 0;
+          for (let i = 3; i < png.rgba.length; i += 4) if (png.rgba[i] < 255) transparentPixels++;
+          if (info.transparent === true && transparentPixels === 0) {
+            fail(`${prefix}: must have a transparent background (no alpha found)`);
+          }
+          if (info.transparent === false && transparentPixels > 0) {
+            fail(`${prefix}: must be fully opaque (${transparentPixels} transparent px)`);
+          }
+          if (typeof info.transparent !== 'boolean')
+            fail(`${prefix}: transparent must be true/false`);
+          if (info.status !== 'placeholder' && info.status !== 'final') {
+            fail(`${prefix}: status must be "placeholder" or "final"`);
+          }
         } catch (error) {
           fail(
             `${prefix}: PNG failed to decode: ${error instanceof Error ? error.message : String(error)}`,
