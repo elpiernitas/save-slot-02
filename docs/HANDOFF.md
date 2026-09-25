@@ -17,8 +17,8 @@ visualmente GAME-04**.
 > español. Gijón cotidiano gamificado (D-040). **Exploración con motor propio
 > Canvas 2D, no Phaser (D-048); mundo a 640×360 (D-049).** React es dueño del
 > save, diálogos y UI. **La Muralla es el bar/café, no una muralla (D-054).**
-> Arte del mundo = PNG generados por `npm run art` (D-055); personajes 32×48
-> (D-056).
+> Runtime visual = PNG raster; `tools/art` es placeholder/regresión, no north
+> star final (D-057). Personajes objetivo ≥32×48 (D-056).
 
 ## Estado del repositorio
 
@@ -90,12 +90,17 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
   `.claude/skills/save-slot-puzzles/SKILL.md`. Incluye ROUTE BEACONS,
   SEAGULL PROTOCOL opcional y SYNC TERMINAL que prepara el misterio de
   PLAYER 2. **No implementar hasta aceptar GAME-05.**
+- GAME-07→12 ya tienen paquetes de spec/orden/tests/skills preparados. Índice
+  completo: `docs/PROJECT_INDEX.md`. El critical path real está en
+  `docs/RELEASE_CRITICAL_PATH.md`; GAME-10 es cortable y GAME-12 ya tiene
+  checklist/QA/Netlify. CI del PR ejecuta `npm run check` (D-059).
 
 ## Qué NO está hecho (a propósito)
 
 - Resto de Gijón, otras franjas horarias, transiciones entre mapas.
-- Sprites/retratos finales de Luis, Manu y Randy (esperan las referencias de
-  Manu). Randy, Manu, tarot, Hoyo 13, Makro/IKEA: fuera del slice.
+- Sprites/retratos finales de Luis, Manu y Randy todavía no están integrados;
+  las referencias ya existen en `docs/art/chatgpt-v2/`. Randy, Manu, tarot,
+  Hoyo 13 y equivalentes comerciales siguen fuera del slice GAME-04R.
 - Inventario, cartas (→ GAME-05), puzzles, boss, Player 2, cita.
 - Música (GAME-11). Zoom de cámara (solo si la QA real lo pide).
 
