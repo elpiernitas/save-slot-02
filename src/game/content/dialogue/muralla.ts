@@ -65,28 +65,6 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
     },
   },
 
-  'muralla.portal': {
-    id: 'muralla.portal',
-    start: 'a',
-    nodes: {
-      a: line('a', [
-        'Un portal con telefonillo. Pulsas un botón al azar.[pause] Nadie contesta.',
-        'La puerta no abre.[pause] [slow]Todavía.[/slow]',
-      ]),
-    },
-  },
-
-  'muralla.shutter': {
-    id: 'muralla.shutter',
-    start: 'a',
-    nodes: {
-      a: line('a', [
-        'Persiana bajada. Un papel pegado con celo:[pause] [sys]VUELVO EN 5 MIN.[/sys]',
-        'Por el color del papel, llevan años siendo cinco minutos.',
-      ]),
-    },
-  },
-
   'muralla.table': {
     id: 'muralla.table',
     start: 'route',

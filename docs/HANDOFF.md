@@ -155,6 +155,13 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
   `status`. Capturas en `docs/art/review/game-04r-iter1/`.
 - Todo el arte del mundo sigue siendo **placeholder**.
 
+## GAME-04R · iteración 2 (D-061)
+
+- Rebuild visual del slice: personajes 40×60, bar como protagonista, terraza
+  con clientes, peatones, capa de primer plano, luz de tarde. Mapa 960×400.
+- Capturas: `docs/art/review/game-04r-iter2/`. Arte = placeholder.
+- Referencias `chatgpt-v2/*.jpg` aún corruptas.
+
 ## Próximo paso exacto
 
 1. Ejecutar **GAME-04R** siguiendo `docs/GAME_04R_VISUAL_REBUILD.md`.

@@ -6,6 +6,7 @@ import { worldViewFromQuery } from './config';
 import { findInteraction, probeRect, REACH, zoneAt } from './interaction';
 import { SPRITES, SPRITE_URLS } from './art/assets';
 import { MURALLA_MAP } from './maps/muralla';
+import { walkerPose } from './render/canvasRenderer';
 import { feetRect, MAX_STEP_MS, stepMovement, WALK_SPEED } from './movement';
 import { TILE_SIZE, type Interactable, type WorldMap } from './types';
 
@@ -232,9 +233,9 @@ describe('La Muralla map', () => {
     }
   });
 
-  it('uses a large, readable player sprite (32×48, 4 directions × 3 frames)', () => {
+  it('uses a large, readable player sprite (40×60, 4 directions × 3 frames)', () => {
     const player = SPRITES.player!;
-    expect([player.frameWidth, player.frameHeight]).toEqual([32, 48]);
+    expect([player.frameWidth, player.frameHeight]).toEqual([40, 60]);
     expect([player.frames, player.rows]).toEqual([3, 4]);
   });
 
@@ -242,13 +243,11 @@ describe('La Muralla map', () => {
     const ids = map.interactables.map((i) => i.id);
     expect(ids).toEqual(expect.arrayContaining(['barDoor', 'barWindowLeft', 'table', 'waitress']));
     for (const banned of ['wall', 'gate']) expect(ids).not.toContain(banned);
-    expect(map.props.filter((p) => p.sprite.startsWith('tableSet')).length).toBeGreaterThanOrEqual(
-      3,
-    );
+    expect(map.props.filter((p) => p.sprite.startsWith('table')).length).toBeGreaterThanOrEqual(3);
   });
 
   it('the terrace can be entered through the gap in the windbreak', () => {
-    let pos = { x: 352, y: 372 };
+    let pos = { x: 510, y: 360 };
     const visited = new Set<string | undefined>();
     for (let i = 0; i < 60; i++) {
       pos = stepMovement(pos, 'up', 'up', 50, world).pos;
@@ -257,6 +256,17 @@ describe('La Muralla map', () => {
     expect(visited).toContain('terrace');
     // …and straight on to the bar door on the sidewalk.
     expect(findInteraction(pos, 'up', map.interactables)?.id).toBe('barDoor');
+  });
+
+  it('background walkers pace back and forth inside their lane', () => {
+    const walker = { sprite: 'walkerA', y: 100, x0: 0, x1: 100, speed: 50, phase: 0 };
+    expect(walkerPose(walker, 1000)).toMatchObject({ x: 50, facing: 'right' });
+    expect(walkerPose(walker, 3000)).toMatchObject({ x: 50, facing: 'left' });
+    for (let t = 0; t < 10000; t += 370) {
+      const { x } = walkerPose(walker, t);
+      expect(x).toBeGreaterThanOrEqual(0);
+      expect(x).toBeLessThanOrEqual(100);
+    }
   });
 
   it('has at least 3 interactables and one generic NPC', () => {

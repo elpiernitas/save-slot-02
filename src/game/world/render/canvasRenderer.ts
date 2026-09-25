@@ -1,6 +1,6 @@
 import { CHARACTER_ROWS, SPRITES, type SpriteImages } from '../art/assets';
 import type { WorldSnapshot } from '../engine/WorldEngine';
-import type { Facing, WorldMap } from '../types';
+import type { Facing, Walker, WorldMap } from '../types';
 
 /**
  * Canvas 2D renderer for exploration maps. Draws at the logical world
@@ -92,13 +92,40 @@ export function createWorldRenderer(
         },
       });
     for (const npc of map.npcs) character(npc.sprite, npc.x, npc.y, npc.facing, 0);
+    for (const walker of map.walkers ?? []) {
+      const w = walkerPose(walker, still ? 0 : snap.timeMs);
+      character(walker.sprite, w.x, walker.y, w.facing, still ? 0 : w.frame);
+    }
     character('player', snap.pos.x, snap.pos.y, snap.facing, snap.walkFrame);
 
     list.sort((a, b) => a.baseY - b.baseY);
     for (const d of list) d.draw();
 
+    // Near-camera layer over everything (foreground foliage).
+    const front = map.foreground ? images.get(map.foreground) : undefined;
+    if (front) ctx.drawImage(front, 0, 0);
+
     // No global colour grade: lighting lives in the art (GAME_04R_VISUAL_REBUILD §8).
   };
 
   return { resize, draw, destroy: () => undefined };
+}
+
+/** Walked distance (px) per step frame, as for the player. */
+const WALKER_STEP_PX = 7;
+
+/** Ping-pong position of a background walker at a given time (pure). */
+export function walkerPose(
+  walker: Walker,
+  timeMs: number,
+): { x: number; facing: Facing; frame: 1 | 2 } {
+  const range = Math.max(1, walker.x1 - walker.x0);
+  const travelled = (timeMs / 1000) * walker.speed + walker.phase;
+  const d = travelled % (2 * range);
+  const forward = d < range;
+  return {
+    x: forward ? walker.x0 + d : walker.x1 - (d - range),
+    facing: forward ? 'right' : 'left',
+    frame: ((Math.floor(travelled / WALKER_STEP_PX) % 2) + 1) as 1 | 2,
+  };
 }

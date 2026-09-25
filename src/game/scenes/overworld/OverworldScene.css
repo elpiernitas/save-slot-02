@@ -81,10 +81,10 @@
   opacity: 0;
 }
 
-/* Floats above PLAYER 1; left/top are set every frame by the scene. */
+/* Floats beside PLAYER 1's head; left/top are set every frame by the scene. */
 .overworld__prompt {
   position: absolute;
-  transform: translate(-50%, -100%);
+  transform: translate(0, -50%);
   padding: calc(var(--px) * 1) calc(var(--px) * 4);
   font-size: var(--text-xs);
   letter-spacing: calc(var(--px) * 0.5);

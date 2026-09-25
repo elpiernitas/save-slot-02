@@ -7,7 +7,7 @@ export const WALK_SPEED = 80;
 export const MAX_STEP_MS = 50;
 
 /** Player collision box: the feet, not the whole sprite (walk "behind" things). */
-export const FEET = { w: 14, h: 6 } as const;
+export const FEET = { w: 16, h: 6 } as const;
 
 export function feetRect(pos: Vec2): Rect {
   return { x: pos.x - FEET.w / 2, y: pos.y - FEET.h, w: FEET.w, h: FEET.h };

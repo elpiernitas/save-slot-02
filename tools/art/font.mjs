@@ -56,30 +56,31 @@ const LARGE = {
   ' ': ['...', '...', '...', '...', '...', '...', '...'],
 };
 
-function draw(canvas, font, text, x, y, color, shadow) {
+function draw(canvas, font, text, x, y, color, shadow, scale = 1) {
   let cx = x;
   for (const ch of text) {
     const glyph = font[ch] ?? font[' '];
     glyph.forEach((row, j) =>
       [...row].forEach((c, i) => {
         if (c !== 'X') return;
-        if (shadow) canvas.px(cx + i + 1, y + j + 1, shadow);
-        canvas.px(cx + i, y + j, color);
+        if (shadow)
+          canvas.rect(cx + i * scale + scale, y + j * scale + scale, scale, scale, shadow);
+        canvas.rect(cx + i * scale, y + j * scale, scale, scale, color);
       }),
     );
-    cx += glyph[0].length + 1;
+    cx += (glyph[0].length + 1) * scale;
   }
-  return cx - x - 1;
+  return cx - x - scale;
 }
 
-export function textWidth(text, large = false) {
+export function textWidth(text, large = false, scale = 1) {
   const font = large ? LARGE : SMALL;
   let w = 0;
   for (const ch of text) w += (font[ch] ?? font[' '])[0].length + 1;
-  return Math.max(0, w - 1);
+  return Math.max(0, w - 1) * scale;
 }
 
 export const smallText = (c, text, x, y, color, shadow) =>
   draw(c, SMALL, text, x, y, color, shadow);
-export const largeText = (c, text, x, y, color, shadow) =>
-  draw(c, LARGE, text, x, y, color, shadow);
+export const largeText = (c, text, x, y, color, shadow, scale = 1) =>
+  draw(c, LARGE, text, x, y, color, shadow, scale);

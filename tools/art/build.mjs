@@ -1,11 +1,19 @@
 // Generates the world art for the La Muralla slice as PNG files.
 //   node tools/art/build.mjs          write src/assets/world/muralla/*.png + manifest.json
 //   node tools/art/build.mjs --check  fail if the committed files differ from the generator
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CHAR_FEET_Y, CHAR_H, CHAR_W, PLAYER, WAITRESS, characterSheet } from './characters.mjs';
-import { drawBackground } from './environment.mjs';
+import {
+  CHAR_FEET_Y,
+  CHAR_H,
+  CHAR_W,
+  PEDESTRIANS,
+  PLAYER,
+  WAITRESS,
+  characterSheet,
+} from './characters.mjs';
+import { drawBackground, drawForeground } from './environment.mjs';
 import { decodePng, encodePng } from './png.mjs';
 import { drawProps } from './props.mjs';
 
@@ -16,23 +24,21 @@ const check = process.argv.includes('--check');
 
 const layout = JSON.parse(readFileSync(layoutPath, 'utf8'));
 
+const character = (palette) => ({
+  canvas: characterSheet(palette),
+  anchorX: CHAR_W / 2,
+  anchorY: CHAR_FEET_Y,
+  frames: 3,
+  rows: 4,
+});
+
 /** id → { canvas, anchorX, anchorY, frames } */
 const sprites = {
   background: { canvas: drawBackground(layout), anchorX: 0, anchorY: 0, frames: 1 },
-  player: {
-    canvas: characterSheet(PLAYER),
-    anchorX: CHAR_W / 2,
-    anchorY: CHAR_FEET_Y,
-    frames: 3,
-    rows: 4,
-  },
-  waitress: {
-    canvas: characterSheet(WAITRESS),
-    anchorX: CHAR_W / 2,
-    anchorY: CHAR_FEET_Y,
-    frames: 3,
-    rows: 4,
-  },
+  foreground: { canvas: drawForeground(layout), anchorX: 0, anchorY: 0, frames: 1 },
+  player: character(PLAYER),
+  waitress: character({ ...WAITRESS, tray: true }),
+  ...Object.fromEntries(Object.entries(PEDESTRIANS).map(([id, p]) => [id, character(p)])),
   ...drawProps(layout),
 };
 
@@ -80,6 +86,13 @@ for (const [id, sprite] of Object.entries(sprites)) {
     }
   } else {
     writeFileSync(path, encodePng(canvas.w, canvas.h, canvas.data));
+  }
+}
+
+// Remove PNGs that the generator no longer produces (renamed/retired sprites).
+if (!check) {
+  for (const file of readdirSync(outDir)) {
+    if (file.endsWith('.png') && !(file.slice(0, -4) in sprites)) rmSync(join(outDir, file));
   }
 }
 

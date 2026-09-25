@@ -145,3 +145,8 @@ export class Canvas {
     return this;
   }
 }
+
+/** Cool shadow tint (blue-violet) — shadows are cool, light is warm. */
+export const cool = (c, t) => mix(c, '#2a2d58', t);
+/** Warm sunlight tint. */
+export const warm = (c, t) => mix(c, '#ffd08a', t);

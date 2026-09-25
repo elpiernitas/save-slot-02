@@ -23,6 +23,8 @@ function fakeScheduler() {
 }
 
 const spawnAt = (id: string): Spawn => MURALLA_MAP.spawns.find((s) => s.id === id)!;
+/** Just below the waitress, facing her. */
+const NEAR_WAITRESS: Spawn = { id: 'test', x: 556, y: 282, facing: 'up' };
 
 function setup(options: { spawn?: Spawn; held?: Facing | null; active?: boolean } = {}) {
   const input = { held: options.held ?? null, active: options.active ?? true };
@@ -64,24 +66,24 @@ describe('WorldEngine', () => {
   });
 
   it('applies a cooldown after resuming so the closing key cannot re-open', () => {
-    const { engine } = setup({ spawn: { ...spawnAt('portal'), facing: 'up' } });
+    const { engine } = setup({ spawn: NEAR_WAITRESS });
     engine.step(0);
-    expect(engine.tryInteract(0)?.id).toBe('portal');
+    expect(engine.tryInteract(0)?.id).toBe('waitress');
     engine.setPaused(true, 0);
     engine.setPaused(false, 1000, 250);
     engine.step(1010);
     expect(engine.tryInteract(1100)).toBeNull();
-    expect(engine.tryInteract(1260)?.id).toBe('portal');
+    expect(engine.tryInteract(1260)?.id).toBe('waitress');
   });
 
   it('reports target changes and entering a new zone (once)', () => {
-    const { engine, events } = setup({ spawn: { ...spawnAt('portal'), facing: 'up' } });
+    const { engine, events } = setup({ spawn: NEAR_WAITRESS });
     engine.step(0);
-    expect(events.target).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'portal' }));
+    expect(events.target).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'waitress' }));
     expect(events.zone).not.toHaveBeenCalled(); // spawn zone is not "entered"
 
-    // Walk down from the arrival sidewalk into the street by the tree.
-    const walker = setup({ spawn: spawnAt('arrival'), held: 'down' });
+    // Walk west along a free row into the zone by the big tree.
+    const walker = setup({ spawn: { ...spawnAt('arrival'), y: 320 }, held: 'left' });
     let t = 0;
     for (let i = 0; i < 80; i++) walker.engine.step((t += 50));
     const zones = walker.events.zone.mock.calls.map(([z]) => z.id);

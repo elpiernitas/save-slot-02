@@ -676,3 +676,36 @@ Implementado sin depender del arte:
 - Fuera el tinte naranja global (`GAME_04R_VISUAL_REBUILD` §8).
 
 Capturas de revisión: `docs/art/review/game-04r-iter1/`.
+
+### D-061 · 2026-09-26 · GAME-04R iteración 2: rebuild de la capa visual
+
+Manu marcó la iteración 1 como **FAIL visual** (suelo vacío, fachada plana,
+poca vida, personajes pequeños, paleta beige, poca profundidad) y pidió un
+rebuild de la presentación manteniendo motor, save, diálogos e
+interacciones. Las referencias `chatgpt-v2/*.jpg` siguen sin decodificar, así
+que el rebuild sigue la dirección **escrita** (`GAME_04R_VISUAL_REBUILD`,
+`GAME_04R_LAYOUT_SPEC`, `ART_DIRECTION_V1`, `UI_SYSTEM_V2`); falta
+contrastarlo con las imágenes.
+
+- **Escala**: personajes 40×60 (antes 32×48), con cara legible, luz cálida y
+  sombra fría; entorno reescalado (~34 px/m). Mapa 960×400.
+- **Composición**: el bar ocupa el tercio superior (rótulo grande, toldos,
+  escaparates con interior vivo, puerta retranqueada, lámparas); terraza en
+  el centro con mesas ocupadas (9 clientes sentados), sombrillas beige y
+  cortavientos; árbol grande a la izquierda; banco con lector, bici, gaviota,
+  bolardos delante.
+- **Vida**: 3 peatones de fondo animados (sin colisión, quietos con
+  movimiento reducido).
+- **Profundidad y luz**: capa de primer plano (follaje en las esquinas),
+  sombra fría del edificio de enfrente sobre el primer plano, sol rasante
+  sobre la terraza, sombras largas hacia el este, luz cálida del bar sobre la
+  acera.
+- **Interacciones** según §10: árbol, pizarra, mesa libre, bolardo (variante
+  por clase), escaparates y puerta del bar, camarera. Fuera portal y persiana.
+- La caja de diálogo de llegada se coloca según el spawn (arriba si PLAYER 1
+  está abajo); el prompt va junto a la cabeza de PLAYER 1, sin tapar al NPC.
+- Carga de sprites por nombre de archivo (`import.meta.glob`): sustituir un
+  PNG no requiere tocar código.
+
+Todo el arte sigue siendo **placeholder generado por código**
+(`status: "placeholder"`). Capturas: `docs/art/review/game-04r-iter2/`.

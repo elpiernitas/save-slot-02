@@ -61,6 +61,18 @@ export interface Prop {
   animMs?: number;
 }
 
+/** A background figure walking back and forth along a horizontal line. */
+export interface Walker {
+  sprite: string;
+  y: number;
+  x0: number;
+  x1: number;
+  /** px per second. */
+  speed: number;
+  /** Starting offset along the path (px). */
+  phase: number;
+}
+
 export interface NpcDef {
   id: string;
   sprite: string;
@@ -77,6 +89,10 @@ export interface WorldMap {
   timeOfDay: 'morning' | 'afternoon' | 'sunset' | 'night';
   /** Pre-rendered ground/façade image (art manifest sprite id). */
   background: string;
+  /** Optional layer drawn over every sprite (near-camera foliage). */
+  foreground?: string;
+  /** Background pedestrians: pure decoration, no collision, no dialogue. */
+  walkers?: readonly Walker[];
   widthTiles: number;
   heightTiles: number;
   /** One string per row, one char per tile (see the map's tile legend). */

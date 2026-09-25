@@ -1,153 +1,51 @@
 {
-  "$comment": "Single source of truth for the La Muralla slice. Read by tools/art (to paint the background) and by maps/muralla.ts (collisions, props, interactables). World px, 1 tile = 16 px.",
   "tile": 16,
-  "widthTiles": 50,
-  "heightTiles": 26,
-  "facadeBottom": 160,
-  "sidewalkBottom": 180,
-  "curbTop": 400,
+  "widthTiles": 60,
+  "heightTiles": 25,
+  "facadeBottom": 152,
+  "sidewalkBottom": 182,
+  "curbTop": 392,
   "buildings": [
-    {
-      "id": "west",
-      "x": 0,
-      "w": 190,
-      "style": "ochre"
-    },
-    {
-      "id": "bar",
-      "x": 190,
-      "w": 330,
-      "style": "cream"
-    },
-    {
-      "id": "east",
-      "x": 520,
-      "w": 280,
-      "style": "coral"
-    }
+    { "id": "west", "x": 0, "w": 300, "style": "ochre" },
+    { "id": "bar", "x": 300, "w": 400, "style": "cream" },
+    { "id": "east", "x": 700, "w": 260, "style": "coral" }
   ],
-  "shutter": {
-    "x": 36,
-    "w": 116
-  },
-  "barWindowLeft": {
-    "x": 212,
-    "w": 108
-  },
-  "barDoor": {
-    "x": 332,
-    "w": 36
-  },
-  "barWindowRight": {
-    "x": 382,
-    "w": 118
-  },
-  "portal": {
-    "x": 556,
-    "w": 36
-  },
-  "shopWindow": {
-    "x": 640,
-    "w": 124
-  },
-  "terrace": {
-    "x": 206,
-    "y": 184,
-    "w": 304,
-    "h": 118,
-    "gapX": 330,
-    "gapW": 44
-  },
+  "westDoor": { "x": 118, "w": 38 },
+  "westWindow": { "x": 196, "w": 64 },
+  "eastDoor": { "x": 806, "w": 38 },
+  "eastWindow": { "x": 874, "w": 60 },
+  "barWindowLeft": { "x": 322, "w": 156 },
+  "barDoor": { "x": 490, "w": 40 },
+  "barWindowRight": { "x": 542, "w": 138 },
+  "terrace": { "x": 330, "y": 186, "w": 360, "h": 112, "gapX": 484, "gapW": 52 },
   "tables": [
-    {
-      "id": "table1",
-      "x": 258,
-      "y": 230,
-      "umbrella": true
-    },
-    {
-      "id": "table2",
-      "x": 452,
-      "y": 230,
-      "umbrella": true
-    },
-    {
-      "id": "table3",
-      "x": 268,
-      "y": 280,
-      "umbrella": false
-    },
-    {
-      "id": "table4",
-      "x": 442,
-      "y": 280,
-      "umbrella": false
-    }
+    { "id": "tableBackWest", "x": 396, "y": 232, "sprite": "tableOccupiedA", "umbrella": true },
+    { "id": "tableBackEast", "x": 626, "y": 232, "sprite": "tableOccupiedB", "umbrella": true },
+    { "id": "tableEmpty", "x": 404, "y": 284, "sprite": "tableEmpty", "umbrella": false },
+    { "id": "tableFrontEast", "x": 616, "y": 284, "sprite": "tableOccupiedC", "umbrella": false }
   ],
   "trees": [
-    {
-      "id": "treeWest",
-      "x": 112,
-      "y": 300
-    },
-    {
-      "id": "treeEast",
-      "x": 628,
-      "y": 318
-    }
+    { "id": "treeWest", "x": 170, "y": 350 },
+    { "id": "treeEast", "x": 896, "y": 336 }
   ],
-  "bench": {
-    "x": 656,
-    "y": 346
-  },
-  "board": {
-    "x": 312,
-    "y": 330
-  },
-  "bin": {
-    "x": 612,
-    "y": 196
-  },
-  "pots": [
-    {
-      "x": 322,
-      "y": 200
-    },
-    {
-      "x": 378,
-      "y": 200
-    }
+  "board": { "x": 460, "y": 326 },
+  "planters": [
+    { "x": 470, "y": 176 },
+    { "x": 550, "y": 176 }
   ],
   "bollards": [
-    {
-      "x": 24,
-      "y": 384
-    },
-    {
-      "x": 72,
-      "y": 384
-    },
-    {
-      "x": 172,
-      "y": 384,
-      "marked": true
-    },
-    {
-      "x": 704,
-      "y": 384
-    },
-    {
-      "x": 752,
-      "y": 384
-    }
+    { "x": 40, "y": 388 },
+    { "x": 262, "y": 386, "marked": true },
+    { "x": 744, "y": 388 },
+    { "x": 940, "y": 388 }
   ],
-  "gull": {
-    "x": 168,
-    "y": 196
-  },
-  "waitress": {
-    "x": 396,
-    "y": 216,
-    "facing": "down"
-  }
+  "bench": { "x": 800, "y": 330 },
+  "bike": { "x": 712, "y": 214 },
+  "gull": { "x": 318, "y": 356 },
+  "waitress": { "x": 556, "y": 250, "facing": "down" },
+  "walkers": [
+    { "sprite": "walkerA", "y": 376, "x0": -30, "x1": 990, "speed": 26, "phase": 0 },
+    { "sprite": "walkerB", "y": 170, "x0": 700, "x1": 990, "speed": 20, "phase": 180 },
+    { "sprite": "walkerC", "y": 366, "x0": -30, "x1": 990, "speed": 18, "phase": 640 }
+  ]
 }

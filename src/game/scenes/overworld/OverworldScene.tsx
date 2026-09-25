@@ -9,18 +9,20 @@ import { Menu } from '../../ui/Menu';
 import { useMenu } from '../../ui/useMenu';
 import { useReducedMotion } from '../../ui/useReducedMotion';
 import { loadSpriteImages, type SpriteImages } from '../../world/art/assets';
+import { cameraFor } from '../../world/camera';
 import { checkpointFor, spawnForCheckpoint } from '../../world/checkpoint';
 import { worldViewFromQuery } from '../../world/config';
 import { WorldEngine } from '../../world/engine/WorldEngine';
 import { MURALLA_MAP } from '../../world/maps/muralla';
 import { createWorldRenderer } from '../../world/render/canvasRenderer';
 import { scriptForInteractable } from '../../world/scripts';
-import type { Interactable } from '../../world/types';
+import { TILE_SIZE, type Interactable } from '../../world/types';
 import type { SceneProps } from '../types';
 import './OverworldScene.css';
 
-/** World px between PLAYER 1's feet and the bottom of the interaction prompt. */
-const PROMPT_LIFT = 54;
+/** Prompt sits beside PLAYER 1's head (never over the thing being faced). */
+const PROMPT_LIFT = 44;
+const PROMPT_SIDE = 22;
 
 /** Feet below this fraction of the view → the dialogue box goes to the top. */
 const DIALOGUE_FLIP_Y = 0.62;
@@ -45,6 +47,7 @@ export function OverworldScene(_: SceneProps) {
   if (!router) throw new Error('OverworldScene needs <InputProvider>');
   const reduced = useReducedMotion();
   const map = MURALLA_MAP;
+  const [spawn] = useState(() => spawnForCheckpoint(map, save.progress.checkpoint));
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const promptRef = useRef<HTMLDivElement>(null);
@@ -52,14 +55,18 @@ export function OverworldScene(_: SceneProps) {
   const hasMovedRef = useRef(false);
   /** PLAYER 1's height on screen (0–1), sampled when a dialogue opens. */
   const playerScreenYRef = useRef(0);
-  const [dialogueAtTop, setDialogueAtTop] = useState(false);
+  // The arrival text opens before the first frame: place it from the spawn.
+  const [dialogueAtTop, setDialogueAtTop] = useState(() => {
+    const view = worldViewFromQuery(window.location.search, import.meta.env.DEV);
+    const size = { width: map.widthTiles * TILE_SIZE, height: map.heightTiles * TILE_SIZE };
+    return (spawn.y - cameraFor(spawn, view, size).y) / view.h > DIALOGUE_FLIP_Y;
+  });
   const engineRef = useRef<WorldEngine | null>(null);
   const [target, setTarget] = useState<Interactable | null>(null);
   const [dialogue, setDialogue] = useState<{ script: DialogueScript; key: number } | null>(() =>
     save.flags[MURALLA_FLAGS.arrived] ? null : { script: MURALLA_ARRIVAL, key: 0 },
   );
   const [menuOpen, setMenuOpen] = useState(false);
-  const [spawn] = useState(() => spawnForCheckpoint(map, save.progress.checkpoint));
   const [images, setImages] = useState<SpriteImages | null>(null);
 
   useEffect(() => {
@@ -138,7 +145,7 @@ export function OverworldScene(_: SceneProps) {
         // Contextual prompt floats above PLAYER 1 (positioned without re-rendering React).
         const prompt = promptRef.current;
         if (prompt) {
-          prompt.style.left = `${((snapshot.pos.x - snapshot.camera.x) / view.w) * 100}%`;
+          prompt.style.left = `${((snapshot.pos.x - snapshot.camera.x + PROMPT_SIDE) / view.w) * 100}%`;
           prompt.style.top = `${((snapshot.pos.y - snapshot.camera.y - PROMPT_LIFT) / view.h) * 100}%`;
         }
         playerScreenYRef.current = (snapshot.pos.y - snapshot.camera.y) / view.h;
