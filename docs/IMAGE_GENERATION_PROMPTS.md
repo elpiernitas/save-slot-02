@@ -208,3 +208,80 @@ Avoid:
 - giant hearts/romance iconography;
 - unreadable micro-pixel characters;
 - text generated inside art when runtime UI can render it.
+
+
+## Specific — BOSS-ENV-001 DESYNC arena
+
+Purpose:
+GAME-07 system-space arena reference / possible raster background.
+
+Scene:
+modern detailed pixel-art synchronization arena, designed for a readable
+640×360 logical gameplay space.
+
+Must show:
+- deep navy stable floor/background;
+- pale cyan/cream signal geometry;
+- three distinct stabiliser nodes;
+- one central recovery core;
+- subtle duplicated/broken synchronization blocks;
+- generous player movement space;
+- clean gameplay readability.
+
+Must not show:
+- monster;
+- face;
+- corrupted person;
+- horror;
+- giant eye;
+- demonic imagery;
+- romantic hearts;
+- text baked into art;
+- character baked into background;
+- neon cyberpunk overload;
+- CRT scanlines.
+
+## Specific — BOSS-FX-001 DESYNC hazards
+
+Reference sheet showing:
+- bar sweep telegraph / active;
+- pulse-zone telegraph / active;
+- final ring telegraph / active;
+- stabiliser inactive / active / complete;
+- PLAYER hit / invulnerability treatment.
+
+Use shape and geometry, not colour alone.
+
+## Specific — REVEAL-001 PLAYER SLOT 02
+
+Purpose:
+GAME-07 reveal UI reference.
+
+Composition:
+16:9 stable system-space, central player-slot panel, silhouette resolving into
+Manu, navy/cream/cyan palette, restrained pixel borders.
+
+Mood:
+recognition, relief, tiny bit of humour.
+
+Must not show:
+- date options;
+- hearts/confetti;
+- romantic slogans;
+- wedding/couple imagery;
+- long text baked into image.
+
+Runtime text will be rendered separately.
+
+## Specific — COOP-001 2/2 gate
+
+Small system-space room with:
+- PLAYER 1 left pad;
+- PLAYER 2 right pad;
+- central locked gate;
+- clean system geometry;
+- both player silhouettes readable;
+- room for short scripted movement.
+
+No combat.
+No companion-AI implication.
