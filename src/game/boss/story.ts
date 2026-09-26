@@ -17,6 +17,8 @@ export const STORY_FLAGS = {
  * resume point. A refresh can therefore never replay a finished boss.
  */
 export function storyScene(save: GameSave): SceneId | null {
+  if (save.timestamps.completedAt) return 'saveSlot';
+  if (save.dateQuest.chosenOptionId) return 'ending';
   if (save.flags[STORY_FLAGS.player2GateComplete]) return 'dateGate';
   if (save.boss.defeated) return 'player2Reveal';
   if (Object.hasOwn(save.puzzles, TERMINAL_ID)) return 'boss';

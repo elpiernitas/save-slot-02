@@ -1,4 +1,5 @@
 import type { AchievementId } from '../achievements/types';
+import { isDateOptionId, type DateOptionId } from '../calendar';
 import { cardDefinition } from '../content/cards';
 import { itemDefinition } from '../content/items';
 import { puzzleDefinition } from '../puzzles/registry';
@@ -49,6 +50,10 @@ export type GameAction =
   /** GAME-07: one per real encounter start (no-op once defeated); first defeat wins. */
   | { type: 'boss/attempt'; at: string }
   | { type: 'boss/defeat'; at: string }
+  /** GAME-08: first confirmed route wins; later choices never overwrite it. */
+  | { type: 'date/choose'; option: DateOptionId; at: string }
+  /** GAME-09: first completion wins. */
+  | { type: 'game/complete'; at: string }
   /** Once per page load: counts the session and restarts at the system check. */
   | { type: 'system/sessionStart'; at: string }
   | { type: 'system/bootCompleted'; at: string }
@@ -210,6 +215,21 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
         action.at,
       );
 
+    case 'date/choose':
+      if (save.dateQuest.chosenOptionId !== null || !isDateOptionId(action.option)) return save;
+      return touch(
+        { ...save, dateQuest: { chosenOptionId: action.option, chosenAt: action.at } },
+        action.at,
+      );
+    case 'game/complete':
+      // A completed save always carries a date route (GAME_09_SPEC §13).
+      if (save.timestamps.completedAt !== null || save.dateQuest.chosenOptionId === null) {
+        return save;
+      }
+      return touch(
+        { ...save, timestamps: { ...save.timestamps, completedAt: action.at } },
+        action.at,
+      );
     case 'system/sessionStart':
       return touch(
         {

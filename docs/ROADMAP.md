@@ -12,7 +12,7 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | GAME-05 | Inventario y cartas                        | ✅ Aceptado            |
 | GAME-06 | Puzzles / minijuegos                       | ✅ Aceptado            |
 | GAME-07 | Boss + aparición PLAYER 2                  | 🟡 Hecho, falta ACCEPT |
-| GAME-08 | Portales y selección de fecha              | Pendiente              |
+| GAME-08 | Portales y selección de fecha              | 🟡 Hecho (autónomo)    |
 | GAME-09 | Final + save slot                          | Pendiente              |
 | GAME-10 | Desbloqueos posteriores                    | Pendiente              |
 | GAME-11 | Easter eggs, sonido, animaciones y pulido  | Pendiente              |
@@ -104,7 +104,10 @@ Implementado (D-071), pendiente de ACCEPT. DESYNC PROCESS: tres fases
 tras 2 fallos. Reveal sobrio: SIGNAL FOUND → PLAYER 2 — MANU → una línea →
 PARTY STATUS — 2/2 → gate cooperativo → DESTINATION DATA AVAILABLE → GAME-08.
 
-### GAME-08 — Portales y selección de fecha
+### GAME-08 — Portales y selección de fecha 🟡
+
+Implementado (D-072): cuatro puertas (mié 30, jue 1, vie 2 bloqueado por el
+teatro, dom 4), disponibilidad en Europe/Madrid, guardado solo al confirmar.
 
 Solo `DATE_OPTIONS`; el viernes aparece como `MAIN QUEST ALREADY ACTIVE`.
 Guardar `dateQuest.chosenOptionId`.

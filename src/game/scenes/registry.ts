@@ -1,5 +1,6 @@
 import { DesyncBoss } from '../boss/desync/DesyncBoss';
 import { Player2Reveal } from '../boss/reveal/Player2Reveal';
+import { DateGateScene } from '../dateGate/DateGateScene';
 import { BootScene } from './boot/BootScene';
 import { ClassSelectScene } from './classSelect/ClassSelectScene';
 import { DialogueDemoScene } from './dialogueDemo/DialogueDemoScene';
@@ -27,6 +28,8 @@ export const SCENE_REGISTRY: Partial<Record<SceneId, SceneDefinition>> = {
   /** GAME-07: DESYNC PROCESS, then the PLAYER 2 reveal + cooperative gate. */
   boss: { id: 'boss', component: DesyncBoss },
   player2Reveal: { id: 'player2Reveal', component: Player2Reveal },
+  /** GAME-08: choose the real-world date route. */
+  dateGate: { id: 'dateGate', component: DateGateScene },
 };
 
 export function getSceneDefinition(id: SceneId): SceneDefinition | undefined {

@@ -213,8 +213,12 @@ cooperativo (`src/game/boss/reveal/`). Enrutado por `storyScene`
 placeholder "AREA NOT GENERATED YET" hasta GAME-08. En desarrollo,
 `window.__desync` y `window.__reveal` exponen el estado para QA.
 
+## GAME-08 — hecho (D-072)
+
+Date gate en `src/game/dateGate/`; disponibilidad en `src/game/calendar`.
+Ejecución autónoma hasta GAME-12 (sin esperar ACCEPT; sin merge ni deploy).
+
 ## Próximo paso exacto
 
-1. Esperar ACCEPT / FIXES de ChatGPT sobre GAME-07.
-2. Después: **GAME-08 — portales y selección de fecha** (no empezar antes).
+1. GAME-09 — final + save slot persistente.
 3. Arte no bloqueante: CHAR-003 (sprite de Manu) y CHAR-004 (retrato).

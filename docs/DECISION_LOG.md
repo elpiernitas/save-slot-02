@@ -891,3 +891,23 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
   inmediato con reduced motion; no puede bloquearse.
 - Única cadena de UI fuera del copy bloqueado: el aviso `E — READY` junto al
   interruptor de PLAYER 1.
+
+### D-072 · 2026-09-26 · GAME-08: date gate
+
+- Ejecución autónoma GAME-07 → GAME-12 autorizada en el PR (comentario
+  5847703452): cada milestone se cierra con check, QA, commit e informe, y se
+  avanza sin esperar ACCEPT. Sin merge ni deploy.
+- Fechas solo desde `src/game/calendar`: `getDateRoutes` /
+  `getAvailableDateOptions` / `isDateOptionAvailable` (Europe/Madrid; una ruta
+  vale todo su día y caduca al siguiente). Etiquetas derivadas de `dateKey`
+  en `src/game/dateGate/routes.ts`; no hay una segunda lista de fechas.
+- Escena `dateGate`: cuatro puertas en orden de calendario. El viernes se
+  muestra como `MAIN QUEST ALREADY ACTIVE` / `18:30 · THEATRE`, iluminado y
+  nunca seleccionable. Una sola línea humana (Manu, de GAME_08_COPY).
+- Guardado solo con YES: `date/choose` (id canónico, la primera gana, nunca se
+  sobrescribe). BACK/Esc y el resaltado no escriben. → `ROUTE LOCKED` →
+  `SAVING...` → `ending`. `storyScene`: ruta elegida → `ending`, partida
+  completada → `saveSlot`.
+- Todas las rutas caducadas (desde el 5 oct): `ROUTES EXPIRED` con una línea
+  en castellano; no se puede elegir una fecha pasada.
+- Sin microlínea de clase: la spec la deja opcional y no añade nada aquí.

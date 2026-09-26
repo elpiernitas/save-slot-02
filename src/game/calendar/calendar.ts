@@ -120,3 +120,38 @@ export function isTimeGateOpen(gate: TimeGate, { now, chosenDateKey }: TimeConte
     }
   }
 }
+
+// ---------------------------------------------------------------------------
+// GAME-08 date gate: what can still be chosen right now (Madrid calendar).
+// ---------------------------------------------------------------------------
+
+export type RouteStatus = 'available' | 'elapsed';
+
+export interface DateRoute {
+  option: DateOption;
+  status: RouteStatus;
+}
+
+/**
+ * Canonical options in display order with their availability. A date stays
+ * selectable through its whole Madrid calendar day ("today" counts), and
+ * becomes `elapsed` from the next day. Friday is never part of this list.
+ */
+export function getDateRoutes(now: Date): DateRoute[] {
+  return DATE_OPTIONS.map((option) => ({
+    option,
+    status: daysUntil(option.dateKey, now) >= 0 ? 'available' : 'elapsed',
+  }));
+}
+
+/** Only the options that can still be chosen. */
+export function getAvailableDateOptions(now: Date): DateOption[] {
+  return getDateRoutes(now)
+    .filter((r) => r.status === 'available')
+    .map((r) => r.option);
+}
+
+/** True when a given option may be chosen now (never Friday, never the past). */
+export function isDateOptionAvailable(id: DateOptionId, now: Date): boolean {
+  return getAvailableDateOptions(now).some((o) => o.id === id);
+}

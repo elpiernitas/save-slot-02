@@ -1,0 +1,175 @@
+/*
+ * GAME-08 date gate: four route gates on a quiet coastal-night system field.
+ * Selected = gold edge + cursor; Friday = an occupied, glowing quest (not an
+ * error); elapsed = dim with written status. Nothing is colour-only.
+ */
+.date-gate__sky {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, transparent 62%, rgb(191 238 242 / 0.08) 62.3%, transparent 62.6%),
+    linear-gradient(to bottom, #0b1626 0%, #13243d 55%, #1c2b44 62%, #0b1626 100%);
+}
+
+.date-gate__title {
+  position: absolute;
+  top: calc(var(--px) * 14);
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-lg);
+  color: var(--color-system);
+}
+
+.date-gate__row {
+  position: absolute;
+  top: calc(var(--px) * 44);
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: repeat(4, calc(var(--px) * 92));
+  gap: calc(var(--px) * 12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.date-gate__gate {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: calc(var(--px) * 3);
+  cursor: pointer;
+  text-align: center;
+}
+
+.date-gate__arch {
+  width: calc(var(--px) * 64);
+  height: calc(var(--px) * 88);
+  border: var(--px) solid var(--color-border-dim);
+  border-bottom: none;
+  border-radius: calc(var(--px) * 32) calc(var(--px) * 32) 0 0;
+  background: linear-gradient(to top, rgb(242 193 78 / 0.18), transparent 70%);
+  box-shadow: inset 0 0 0 calc(var(--px) * 3) var(--color-bg);
+}
+
+.date-gate__label {
+  font-size: var(--text-md);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.date-gate__sub,
+.date-gate__time {
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  white-space: nowrap;
+}
+
+.date-gate__gate[data-selected] .date-gate__arch {
+  border-color: var(--color-select);
+  background: linear-gradient(to top, rgb(242 193 78 / 0.4), transparent 75%);
+}
+
+.date-gate__gate[data-selected] .date-gate__label {
+  color: var(--color-select);
+}
+
+.date-gate__gate[data-selected]::before {
+  content: '▼';
+  position: absolute;
+  top: calc(var(--px) * -11);
+  font-size: var(--text-xs);
+  color: var(--color-select);
+}
+
+/* Friday: the quest that already exists, lit and occupied. */
+.date-gate__gate[data-kind='mainQuest'] {
+  cursor: default;
+}
+
+.date-gate__gate[data-kind='mainQuest'] .date-gate__arch {
+  border-color: var(--color-system);
+  background: linear-gradient(to top, rgb(191 238 242 / 0.45), rgb(191 238 242 / 0.12));
+}
+
+.date-gate__gate[data-kind='mainQuest'] .date-gate__sub {
+  color: var(--color-system);
+}
+
+.date-gate__gate[data-kind='mainQuest'] .date-gate__time {
+  color: var(--color-text);
+}
+
+.date-gate__gate[data-status='elapsed'] {
+  cursor: default;
+}
+
+.date-gate__gate[data-status='elapsed'] .date-gate__arch {
+  border-style: dashed;
+  border-bottom-style: none;
+  background: none;
+}
+
+.date-gate__gate[data-status='elapsed'] .date-gate__label {
+  color: var(--color-text-dim);
+}
+
+.date-gate__party {
+  position: absolute;
+  bottom: calc(var(--px) * 16);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: calc(var(--px) * 26);
+}
+
+.date-gate__p1 {
+  display: block;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+
+.date-gate__p2 {
+  margin-bottom: calc(var(--px) * 30);
+  padding: 0 calc(var(--px) * 3);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--color-bg);
+  background: var(--color-system);
+}
+
+.date-gate__human {
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--color-text);
+}
+
+.date-gate__expired {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: calc(var(--px) * 4);
+  width: calc(var(--px) * 320);
+  text-align: center;
+}
+
+.date-gate__expired p {
+  margin: 0;
+  color: var(--color-system);
+}
+
+.date-gate__expired .date-gate__expired-line {
+  color: var(--color-text);
+}
+
+/* Friday's quest label wraps inside its column instead of running into Sunday. */
+.date-gate__gate[data-kind='mainQuest'] .date-gate__sub {
+  max-width: calc(var(--px) * 88);
+  white-space: normal;
+}
