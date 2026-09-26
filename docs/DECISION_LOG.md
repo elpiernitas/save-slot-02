@@ -967,3 +967,26 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
   revisión final de Manu.
 - Deuda no bloqueante: sprite/retrato de Manu, Luis nativo 80×120, limpieza
   de ENV-001, legibilidad de la C en Pixelify Sans.
+
+### D-077 · 2026-09-26 · Idioma del jugador: castellano (director, 5847918411)
+
+- Todo el texto visible pasa a castellano, también el de GAME-00→06. IDs,
+  claves de guardado, nombres de archivo, tests y documentación técnica
+  siguen en inglés. No hay infraestructura i18n: el copy canónico está en el
+  código.
+- Se mantienen como etiquetas establecidas: PLAYER 1 / PLAYER 2, SAVE SLOT 02,
+  CITY CARDS, LA MURALLA, MANU, DESYNC (nombre del proceso), CHECKSUM, HOLO y
+  los nombres de teclas (ENTER, ESC, E, WASD).
+- Glosario: CONTINUAR, AJUSTES, VOLVER, ELEGIR, REINTENTAR, VOLVER AL TÍTULO,
+  MISIÓN SECUNDARIA, SEÑAL, SEÑAL ENCONTRADA, DATOS DE IDENTIDAD RECUPERADOS,
+  ENLACE DE JUGADORES — ESTABLE, GRUPO — 2/2, MODO ASISTIDO, RUTA FIJADA.
+  "¿me ha cargado bien por lo menos?" no cambia.
+- Fechas en castellano natural: `MIÉ · 30 SEP` en las puertas, "Jueves · 1 de
+  octubre" en la confirmación y `JUEVES · 1 DE OCTUBRE` en el final. Viernes:
+  `MISIÓN PRINCIPAL YA ACTIVA` / `18:30 · TEATRO`.
+- Se evita "destino" (lista negra por su lectura romántica): `ELIGE RUTA` y
+  `DATOS DE RUTA DISPONIBLES`.
+- Los docs de copy (GAME_07_COPY, GAME_08_COPY) quedan como dirección en
+  inglés; el texto final es el del código.
+- Filtro de idioma en la QA: el recorrido completo recoge cada nodo de texto
+  visible y falla si aparece vocabulario en inglés fuera de la lista anterior.

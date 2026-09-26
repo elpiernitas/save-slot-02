@@ -19,9 +19,9 @@ export interface BeaconState {
 }
 
 export const SYMBOL_LABEL: Readonly<Record<BeaconSymbol, string>> = {
-  cup: 'CUP',
-  lamp: 'LAMP',
-  bird: 'BIRD',
+  cup: 'TAZA',
+  lamp: 'FAROLA',
+  bird: 'GAVIOTA',
 };
 
 export const ROUTE_SEQUENCE: readonly BeaconSymbol[] = ['cup', 'lamp', 'bird'];

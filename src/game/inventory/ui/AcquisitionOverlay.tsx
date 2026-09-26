@@ -36,9 +36,14 @@ export function AcquisitionOverlay({ entries, onDone }: AcquisitionOverlayProps)
   if (!entry) return null;
   return (
     <div className="inv-layer" onClick={next} role="presentation">
-      <section className="rpg-box inv-reward" role="dialog" aria-live="polite" aria-label="Reward">
+      <section
+        className="rpg-box inv-reward"
+        role="dialog"
+        aria-live="polite"
+        aria-label="Recompensa"
+      >
         <p className="inv-reward__title">
-          {entry.kind === 'card' ? 'CITY CARD ADDED' : 'ITEM OBTAINED'}
+          {entry.kind === 'card' ? 'NUEVA CITY CARD' : 'OBJETO CONSEGUIDO'}
         </p>
         {entry.kind === 'card' ? (
           <CardFace card={entry.card} />

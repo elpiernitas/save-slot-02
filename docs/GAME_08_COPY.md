@@ -1,5 +1,8 @@
 # GAME-08 — Date Gate Copy Direction
 
+> **D-077:** el juego se publica en castellano. Estas líneas en inglés son la
+> dirección original; el copy final vive en el código.
+
 Status: writing guide.
 
 ## Reveal line

@@ -5,7 +5,12 @@ import { useMenu } from '../../ui/useMenu';
 import { inventoryRows } from '../cards';
 import './inventory.css';
 
-const CATEGORY_LABEL = { quest: 'QUEST', object: 'OBJECT', consumable: 'CONSUMABLE', key: 'KEY' };
+const CATEGORY_LABEL = {
+  quest: 'MISIÓN',
+  object: 'OBJETO',
+  consumable: 'CONSUMIBLE',
+  key: 'LLAVE',
+};
 
 /**
  * INVENTARIO (GAME_05_SPEC §12): item list on the left, detail on the right.
@@ -31,7 +36,9 @@ export function InventoryPanel({ onBack }: { onBack: () => void }) {
       <section className="rpg-box inv-panel" role="dialog" aria-label="Inventario">
         <p className="inv-panel__title">INVENTARIO</p>
         {rows.length === 0 ? (
-          <p className="inv-empty">NO ITEMS YET. The city will hand you things. Eventually.</p>
+          <p className="inv-empty">
+            AÚN NO HAY OBJETOS. La ciudad ya te irá dando cosas. Algún día.
+          </p>
         ) : (
           <div className="inv-panel__body">
             <Menu
@@ -52,7 +59,7 @@ export function InventoryPanel({ onBack }: { onBack: () => void }) {
           </div>
         )}
         <p className="inv-hint">
-          <kbd>ESC</kbd> BACK
+          <kbd>ESC</kbd> VOLVER
         </p>
       </section>
     </div>

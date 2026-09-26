@@ -152,13 +152,13 @@ export function advanceGate(prev: GateState, dtMs: number, input: GateInput): Ga
 export function gateLines(s: GateState): string[] {
   switch (s.stage) {
     case 'await1':
-      return ['PLAYER 1 INPUT REQUIRED'];
+      return ['SE NECESITA LA ENTRADA DE PLAYER 1'];
     case 'p2walk':
-      return ['PLAYER 1 — READY'];
+      return ['PLAYER 1 — LISTO'];
     case 'p2ready':
-      return ['PLAYER 1 — READY', 'PLAYER 2 — READY'];
+      return ['PLAYER 1 — LISTO', 'PLAYER 2 — LISTO'];
     case 'opening':
     case 'open':
-      return ['2/2 PLAYERS — READY'];
+      return ['2/2 JUGADORES — LISTOS'];
   }
 }

@@ -25,7 +25,7 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
       return;
     }
     void services.fullscreen.request().then((result) => {
-      setNotice(result === 'denied' ? 'FULLSCREEN DENIED BY THE BROWSER.' : null);
+      setNotice(result === 'denied' ? 'EL NAVEGADOR HA DENEGADO LA PANTALLA COMPLETA.' : null);
     });
   };
 
@@ -38,14 +38,18 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
   const items: MenuItem[] = [
     {
       id: 'fullscreen',
-      label: 'FULLSCREEN',
-      value: !fullscreen.supported ? 'N/A' : fullscreen.active ? 'ON' : 'OFF',
+      label: 'PANTALLA COMPLETA',
+      value: !fullscreen.supported ? 'N/A' : fullscreen.active ? 'SÍ' : 'NO',
       disabled: !fullscreen.supported,
     },
-    { id: 'sound', label: 'SOUND', value: muted ? 'OFF' : 'ON' },
-    { id: 'textSpeed', label: 'TEXT SPEED', value: optionLabel(TEXT_SPEED_OPTIONS, textSpeed) },
-    { id: 'motion', label: 'MOTION', value: optionLabel(MOTION_OPTIONS, reducedMotion) },
-    { id: 'back', label: 'BACK' },
+    { id: 'sound', label: 'SONIDO', value: muted ? 'NO' : 'SÍ' },
+    {
+      id: 'textSpeed',
+      label: 'VELOCIDAD DEL TEXTO',
+      value: optionLabel(TEXT_SPEED_OPTIONS, textSpeed),
+    },
+    { id: 'motion', label: 'MOVIMIENTO', value: optionLabel(MOTION_OPTIONS, reducedMotion) },
+    { id: 'back', label: 'VOLVER' },
   ];
 
   const run = (item: MenuItem, dir: 1 | -1 = 1) => {
@@ -78,10 +82,10 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
   });
 
   return (
-    <section className="rpg-box title-settings" aria-label="Settings">
-      <h2 className="title-settings__heading">SETTINGS</h2>
+    <section className="rpg-box title-settings" aria-label="Ajustes">
+      <h2 className="title-settings__heading">AJUSTES</h2>
       <Menu
-        label="Settings"
+        label="Ajustes"
         items={items}
         selected={menu.selected}
         onHover={menu.select}

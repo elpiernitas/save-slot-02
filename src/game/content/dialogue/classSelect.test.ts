@@ -38,9 +38,11 @@ describe('class select dialogues', () => {
 
   it('intro: full version once, short version afterwards', () => {
     const first = readAll(CLASS_SELECT_INTRO, createInitialSave(now));
-    expect(first.text[0]).toBe('CLASS DATA MISSING.');
+    expect(first.text[0]).toBe('FALTAN DATOS DE CLASE.');
     expect(first.save.flags[CLASS_INTRO_SEEN_FLAG]).toBe(true);
-    expect(readAll(CLASS_SELECT_INTRO, first.save).text).toEqual(['PLAYER INPUT STILL REQUIRED.']);
+    expect(readAll(CLASS_SELECT_INTRO, first.save).text).toEqual([
+      'SIGUE FALTANDO LA ENTRADA DEL JUGADOR.',
+    ]);
   });
 
   it.each(PLAYER_CLASS_IDS)(
@@ -52,8 +54,8 @@ describe('class select dialogues', () => {
         at: now.toISOString(),
       });
       const run = readAll(CLASS_ASSIGNED, save);
-      expect(run.text[0]).toBe(`CLASS ASSIGNED: ${PLAYER_CLASSES[classId].displayName}.`);
-      expect(run.text.at(-1)).toBe('LOADING WORLD...');
+      expect(run.text[0]).toBe(`CLASE ASIGNADA: ${PLAYER_CLASSES[classId].displayName}.`);
+      expect(run.text.at(-1)).toBe('CARGANDO MUNDO...');
       expect(run.status).toBe('finished');
     },
   );

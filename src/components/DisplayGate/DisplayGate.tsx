@@ -34,17 +34,17 @@ function IncompatibleDisplay() {
   return (
     <div className="display-gate" role="alert">
       <div className="display-gate__panel">
-        <p className="display-gate__heading">SYSTEM CHECK</p>
-        <p className="display-gate__error">INCOMPATIBLE DISPLAY</p>
-        <p>THIS QUEST REQUIRES A COMPUTER.</p>
+        <p className="display-gate__heading">COMPROBACIÓN DEL SISTEMA</p>
+        <p className="display-gate__error">PANTALLA INCOMPATIBLE</p>
+        <p>ESTA MISIÓN NECESITA UN ORDENADOR.</p>
         <div className="display-gate__list">
-          <p className="display-gate__dim">RETURN WITH:</p>
-          <p>[ KEYBOARD ]</p>
-          <p>[ BIGGER SCREEN ]</p>
-          <p>[ QUESTIONABLE DECISIONS ]</p>
+          <p className="display-gate__dim">VUELVE CON:</p>
+          <p>[ TECLADO ]</p>
+          <p>[ PANTALLA MÁS GRANDE ]</p>
+          <p>[ DECISIONES CUESTIONABLES ]</p>
         </div>
         <p className="display-gate__dim display-gate__small">
-          ERR 0x02 — POCKET-SIZED DEVICE DETECTED
+          ERR 0x02 — DISPOSITIVO DE BOLSILLO DETECTADO
         </p>
       </div>
     </div>
@@ -55,12 +55,12 @@ function WindowTooSmall({ status }: { status: Extract<DisplayStatus, { kind: 'to
   return (
     <div className="display-gate display-gate--overlay" role="alert">
       <div className="display-gate__panel">
-        <p className="display-gate__error">WINDOW TOO SMALL</p>
+        <p className="display-gate__error">VENTANA DEMASIADO PEQUEÑA</p>
         <p>
-          MAXIMIZE TO CONTINUE<span className="display-gate__blink">_</span>
+          MAXIMIZA PARA CONTINUAR<span className="display-gate__blink">_</span>
         </p>
         <p className="display-gate__dim display-gate__small">
-          MINIMUM {status.requiredWidth}×{status.requiredHeight}
+          MÍNIMO {status.requiredWidth}×{status.requiredHeight}
         </p>
       </div>
     </div>

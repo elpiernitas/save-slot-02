@@ -16,12 +16,12 @@ export function PlaceholderScene({ sceneId }: SceneProps) {
 
   return (
     <div className="scene terminal" onClick={back}>
-      <p className="terminal__heading">AREA NOT GENERATED YET</p>
-      <p className="terminal__line tone-dim">REGION: {sceneId.toUpperCase()}</p>
-      <p className="terminal__line">THIS PART OF THE WORLD IS STILL LOADING.</p>
+      <p className="terminal__heading">ZONA AÚN NO GENERADA</p>
+      <p className="terminal__line tone-dim">REGIÓN: {sceneId.toUpperCase()}</p>
+      <p className="terminal__line">ESTA PARTE DEL MUNDO TODAVÍA SE ESTÁ CARGANDO.</p>
       <div className="terminal__footer key-hints">
         <span>
-          <kbd>ESC</kbd>RETURN TO TITLE
+          <kbd>ESC</kbd>VOLVER AL TÍTULO
         </span>
       </div>
     </div>

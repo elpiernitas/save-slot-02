@@ -10,7 +10,7 @@ const COLUMNS = 4;
 
 const obtained = (iso: string) =>
   new Date(iso)
-    .toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+    .toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
     .toUpperCase();
 
 /**
@@ -63,10 +63,10 @@ export function CardBinder({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="inv-layer">
-      <section className="rpg-box inv-panel inv-binder" role="dialog" aria-label="City cards">
+      <section className="rpg-box inv-panel inv-binder" role="dialog" aria-label="City Cards">
         <p className="inv-panel__title">CITY CARDS</p>
         {entries.length === 0 ? (
-          <p className="inv-empty">NO CARDS YET. The city is watching. Politely.</p>
+          <p className="inv-empty">AÚN NO HAY CARTAS. La ciudad observa. Con educación.</p>
         ) : (
           <div className="inv-panel__body">
             <ul className="inv-grid" aria-label="Cartas">
@@ -96,7 +96,7 @@ export function CardBinder({ onBack }: { onBack: () => void }) {
                       <p className="inv-item__desc">{current.card.description}</p>
                     )}
                     <p className="inv-item__category">
-                      OBTAINED {obtained(current.owned.obtainedAt)}
+                      OBTENIDA {obtained(current.owned.obtainedAt)}
                     </p>
                   </>
                 )}
@@ -105,7 +105,7 @@ export function CardBinder({ onBack }: { onBack: () => void }) {
           </div>
         )}
         <p className="inv-hint">
-          <kbd>ENTER</kbd> {open ? 'CLOSE' : 'OPEN'} <kbd>ESC</kbd> BACK
+          <kbd>ENTER</kbd> {open ? 'CERRAR' : 'ABRIR'} <kbd>ESC</kbd> VOLVER
         </p>
       </section>
     </div>

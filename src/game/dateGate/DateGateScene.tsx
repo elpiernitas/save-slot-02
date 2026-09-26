@@ -175,8 +175,8 @@ export function DateGateScene(_: SceneProps) {
 }
 
 const CONFIRM_ITEMS: readonly MenuItem[] = [
-  { id: 'yes', label: 'YES' },
-  { id: 'back', label: 'BACK' },
+  { id: 'yes', label: 'SÍ' },
+  { id: 'back', label: 'VOLVER' },
 ];
 
 function ConfirmPanel({

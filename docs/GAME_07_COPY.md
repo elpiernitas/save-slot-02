@@ -1,5 +1,8 @@
 # GAME-07 — Locked Copy
 
+> **D-077:** el juego se publica en castellano. Estas líneas en inglés son la
+> dirección original; el copy final vive en el código.
+
 Status: release copy for boss/reveal unless implementation layout forces a
 minor line-break change.
 

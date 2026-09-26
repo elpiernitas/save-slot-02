@@ -327,10 +327,10 @@ export function OverworldScene(_: SceneProps) {
         <footer className="overworld__hints key-hints" data-faded={hasMoved || undefined}>
           <span>
             <kbd>WASD</kbd>
-            <kbd>↑↓←→</kbd>MOVE
+            <kbd>↑↓←→</kbd>MOVERSE
           </span>
           <span>
-            <kbd>ESC</kbd>MENU
+            <kbd>ESC</kbd>MENÚ
           </span>
         </footer>
       )}
@@ -350,7 +350,7 @@ export function OverworldScene(_: SceneProps) {
           </div>
         ))}
       <div ref={promptRef} className="overworld__prompt" role="status" hidden={!showPrompt}>
-        <kbd>E</kbd> INTERACT
+        <kbd>E</kbd> INTERACTUAR
       </div>
       {dialogue && (
         <DialoguePlayer
@@ -408,7 +408,7 @@ function PauseMenu({
   return (
     <div className="overworld__menu-layer">
       <section className="rpg-box overworld__menu" role="dialog" aria-label="Pausa">
-        <p className="overworld__menu-title">PAUSE</p>
+        <p className="overworld__menu-title">PAUSA</p>
         <Menu
           label="Pausa"
           items={items}

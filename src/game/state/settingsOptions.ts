@@ -6,10 +6,10 @@ export interface SettingOption<T> {
 }
 
 export const TEXT_SPEED_OPTIONS: readonly SettingOption<TextSpeed>[] = [
-  { value: 'slow', label: 'SLOW' },
+  { value: 'slow', label: 'LENTA' },
   { value: 'normal', label: 'NORMAL' },
-  { value: 'fast', label: 'FAST' },
-  { value: 'instant', label: 'INSTANT' },
+  { value: 'fast', label: 'RÁPIDA' },
+  { value: 'instant', label: 'INSTANTÁNEA' },
 ];
 
 /**
@@ -17,9 +17,9 @@ export const TEXT_SPEED_OPTIONS: readonly SettingOption<TextSpeed>[] = [
  * `reducedMotion` (is motion reduced?). So MOTION ON = reducedMotion 'off'.
  */
 export const MOTION_OPTIONS: readonly SettingOption<GameSettings['reducedMotion']>[] = [
-  { value: 'system', label: 'SYSTEM' },
-  { value: 'off', label: 'ON' },
-  { value: 'on', label: 'OFF' },
+  { value: 'system', label: 'SISTEMA' },
+  { value: 'off', label: 'SÍ' },
+  { value: 'on', label: 'NO' },
 ];
 
 /** Next/previous option, wrapping. Unknown current values start at the first option. */

@@ -134,7 +134,7 @@ export function createAttempt(options: { assist?: boolean } = {}): DesyncState {
     status: 'playing',
     phase: 'checksum',
     t: 0,
-    banner: { text: 'CHECKSUM MISMATCH', until: BANNER_MS },
+    banner: { text: 'EL CHECKSUM NO COINCIDE', until: BANNER_MS },
     step: 0,
     stepCount: 0,
     stepStart: BANNER_MS,
@@ -277,8 +277,8 @@ const STEP: Record<Facing, [number, number]> = {
 };
 
 const PHASE_AFTER: Record<Phase, { done: string; next: Phase | null; title: string }> = {
-  checksum: { done: 'NODE A — STABLE', next: 'split', title: 'SIGNAL SPLIT' },
-  split: { done: 'PLAYER 1 SIGNAL — STABLE', next: 'missing', title: 'MISSING CHANNEL' },
+  checksum: { done: 'NODO A — ESTABLE', next: 'split', title: 'SEÑAL DIVIDIDA' },
+  split: { done: 'SEÑAL DE PLAYER 1 — ESTABLE', next: 'missing', title: 'CANAL PERDIDO' },
   missing: { done: '', next: null, title: '' },
 };
 
@@ -347,7 +347,7 @@ export function advanceBoss(prev: DesyncState, dtMs: number, input: BossInput): 
       if (s.phase === 'split' && nodes[node] === COMMITS_PER_NODE) {
         const other = node === 'b' ? 'c' : 'b';
         if (nodes[other] < COMMITS_PER_NODE) {
-          s = { ...s, notice: { text: '1 CHANNEL REMAINS', until: s.t + 2000 } };
+          s = { ...s, notice: { text: 'QUEDA 1 CANAL', until: s.t + 2000 } };
         }
       }
     }

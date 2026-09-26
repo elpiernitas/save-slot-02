@@ -26,9 +26,9 @@ import './desync.css';
 
 /** Locked intro copy (GAME_07_COPY). Shown once per visit, never on retry. */
 const INTRO = [
-  'RECOVERY PROCESS ERROR',
-  'UNRESOLVED INPUT DETECTED',
-  'STARTING DESYNC RECOVERY...',
+  'ERROR EN EL PROCESO DE RECUPERACIÓN',
+  'ENTRADA SIN RESOLVER DETECTADA',
+  'INICIANDO RECUPERACIÓN DE LA DESINCRONIZACIÓN...',
 ];
 const INTRO_LINE_MS = 1100;
 const TITLE_MS = 1400;
@@ -38,15 +38,15 @@ const ASSIST_AFTER = 2;
 
 /** Phase-start flavour only; difficulty is the same for every class. */
 const CLASS_LINE: Readonly<Record<PlayerClassId, string>> = {
-  warrior: 'DIRECT ROUTE DETECTED.',
-  tank: 'SIGNAL TOLERANCE: HIGH.',
-  healer: 'RECOVERY ROUTE MAPPED.',
+  warrior: 'RUTA DIRECTA DETECTADA.',
+  tank: 'TOLERANCIA DE SEÑAL: ALTA.',
+  healer: 'RUTA DE RECUPERACIÓN TRAZADA.',
 };
 
 const PHASE_LABEL = {
-  checksum: 'CHECKSUM MISMATCH',
-  split: 'SIGNAL SPLIT',
-  missing: 'MISSING CHANNEL',
+  checksum: 'EL CHECKSUM NO COINCIDE',
+  split: 'SEÑAL DIVIDIDA',
+  missing: 'CANAL PERDIDO',
 } as const;
 
 type Stage =
@@ -69,7 +69,7 @@ interface Hud {
 
 function hudOf(s: DesyncState): Hud {
   const node = nodeInReach(s);
-  const prompt = coreInReach(s) ? 'E — RECOVER INPUT' : node ? 'E — STABILISE' : null;
+  const prompt = coreInReach(s) ? 'E — RECUPERAR ENTRADA' : node ? 'E — ESTABILIZAR' : null;
   const progress = PHASE_NODES[s.phase]
     .map((id) => `${id.toUpperCase()} ${s.nodes[id]}/${COMMITS_PER_NODE}`)
     .join('  ');
@@ -267,14 +267,14 @@ export function DesyncBoss(_: SceneProps) {
   const classLine = save.player.classId && phaseStart ? CLASS_LINE[save.player.classId] : null;
 
   return (
-    <div className="desync" aria-label="DESYNC PROCESS">
+    <div className="desync" aria-label="PROCESO DESYNC">
       <canvas ref={canvasRef} className="desync__canvas" aria-hidden="true" />
 
       {(stage.kind === 'fight' || stage.kind === 'failed') && (
         <>
           <div className="desync__hud" role="status">
             <span className="desync__signal">
-              SIGNAL {hud.integrity}/3
+              SEÑAL {hud.integrity}/3
               <span className="desync__pips" aria-hidden="true">
                 {[0, 1, 2].map((i) => (
                   <i key={i} data-on={i < hud.integrity ? '' : undefined} />
@@ -283,12 +283,12 @@ export function DesyncBoss(_: SceneProps) {
             </span>
             <span className="desync__phase">{PHASE_LABEL[hud.phase]}</span>
             {hud.progress && <span className="desync__progress">{hud.progress}</span>}
-            {assist && <span className="desync__assist">ASSIST</span>}
+            {assist && <span className="desync__assist">ASISTIDO</span>}
           </div>
           {hud.phase3 && (
             <div className="desync__players">
-              <span>PLAYER 1 — ACTIVE</span>
-              <span data-missing="">PLAYER 2 — NO SIGNAL</span>
+              <span>PLAYER 1 — ACTIVO</span>
+              <span data-missing="">PLAYER 2 — SIN SEÑAL</span>
             </div>
           )}
           {hud.banner && (
@@ -313,14 +313,14 @@ export function DesyncBoss(_: SceneProps) {
           {stage.kind === 'intro' ? (
             INTRO.slice(0, stage.line + 1).map((line) => <p key={line}>{line}</p>)
           ) : (
-            <p className="desync__title">DESYNC PROCESS</p>
+            <p className="desync__title">PROCESO DESYNC</p>
           )}
         </div>
       )}
 
       {stage.kind === 'terminated' && (
         <div className="desync__card">
-          <p className="desync__title">DESYNC PROCESS — TERMINATED</p>
+          <p className="desync__title">PROCESO DESYNC — TERMINADO</p>
         </div>
       )}
 
@@ -344,8 +344,8 @@ export function DesyncBoss(_: SceneProps) {
 }
 
 const FAILED_ITEMS: readonly MenuItem[] = [
-  { id: 'retry', label: 'RETRY' },
-  { id: 'title', label: 'RETURN TO TITLE' },
+  { id: 'retry', label: 'REINTENTAR' },
+  { id: 'title', label: 'VOLVER AL TÍTULO' },
 ];
 
 function FailedPanel({ onRetry, onTitle }: { onRetry: () => void; onTitle: () => void }) {
@@ -356,10 +356,10 @@ function FailedPanel({ onRetry, onTitle }: { onRetry: () => void; onTitle: () =>
   });
   return (
     <div className="desync__layer">
-      <section className="rpg-box desync__panel" role="dialog" aria-label="SIGNAL LOST">
-        <h2 className="desync__panel-title">SIGNAL LOST</h2>
+      <section className="rpg-box desync__panel" role="dialog" aria-label="SEÑAL PERDIDA">
+        <h2 className="desync__panel-title">SEÑAL PERDIDA</h2>
         <Menu
-          label="SIGNAL LOST"
+          label="SEÑAL PERDIDA"
           items={FAILED_ITEMS}
           selected={menu.selected}
           onHover={menu.select}
@@ -371,8 +371,8 @@ function FailedPanel({ onRetry, onTitle }: { onRetry: () => void; onTitle: () =>
 }
 
 const ASSIST_ITEMS: readonly MenuItem[] = [
-  { id: 'enable', label: 'ENABLE' },
-  { id: 'later', label: 'NOT NOW' },
+  { id: 'enable', label: 'ACTIVAR' },
+  { id: 'later', label: 'AHORA NO' },
 ];
 
 function AssistPanel({ onEnable, onDecline }: { onEnable: () => void; onDecline: () => void }) {
@@ -384,12 +384,16 @@ function AssistPanel({ onEnable, onDecline }: { onEnable: () => void; onDecline:
   });
   return (
     <div className="desync__layer">
-      <section className="rpg-box desync__panel" role="dialog" aria-label="ASSIST MODE AVAILABLE">
-        <h2 className="desync__panel-title">SIGNAL LOST</h2>
-        <p className="desync__panel-sub">ASSIST MODE AVAILABLE</p>
-        <p className="desync__panel-note">Longer warnings. Same result.</p>
+      <section
+        className="rpg-box desync__panel"
+        role="dialog"
+        aria-label="MODO ASISTIDO DISPONIBLE"
+      >
+        <h2 className="desync__panel-title">SEÑAL PERDIDA</h2>
+        <p className="desync__panel-sub">MODO ASISTIDO DISPONIBLE</p>
+        <p className="desync__panel-note">Avisos más largos. Mismo resultado.</p>
         <Menu
-          label="ASSIST MODE AVAILABLE"
+          label="MODO ASISTIDO DISPONIBLE"
           items={ASSIST_ITEMS}
           selected={menu.selected}
           onHover={menu.select}

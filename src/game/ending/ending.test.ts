@@ -37,16 +37,16 @@ describe('GAME-09 completion', () => {
 
 describe('GAME-09 save slot', () => {
   it.each([
-    ['wed-30-sep', 'WEDNESDAY · 30 SEPTEMBER'],
-    ['thu-01-oct', 'THURSDAY · 01 OCTOBER'],
-    ['sun-04-oct', 'SUNDAY · 04 OCTOBER'],
+    ['wed-30-sep', 'MIÉRCOLES · 30 DE SEPTIEMBRE'],
+    ['thu-01-oct', 'JUEVES · 1 DE OCTUBRE'],
+    ['sun-04-oct', 'DOMINGO · 4 DE OCTUBRE'],
   ] as const)('%s → %s', (option, label) => {
     expect(saveSlotRows(complete(chosen(option)))).toEqual([
       { label: 'PLAYER 1', value: 'LUIS' },
-      { label: 'CLASS', value: 'TANQUE' },
+      { label: 'CLASE', value: 'TANQUE' },
       { label: 'PLAYER 2', value: 'MANU' },
-      { label: 'SIDE QUEST', value: 'COMPLETE' },
-      { label: 'DATE ROUTE', value: label },
+      { label: 'MISIÓN SECUNDARIA', value: 'COMPLETADA' },
+      { label: 'RUTA', value: label },
     ]);
   });
 

@@ -30,7 +30,8 @@
 
 .reveal__slot-head {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: calc(var(--px) * 2);
   font-size: var(--text-xs);
   color: var(--color-text);
 }

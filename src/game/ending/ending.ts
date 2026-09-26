@@ -24,13 +24,13 @@ export const ENDING_BEATS: readonly EndingBeat[] = [
 ];
 
 export const ENDING_COPY = {
-  saving: 'SAVING...',
-  checksum: 'CHECKSUM — OK',
-  complete: 'SIDE QUEST — COMPLETE',
+  saving: 'GUARDANDO...',
+  checksum: 'COMPROBACIÓN — OK',
+  complete: 'MISIÓN SECUNDARIA — COMPLETADA',
   speaker: 'MANU',
   line: 'bien. ahora ya solo falta hacer la parte que no cabe aquí.',
-  route: 'DATE ROUTE',
-  updated: 'SAVE SLOT 02 — UPDATED',
+  route: 'RUTA ELEGIDA',
+  updated: 'SAVE SLOT 02 — ACTUALIZADO',
 } as const;
 
 export interface SlotRow {
@@ -45,9 +45,9 @@ export function saveSlotRows(save: GameSave): SlotRow[] | null {
   const classId = save.player.classId;
   return [
     { label: 'PLAYER 1', value: (save.player.name ?? 'Luis').toUpperCase() },
-    { label: 'CLASS', value: classId ? PLAYER_CLASSES[classId].displayName : '—' },
+    { label: 'CLASE', value: classId ? PLAYER_CLASSES[classId].displayName : '—' },
     { label: 'PLAYER 2', value: 'MANU' },
-    { label: 'SIDE QUEST', value: 'COMPLETE' },
-    { label: 'DATE ROUTE', value: chosenRouteLabel(option) },
+    { label: 'MISIÓN SECUNDARIA', value: 'COMPLETADA' },
+    { label: 'RUTA', value: chosenRouteLabel(option) },
   ];
 }

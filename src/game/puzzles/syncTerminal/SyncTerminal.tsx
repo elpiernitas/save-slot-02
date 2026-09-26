@@ -116,17 +116,19 @@ export function SyncTerminal({ onComplete, onLeave }: SyncTerminalProps) {
       <section
         className="rpg-box sync-terminal"
         role="dialog"
-        aria-label="Sync terminal"
+        aria-label="Terminal de sincronización"
         data-glitch={p2Failed || undefined}
       >
-        <p className="sync-terminal__title">SERVICE ACCESS · SYNC TERMINAL</p>
+        <p className="sync-terminal__title">ACCESO DE SERVICIO · TERMINAL DE SINCRONIZACIÓN</p>
         <div className="sync-terminal__channels">
           <div className="sync-channel">
             <p className="sync-channel__label">
-              PLAYER 1 INPUT{' '}
-              <span data-ok={synced || undefined}>{synced ? '[ SYNCED ]' : '[ ACTIVE ]'}</span>
+              ENTRADA PLAYER 1{' '}
+              <span data-ok={synced || undefined}>
+                {synced ? '[ SINCRONIZADA ]' : '[ ACTIVA ]'}
+              </span>
             </p>
-            <div className="sync-grid" role="grid" aria-label="PLAYER 1 channel">
+            <div className="sync-grid" role="grid" aria-label="Canal de PLAYER 1">
               <span className="sync-grid__source" aria-hidden="true">
                 ▶
               </span>
@@ -138,7 +140,7 @@ export function SyncTerminal({ onComplete, onLeave }: SyncTerminalProps) {
                   className="sync-tile"
                   style={{ gridColumn: tile.col + 2, gridRow: tile.row + 1 }}
                   data-selected={(!synced && index === state.cursor) || undefined}
-                  aria-label={`Tile ${index + 1}${powered.includes(index) ? ', powered' : ''}`}
+                  aria-label={`Pieza ${index + 1}${powered.includes(index) ? ', con corriente' : ''}`}
                   disabled={synced}
                   onMouseMove={() =>
                     index !== state.cursor && send({ type: 'select', tile: index })
@@ -156,7 +158,8 @@ export function SyncTerminal({ onComplete, onLeave }: SyncTerminalProps) {
           </div>
           <div className="sync-channel" data-offline aria-disabled="true">
             <p className="sync-channel__label">
-              PLAYER 2 INPUT <span data-bad>{p2Failed ? '[ NOT FOUND ]' : '[ NO SIGNAL ]'}</span>
+              ENTRADA PLAYER 2{' '}
+              <span data-bad>{p2Failed ? '[ NO ENCONTRADA ]' : '[ SIN SEÑAL ]'}</span>
             </p>
             <div className="sync-grid" aria-hidden="true">
               {[
@@ -174,10 +177,10 @@ export function SyncTerminal({ onComplete, onLeave }: SyncTerminalProps) {
           </div>
         </div>
         <div className="sync-terminal__log" aria-live="polite">
-          {state.phase === 'solving' && <p>ROUTE THE SIGNAL FROM ▶ TO ▼.</p>}
-          {state.phase === 'p1Synced' && <p>PLAYER 1 — SYNCED</p>}
-          {p2Failed && <p>PLAYER 1 — SYNCED</p>}
-          {p2Failed && <p data-bad>PLAYER 2 INPUT........ NOT FOUND</p>}
+          {state.phase === 'solving' && <p>LLEVA LA SEÑAL DE ▶ A ▼.</p>}
+          {state.phase === 'p1Synced' && <p>PLAYER 1 — SINCRONIZADO</p>}
+          {p2Failed && <p>PLAYER 1 — SINCRONIZADO</p>}
+          {p2Failed && <p data-bad>ENTRADA PLAYER 2........ NO ENCONTRADA</p>}
           {['fallback', 'recovering', 'done'].includes(state.phase) && (
             <p className="sync-terminal__narrator">
               Eso parece... menos opcional de lo que debería.
@@ -191,23 +194,23 @@ export function SyncTerminal({ onComplete, onLeave }: SyncTerminalProps) {
               onMouseDown={(event) => event.preventDefault()}
               onClick={applyFallback}
             >
-              FALLBACK ROUTE AVAILABLE — <kbd>ENTER</kbd> APPLY
+              RUTA ALTERNATIVA DISPONIBLE — <kbd>ENTER</kbd> APLICAR
             </button>
           )}
           {['recovering', 'done'].includes(state.phase) && (
             <>
-              <p>RECOVERING MISSING INPUT...</p>
-              <p data-bad>RECOVERY PROCESS ERROR</p>
+              <p>RECUPERANDO ENTRADA PERDIDA...</p>
+              <p data-bad>ERROR EN EL PROCESO DE RECUPERACIÓN</p>
             </>
           )}
         </div>
         <p className="inv-hint">
           {state.phase === 'solving' ? (
             <>
-              <kbd>↑↓←→</kbd> SELECT <kbd>ENTER</kbd> ROTATE <kbd>ESC</kbd> LEAVE
+              <kbd>↑↓←→</kbd> ELEGIR <kbd>ENTER</kbd> GIRAR <kbd>ESC</kbd> SALIR
             </>
           ) : (
-            <>INPUT LOCKED</>
+            <>ENTRADA BLOQUEADA</>
           )}
         </p>
       </section>

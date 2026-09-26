@@ -126,7 +126,7 @@
   color: var(--color-text);
 }
 
-.save-slot__row[data-row='DATE ROUTE'] dd {
+.save-slot__row[data-row='RUTA'] dd {
   color: var(--color-select);
 }
 

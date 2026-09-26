@@ -28,16 +28,16 @@ const atSwitch = (): GateState => ({ ...createGate(), p1: { ...SWITCH_1, facing:
 describe('PLAYER 2 reveal — copy', () => {
   it('uses the locked copy exactly', () => {
     expect(REVEAL_COPY).toMatchObject({
-      found: 'SIGNAL FOUND',
-      slot: 'PLAYER SLOT 02',
-      recovered: 'IDENTITY DATA RECOVERED',
+      found: 'SEÑAL ENCONTRADA',
+      slot: 'RANURA DE JUGADOR 02',
+      recovered: 'DATOS DE IDENTIDAD RECUPERADOS',
       name: 'PLAYER 2 — MANU',
       speaker: 'MANU',
       line: '¿me ha cargado bien por lo menos?',
-      link: 'PLAYER LINK — STABLE',
-      party: 'PARTY STATUS — 2/2',
-      endA: 'FINAL SIDE QUEST DATA RECOVERED',
-      endB: 'DESTINATION DATA AVAILABLE',
+      link: 'ENLACE DE JUGADORES — ESTABLE',
+      party: 'GRUPO — 2/2',
+      endA: 'DATOS DE LA ÚLTIMA MISIÓN SECUNDARIA RECUPERADOS',
+      endB: 'DATOS DE RUTA DISPONIBLES',
     });
   });
 
@@ -90,10 +90,10 @@ describe('cooperative gate', () => {
   it('waits for PLAYER 1 at the left switch', () => {
     let s = run(createGate(), 3000, { ...still, interact: true });
     expect(s.stage).toBe('await1');
-    expect(gateLines(s)).toEqual(['PLAYER 1 INPUT REQUIRED']);
+    expect(gateLines(s)).toEqual(['SE NECESITA LA ENTRADA DE PLAYER 1']);
     s = advanceGate(atSwitch(), 16, { ...still, interact: true });
     expect(s.stage).toBe('p2walk');
-    expect(gateLines(s)).toEqual(['PLAYER 1 — READY']);
+    expect(gateLines(s)).toEqual(['PLAYER 1 — LISTO']);
   });
 
   it('PLAYER 2 follows the fixed waypoints to the right switch, then the gate opens', () => {
@@ -105,8 +105,8 @@ describe('cooperative gate', () => {
     }
     expect(s.stage).toBe('open');
     expect({ x: s.p2.x, y: s.p2.y }).toEqual(SWITCH_2);
-    expect([...seen]).toContain('PLAYER 1 — READY|PLAYER 2 — READY');
-    expect(gateLines(s)).toEqual(['2/2 PLAYERS — READY']);
+    expect([...seen]).toContain('PLAYER 1 — LISTO|PLAYER 2 — LISTO');
+    expect(gateLines(s)).toEqual(['2/2 JUGADORES — LISTOS']);
     expect([s.p1.facing, s.p2.facing]).toEqual(['up', 'up']);
     expect(s.t).toBeLessThan(P2_FALLBACK_MS + 2000);
   });

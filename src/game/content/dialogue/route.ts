@@ -21,14 +21,14 @@ export const ROUTE_UPDATE: DialogueScript = {
   id: 'route.update',
   start: 'a',
   nodes: {
-    a: sys('a', ['SIDE QUEST ROUTE UPDATED\nROUTE DATA RECOVERED: 18%'], {
+    a: sys('a', ['RUTA DE MISIÓN SECUNDARIA ACTUALIZADA\nDATOS DE RUTA RECUPERADOS: 18%'], {
       effects: [{ kind: 'setFlag', flag: ROUTE_FLAGS.updated, value: true }],
       next: 'b',
     }),
     b: say('b', ['Hay una ruta nueva.[pause] Eso normalmente sería una buena noticia.'], {
       next: 'c',
     }),
-    c: sys('c', ['ROUTE CALIBRATION REQUIRED']),
+    c: sys('c', ['HAY QUE CALIBRAR LA RUTA']),
   },
 };
 
@@ -39,14 +39,14 @@ export const beaconSynced = (
 ): DialogueScript => ({
   id: 'route.beaconSynced',
   start: 'a',
-  nodes: { a: sys('a', [`BEACON ${SYMBOL_LABEL[symbol]} — SYNC ${step}/${total}`]) },
+  nodes: { a: sys('a', [`BALIZA ${SYMBOL_LABEL[symbol]} — SINCRONIZADA ${step}/${total}`]) },
 });
 
 export const BEACON_REJECTED: DialogueScript = {
   id: 'route.beaconRejected',
   start: 'a',
   nodes: {
-    a: sys('a', ['SEQUENCE REJECTED.'], { next: 'b' }),
+    a: sys('a', ['SECUENCIA RECHAZADA.'], { next: 'b' }),
     b: say('b', ['Muy dramático para tres cosas en una calle.']),
   },
 };
@@ -55,14 +55,14 @@ export const ROUTE_SOLVED: DialogueScript = {
   id: 'route.solved',
   start: 'a',
   nodes: {
-    a: sys('a', ['ROUTE SYNC — OK'], {
+    a: sys('a', ['RUTA SINCRONIZADA — OK'], {
       effects: [{ kind: 'giveCard', card: 'city.005.cimavilla_afternoon' }],
       next: 'b',
     }),
     b: say('b', ['Junto al bar, la puerta del 12 zumba.[pause] Las puertas no zumban.'], {
       next: 'c',
     }),
-    c: sys('c', ['SERVICE ACCESS ONLINE']),
+    c: sys('c', ['ACCESO DE SERVICIO EN LÍNEA']),
   },
 };
 
@@ -70,20 +70,20 @@ export const ROUTE_SOLVED: DialogueScript = {
 export const ROUTE_NODE: DialogueScript = {
   id: 'route.node',
   start: 'a',
-  nodes: { a: sys('a', ['ROUTE NODE — CALIBRATION PATTERN']) },
+  nodes: { a: sys('a', ['NODO DE RUTA — PATRÓN DE CALIBRACIÓN']) },
 };
 
 export const SERVICE_ACCESS: DialogueScript = {
   id: 'route.serviceAccess',
   start: 'a',
-  nodes: { a: sys('a', ['SERVICE ACCESS — SYNC TERMINAL']) },
+  nodes: { a: sys('a', ['ACCESO DE SERVICIO — TERMINAL DE SINCRONIZACIÓN']) },
 };
 
 export const SERVICE_ACCESS_DONE: DialogueScript = {
   id: 'route.serviceAccessDone',
   start: 'a',
   nodes: {
-    a: sys('a', ['SERVICE ACCESS — NO RESPONSE'], { next: 'b' }),
+    a: sys('a', ['ACCESO DE SERVICIO — SIN RESPUESTA'], { next: 'b' }),
     b: say('b', ['La puerta ha vuelto a ser una puerta.[pause] Sospechosamente normal.']),
   },
 };

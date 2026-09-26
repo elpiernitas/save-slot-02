@@ -222,7 +222,7 @@ export function Player2Reveal(_: SceneProps) {
               <span key={line}>{line}</span>
             ))}
           </div>
-          {prompt && <div className="reveal__gate-prompt">E — READY</div>}
+          {prompt && <div className="reveal__gate-prompt">E — LISTO</div>}
         </>
       )}
 

@@ -33,17 +33,17 @@ export const GATE_BEATS: readonly Beat[] = FULL_BEATS.filter(
 );
 
 export const REVEAL_COPY = {
-  scan: 'SCANNING FOR MISSING INPUT...',
-  found: 'SIGNAL FOUND',
-  slot: 'PLAYER SLOT 02',
-  recovered: 'IDENTITY DATA RECOVERED',
+  scan: 'BUSCANDO LA ENTRADA PERDIDA...',
+  found: 'SEÑAL ENCONTRADA',
+  slot: 'RANURA DE JUGADOR 02',
+  recovered: 'DATOS DE IDENTIDAD RECUPERADOS',
   name: 'PLAYER 2 — MANU',
   speaker: 'MANU',
   line: '¿me ha cargado bien por lo menos?',
-  link: 'PLAYER LINK — STABLE',
-  party: 'PARTY STATUS — 2/2',
-  endA: 'FINAL SIDE QUEST DATA RECOVERED',
-  endB: 'DESTINATION DATA AVAILABLE',
+  link: 'ENLACE DE JUGADORES — ESTABLE',
+  party: 'GRUPO — 2/2',
+  endA: 'DATOS DE LA ÚLTIMA MISIÓN SECUNDARIA RECUPERADOS',
+  endB: 'DATOS DE RUTA DISPONIBLES',
 } as const;
 
 /** Beats that may be advanced with Enter/click (the gate is played). */

@@ -9,11 +9,11 @@ import './BootScene.css';
 
 /** Short and mysterious. Must not reveal who made this or why. */
 const LOG = [
-  'INITIALIZING...',
-  'LOADING PLAYER DATA...',
-  'CHECKING QUEST STATE...',
-  '1 ENTRY COULD NOT BE IDENTIFIED.',
-  'ATTEMPTING TO READ IT ANYWAY...',
+  'INICIANDO...',
+  'CARGANDO DATOS DEL JUGADOR...',
+  'COMPROBANDO ESTADO DE LA MISIÓN...',
+  'NO SE HA PODIDO IDENTIFICAR 1 ENTRADA.',
+  'INTENTANDO LEERLA DE TODOS MODOS...',
 ] as const;
 
 const STEP_MS = 420;
@@ -60,7 +60,7 @@ export function BootScene(_: SceneProps) {
         ))}
         {!done && <span className="blink">_</span>}
       </div>
-      <div className="boot__bar" role="progressbar" aria-valuenow={progress} aria-label="Loading">
+      <div className="boot__bar" role="progressbar" aria-valuenow={progress} aria-label="Cargando">
         <div className="boot__bar-fill" style={{ width: `${progress}%` }} />
       </div>
     </div>

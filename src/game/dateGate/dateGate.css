@@ -63,9 +63,9 @@
 
 .date-gate__sub,
 .date-gate__time {
+  max-width: calc(var(--px) * 90);
   font-size: var(--text-xs);
   color: var(--color-text-dim);
-  white-space: nowrap;
 }
 
 .date-gate__gate[data-selected] .date-gate__arch {
@@ -166,12 +166,6 @@
 
 .date-gate__expired .date-gate__expired-line {
   color: var(--color-text);
-}
-
-/* Friday's quest label wraps inside its column instead of running into Sunday. */
-.date-gate__gate[data-kind='mainQuest'] .date-gate__sub {
-  max-width: calc(var(--px) * 88);
-  white-space: normal;
 }
 
 .date-gate__expired .date-gate__expired-hint {

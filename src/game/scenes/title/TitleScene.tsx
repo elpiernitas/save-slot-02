@@ -9,8 +9,8 @@ import { TitleBackdrop } from './TitleBackdrop';
 import './TitleScene.css';
 
 const ITEMS: readonly MenuItem[] = [
-  { id: 'continue', label: 'CONTINUE' },
-  { id: 'settings', label: 'SETTINGS' },
+  { id: 'continue', label: 'CONTINUAR' },
+  { id: 'settings', label: 'AJUSTES' },
 ];
 
 export function TitleScene(_: SceneProps) {
@@ -39,13 +39,15 @@ export function TitleScene(_: SceneProps) {
           SAVE SLOT <span className="title__number">02</span>
         </h1>
         <p className="title__tagline">
-          {save.timestamps.completedAt ? 'SIDE QUEST: COMPLETE' : 'SIDE QUEST: UNIDENTIFIED'}
+          {save.timestamps.completedAt
+            ? 'MISIÓN SECUNDARIA: COMPLETADA'
+            : 'MISIÓN SECUNDARIA: SIN IDENTIFICAR'}
         </p>
       </header>
 
       <nav className="title__menu">
         <Menu
-          label="Title menu"
+          label="Menú principal"
           items={ITEMS}
           selected={menu.selected}
           onHover={menu.select}
@@ -62,14 +64,14 @@ export function TitleScene(_: SceneProps) {
       <footer className="title__footer key-hints">
         <span>
           <kbd>↑↓</kbd>
-          <kbd>W S</kbd>MOVE
+          <kbd>W S</kbd>MOVERSE
         </span>
         <span>
-          <kbd>ENTER</kbd>SELECT
+          <kbd>ENTER</kbd>ELEGIR
         </span>
         {settingsOpen && (
           <span>
-            <kbd>ESC</kbd>BACK
+            <kbd>ESC</kbd>VOLVER
           </span>
         )}
       </footer>

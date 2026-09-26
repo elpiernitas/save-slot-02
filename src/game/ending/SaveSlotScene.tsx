@@ -15,8 +15,8 @@ import './ending.css';
 
 const ITEMS: readonly MenuItem[] = [
   { id: 'cards', label: 'CITY CARDS' },
-  { id: 'settings', label: 'SETTINGS' },
-  { id: 'title', label: 'RETURN TO TITLE' },
+  { id: 'settings', label: 'AJUSTES' },
+  { id: 'title', label: 'VOLVER AL TÍTULO' },
 ];
 
 /**
@@ -49,7 +49,7 @@ export function SaveSlotScene(_: SceneProps) {
       <section className="save-slot__card" aria-label="SAVE SLOT 02">
         <header className="save-slot__head">
           <span>SAVE SLOT 02</span>
-          <span className="save-slot__ok">STATUS — OK</span>
+          <span className="save-slot__ok">ESTADO — OK</span>
         </header>
         <dl className="save-slot__rows">
           {rows.map((row) => (

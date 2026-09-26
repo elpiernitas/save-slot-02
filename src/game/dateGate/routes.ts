@@ -13,49 +13,50 @@ import {
 import { getIsoWeekday, parseDateKey } from '../../lib/time';
 import type { DateKey } from '../../types/common';
 
-const WEEKDAYS = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+const WEEKDAYS = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+const WEEKDAYS_SHORT = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
 const MONTHS = [
-  'JANUARY',
-  'FEBRUARY',
-  'MARCH',
-  'APRIL',
-  'MAY',
-  'JUNE',
-  'JULY',
-  'AUGUST',
-  'SEPTEMBER',
-  'OCTOBER',
-  'NOVEMBER',
-  'DECEMBER',
+  'ENERO',
+  'FEBRERO',
+  'MARZO',
+  'ABRIL',
+  'MAYO',
+  'JUNIO',
+  'JULIO',
+  'AGOSTO',
+  'SEPTIEMBRE',
+  'OCTUBRE',
+  'NOVIEMBRE',
+  'DICIEMBRE',
 ];
 
 const pad = (n: number) => String(n).padStart(2, '0');
-const title = (s: string) => s.charAt(0) + s.slice(1).toLowerCase();
+const lower = (s: string) => s.toLowerCase();
+const cap = (s: string) => s.charAt(0) + lower(s.slice(1));
 
-/** `WED · 30 SEP` */
+/** `MIÉ · 30 SEP` (gate label). */
 export function shortLabel(key: DateKey): string {
   const { day, month } = parseDateKey(key);
-  const weekday = WEEKDAYS[getIsoWeekday(key) - 1]!;
-  return `${weekday.slice(0, 3)} · ${pad(day)} ${MONTHS[month - 1]!.slice(0, 3)}`;
+  return `${WEEKDAYS_SHORT[getIsoWeekday(key) - 1]!} · ${pad(day)} ${MONTHS[month - 1]!.slice(0, 3)}`;
 }
 
-/** `Thursday · 1 October` (confirmation, human-readable). */
+/** `Jueves · 1 de octubre` (confirmation). */
 export function humanLabel(key: DateKey): string {
   const { day, month } = parseDateKey(key);
-  return `${title(WEEKDAYS[getIsoWeekday(key) - 1]!)} · ${day} ${title(MONTHS[month - 1]!)}`;
+  return `${cap(WEEKDAYS[getIsoWeekday(key) - 1]!)} · ${day} de ${lower(MONTHS[month - 1]!)}`;
 }
 
-/** `THURSDAY · 01 OCTOBER` (ending and save slot). */
+/** `JUEVES · 1 DE OCTUBRE` (ending and save slot). */
 export function longLabel(key: DateKey): string {
   const { day, month } = parseDateKey(key);
-  return `${WEEKDAYS[getIsoWeekday(key) - 1]!} · ${pad(day)} ${MONTHS[month - 1]!}`;
+  return `${WEEKDAYS[getIsoWeekday(key) - 1]!} · ${day} DE ${MONTHS[month - 1]!}`;
 }
 
 /** Optional flavour per route; promises no activity. */
 const SUBLABEL: Readonly<Record<DateOptionId, string>> = {
-  'wed-30-sep': 'MIDWEEK ROUTE',
-  'thu-01-oct': 'ALMOST WEEKEND',
-  'sun-04-oct': 'SUNDAY SIDE QUEST',
+  'wed-30-sep': 'MITAD DE SEMANA',
+  'thu-01-oct': 'CASI FINDE',
+  'sun-04-oct': 'MISIÓN DE DOMINGO',
 };
 
 export type GateView =
@@ -91,8 +92,8 @@ export function dateGates(now: Date): GateView[] {
     view: {
       kind: 'mainQuest',
       label: shortLabel(friday.dateKey),
-      sub: friday.label,
-      time: `${pad(hour)}:${pad(minute)} · THEATRE`,
+      sub: DATE_GATE_COPY.mainQuest,
+      time: `${pad(hour)}:${pad(minute)} · TEATRO`,
     },
   });
   return gates.sort((a, b) => a.key.localeCompare(b.key)).map((g) => g.view);
@@ -102,14 +103,15 @@ export const chosenRouteLabel = (id: DateOptionId) => longLabel(getDateOption(id
 
 /** Locked copy (GAME_08_COPY). One human line: Manu's. */
 export const DATE_GATE_COPY = {
-  title: 'SELECT DESTINATION',
+  title: 'ELIGE RUTA',
+  mainQuest: 'MISIÓN PRINCIPAL YA ACTIVA',
   speaker: 'MANU',
   line: 'elige día y yo hago como que todo esto era un plan perfectamente normal.',
-  confirm: 'LOCK THIS ROUTE?',
-  locked: 'ROUTE LOCKED',
-  saving: 'SAVING...',
-  elapsed: 'ROUTE ELAPSED',
-  expired: 'ROUTES EXPIRED',
-  expiredHint: 'ENTER — RETURN TO TITLE',
+  confirm: '¿FIJAR ESTA RUTA?',
+  locked: 'RUTA FIJADA',
+  saving: 'GUARDANDO...',
+  elapsed: 'RUTA CADUCADA',
+  expired: 'RUTAS CADUCADAS',
+  expiredHint: 'ENTER — VOLVER AL TÍTULO',
   expiredLine: 'Las fechas de este guardado ya pasaron. Esta parte toca hablarla fuera del juego.',
 } as const;

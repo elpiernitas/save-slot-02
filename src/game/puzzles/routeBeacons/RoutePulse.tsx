@@ -48,10 +48,10 @@ export function RoutePulse({
       <section
         className="rpg-box route-pulse"
         role="dialog"
-        aria-label="Route calibration"
+        aria-label="Calibración de ruta"
         aria-live="polite"
       >
-        <p className="route-pulse__title">ROUTE CALIBRATION</p>
+        <p className="route-pulse__title">CALIBRACIÓN DE RUTA</p>
         <ol className="route-pulse__row">
           {sequence.map((symbol, i) => (
             <li key={symbol} className="route-pulse__slot" data-lit={i < lit || undefined}>
@@ -67,7 +67,7 @@ export function RoutePulse({
               <kbd>ENTER</kbd> OK
             </>
           ) : (
-            'RECEIVING…'
+            'RECIBIENDO…'
           )}
         </p>
       </section>

@@ -58,6 +58,8 @@ Verificado en local (Chromium 1920/1440/1366, build de producción con
 - [x] save corrupto → backup + partida nueva; v1 → v2; sin localStorage → juega
 - [x] móvil → pantalla INCOMPATIBLE DISPLAY
 - [x] `noindex` (meta + `X-Robots-Tag`) y `robots.txt` presentes
+- [x] filtro de idioma: 0 textos en inglés visibles en el recorrido completo
+      (D-077)
 
 Pendiente fuera del alcance de Claude (requiere a Manu):
 - [ ] CI verde en el commit RC (se comprueba tras el push)

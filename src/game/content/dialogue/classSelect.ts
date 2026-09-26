@@ -19,7 +19,7 @@ export const CLASS_SELECT_INTRO: DialogueScript = {
       type: 'line',
       speaker: 'system',
       effects: [{ kind: 'setFlag', flag: CLASS_INTRO_SEEN_FLAG, value: true }],
-      pages: ['CLASS DATA MISSING.', 'PLAYER INPUT REQUIRED.'],
+      pages: ['FALTAN DATOS DE CLASE.', 'SE NECESITA LA ENTRADA DEL JUGADOR.'],
       next: 'narration',
     },
     narration: {
@@ -34,7 +34,7 @@ export const CLASS_SELECT_INTRO: DialogueScript = {
       id: 'again',
       type: 'line',
       speaker: 'system',
-      pages: ['PLAYER INPUT STILL REQUIRED.'],
+      pages: ['SIGUE FALTANDO LA ENTRADA DEL JUGADOR.'],
     },
   },
 };
@@ -61,7 +61,7 @@ export const CLASS_ASSIGNED: DialogueScript = {
       id: 'warrior',
       type: 'line',
       speaker: 'system',
-      pages: ['CLASS ASSIGNED: GUERRERO.'],
+      pages: ['CLASE ASIGNADA: GUERRERO.'],
       next: 'warriorNote',
     },
     warriorNote: {
@@ -74,7 +74,7 @@ export const CLASS_ASSIGNED: DialogueScript = {
       id: 'tank',
       type: 'line',
       speaker: 'system',
-      pages: ['CLASS ASSIGNED: TANQUE.'],
+      pages: ['CLASE ASIGNADA: TANQUE.'],
       next: 'tankNote',
     },
     tankNote: {
@@ -87,7 +87,7 @@ export const CLASS_ASSIGNED: DialogueScript = {
       id: 'healer',
       type: 'line',
       speaker: 'system',
-      pages: ['CLASS ASSIGNED: CURADOR.'],
+      pages: ['CLASE ASIGNADA: CURADOR.'],
       next: 'healerNote',
     },
     healerNote: {
@@ -102,7 +102,7 @@ export const CLASS_ASSIGNED: DialogueScript = {
       id: 'loading',
       type: 'line',
       speaker: 'system',
-      pages: ['LOADING WORLD...'],
+      pages: ['CARGANDO MUNDO...'],
     },
   },
 };

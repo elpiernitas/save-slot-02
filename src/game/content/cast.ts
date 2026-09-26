@@ -11,5 +11,5 @@ export const CAST: readonly Speaker[] = [
     defaultPortrait: 'archivist',
     voice: 'archivist',
   },
-  { id: 'system', displayName: 'SYSTEM', voice: 'system', tone: 'system' },
+  { id: 'system', displayName: 'SISTEMA', voice: 'system', tone: 'system' },
 ];

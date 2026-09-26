@@ -13,10 +13,10 @@ import '../terminal.css';
 import './SystemCheckScene.css';
 
 const CHECKS = [
-  { label: 'DISPLAY', value: 'OK' },
-  { label: 'INPUT', value: 'KEYBOARD' },
-  { label: 'AUDIO', value: 'STANDBY' },
-  { label: 'SAVE DATA', value: 'FOUND' },
+  { label: 'PANTALLA', value: 'OK' },
+  { label: 'ENTRADA', value: 'TECLADO' },
+  { label: 'AUDIO', value: 'EN ESPERA' },
+  { label: 'PARTIDA GUARDADA', value: 'ENCONTRADA' },
 ] as const;
 
 type Prompt = 'offer' | 'denied';
@@ -52,13 +52,14 @@ export function SystemCheckScene(_: SceneProps) {
 
   const items: MenuItem[] =
     !fullscreen.supported || fullscreen.active
-      ? [{ id: 'continue', label: '[ CONTINUE ]' }]
+      ? [{ id: 'continue', label: '[ CONTINUAR ]' }]
       : [
           {
             id: 'fullscreen',
-            label: prompt === 'denied' ? '[ RETRY FULLSCREEN ]' : '[ ENTER FULLSCREEN ]',
+            label:
+              prompt === 'denied' ? '[ REINTENTAR PANTALLA COMPLETA ]' : '[ PANTALLA COMPLETA ]',
           },
-          { id: 'window', label: '[ CONTINUE IN WINDOW ]' },
+          { id: 'window', label: '[ CONTINUAR EN VENTANA ]' },
         ];
 
   const menu = useMenu({
@@ -72,7 +73,7 @@ export function SystemCheckScene(_: SceneProps) {
 
   return (
     <div className="scene terminal system-check" onClick={done ? undefined : revealAll}>
-      <p className="terminal__heading">SYSTEM CHECK...</p>
+      <p className="terminal__heading">COMPROBACIÓN DEL SISTEMA...</p>
       <div className="terminal__log">
         {CHECKS.slice(0, shown).map((check) => (
           <LeaderLine key={check.label} label={check.label} value={check.value} tone="system" />
@@ -83,21 +84,21 @@ export function SystemCheckScene(_: SceneProps) {
         <div className="system-check__prompt">
           {!fullscreen.supported ? (
             <p className="terminal__line tone-dim">
-              FULLSCREEN NOT AVAILABLE IN THIS BROWSER. THE QUEST CONTINUES IN WINDOW.
+              PANTALLA COMPLETA NO DISPONIBLE EN ESTE NAVEGADOR. LA MISIÓN SIGUE EN VENTANA.
             </p>
           ) : fullscreen.active ? (
-            <p className="terminal__line tone-system">FULLSCREEN MODE ACTIVE.</p>
+            <p className="terminal__line tone-system">PANTALLA COMPLETA ACTIVA.</p>
           ) : prompt === 'denied' ? (
             <p className="terminal__line tone-danger">
-              FULLSCREEN REQUEST DENIED. YOU CAN RETRY OR CONTINUE IN WINDOW.
+              EL NAVEGADOR HA DENEGADO LA PANTALLA COMPLETA. PUEDES REINTENTAR O SEGUIR EN VENTANA.
             </p>
           ) : (
             <p className="terminal__line">
-              FULLSCREEN MODE RECOMMENDED<span className="blink">_</span>
+              SE RECOMIENDA PANTALLA COMPLETA<span className="blink">_</span>
             </p>
           )}
           <Menu
-            label="Start options"
+            label="Opciones de inicio"
             items={items}
             selected={menu.selected}
             onHover={menu.select}
@@ -109,10 +110,10 @@ export function SystemCheckScene(_: SceneProps) {
 
       <div className="terminal__footer key-hints">
         <span>
-          <kbd>ENTER</kbd>SELECT
+          <kbd>ENTER</kbd>ELEGIR
         </span>
         <span>
-          <kbd>ESC</kbd>LEAVE FULLSCREEN ANYTIME
+          <kbd>ESC</kbd>SALIR DE PANTALLA COMPLETA
         </span>
       </div>
     </div>

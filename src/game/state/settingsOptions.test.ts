@@ -9,9 +9,9 @@ describe('settings options', () => {
   });
 
   it('maps MOTION labels to the reducedMotion setting', () => {
-    expect(optionLabel(MOTION_OPTIONS, 'system')).toBe('SYSTEM');
-    expect(optionLabel(MOTION_OPTIONS, 'off')).toBe('ON'); // motion on = not reduced
-    expect(optionLabel(MOTION_OPTIONS, 'on')).toBe('OFF'); // motion off = reduced
+    expect(optionLabel(MOTION_OPTIONS, 'system')).toBe('SISTEMA');
+    expect(optionLabel(MOTION_OPTIONS, 'off')).toBe('SÍ'); // motion on = not reduced
+    expect(optionLabel(MOTION_OPTIONS, 'on')).toBe('NO'); // motion off = reduced
     expect(cycleOption(MOTION_OPTIONS, 'system', 1)).toBe('off');
   });
 

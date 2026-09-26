@@ -52,18 +52,18 @@ describe('GAME-08 gates', () => {
 
   it('four gates in calendar order, Friday once and never selectable', () => {
     expect(gates.map((g) => g.label)).toEqual([
-      'WED · 30 SEP',
-      'THU · 01 OCT',
-      'FRI · 02 OCT',
-      'SUN · 04 OCT',
+      'MIÉ · 30 SEP',
+      'JUE · 01 OCT',
+      'VIE · 02 OCT',
+      'DOM · 04 OCT',
     ]);
     const friday = gates.filter((g) => g.kind === 'mainQuest');
     expect(friday).toEqual([
       {
         kind: 'mainQuest',
-        label: 'FRI · 02 OCT',
-        sub: 'MAIN QUEST ALREADY ACTIVE',
-        time: '18:30 · THEATRE',
+        label: 'VIE · 02 OCT',
+        sub: 'MISIÓN PRINCIPAL YA ACTIVA',
+        time: '18:30 · TEATRO',
       },
     ]);
     expect(MAIN_QUEST_ALREADY_ACTIVE.selectable).toBe(false);
@@ -80,15 +80,23 @@ describe('GAME-08 gates', () => {
   });
 
   it('human-readable labels', () => {
-    expect(humanLabel('2026-10-01')).toBe('Thursday · 1 October');
-    expect(chosenRouteLabel('wed-30-sep')).toBe('WEDNESDAY · 30 SEPTEMBER');
-    expect(chosenRouteLabel('thu-01-oct')).toBe('THURSDAY · 01 OCTOBER');
-    expect(chosenRouteLabel('sun-04-oct')).toBe('SUNDAY · 04 OCTOBER');
+    expect(humanLabel('2026-10-01')).toBe('Jueves · 1 de octubre');
+    expect(chosenRouteLabel('wed-30-sep')).toBe('MIÉRCOLES · 30 DE SEPTIEMBRE');
+    expect(chosenRouteLabel('thu-01-oct')).toBe('JUEVES · 1 DE OCTUBRE');
+    expect(chosenRouteLabel('sun-04-oct')).toBe('DOMINGO · 4 DE OCTUBRE');
   });
 
   it('copy stays restrained', () => {
     const text = Object.values(DATE_GATE_COPY).join(' ').toLowerCase();
-    for (const bad of ['date with me', 'love', 'forever', 'destino', 'soulmate']) {
+    for (const bad of [
+      'date with me',
+      'love',
+      'forever',
+      'destino',
+      'soulmate',
+      'amor',
+      'cita conmigo',
+    ]) {
       expect(text).not.toContain(bad);
     }
   });

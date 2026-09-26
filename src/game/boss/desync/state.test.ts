@@ -54,7 +54,7 @@ describe('DESYNC PROCESS (pure)', () => {
     expect([s.phase, s.integrity, s.banner?.text, s.status]).toEqual([
       'checksum',
       3,
-      'CHECKSUM MISMATCH',
+      'EL CHECKSUM NO COINCIDE',
       'playing',
     ]);
     expect(currentHazard(s)).toBeNull();

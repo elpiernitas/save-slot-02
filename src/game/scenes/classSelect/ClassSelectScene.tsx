@@ -62,7 +62,7 @@ export function ClassSelectScene(_: SceneProps) {
 
   return (
     <div className="scene class-select" data-phase={state.phase}>
-      <p className="class-select__label">PLAYER 1 // CLASS SETUP</p>
+      <p className="class-select__label">PLAYER 1 // ELECCIÓN DE CLASE</p>
 
       {showCards && (
         <>
@@ -94,13 +94,13 @@ export function ClassSelectScene(_: SceneProps) {
             <footer className="class-select__hints key-hints">
               <span>
                 <kbd>← →</kbd>
-                <kbd>A D</kbd>CHOOSE
+                <kbd>A D</kbd>CAMBIAR
               </span>
               <span>
-                <kbd>ENTER</kbd>SELECT
+                <kbd>ENTER</kbd>ELEGIR
               </span>
               <span>
-                <kbd>ESC</kbd>TITLE
+                <kbd>ESC</kbd>TÍTULO
               </span>
             </footer>
           )}
@@ -213,7 +213,7 @@ function ConfirmClass({
   return (
     <div className="class-confirm">
       <section className="rpg-box class-confirm__box" data-accent={def.accent} role="dialog">
-        <p className="class-confirm__system">ASSIGN CLASS:</p>
+        <p className="class-confirm__system">ASIGNAR CLASE:</p>
         <p className="class-confirm__name">{def.displayName}</p>
         <p className="class-confirm__question">¿CONFIRMAR?</p>
         <Menu

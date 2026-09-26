@@ -2,11 +2,19 @@ import { SPRITES, SPRITE_URLS } from '../../world/art/assets';
 import type { CardArt, CardDefinition } from '../types';
 
 const KIND_LABEL = {
-  place: 'PLACE',
-  object: 'OBJECT',
-  npc: 'NPC',
-  event: 'EVENT',
-  system: 'SYSTEM',
+  place: 'LUGAR',
+  object: 'OBJETO',
+  npc: 'PERSONAJE',
+  event: 'EVENTO',
+  system: 'SISTEMA',
+};
+
+const RARITY_LABEL = {
+  common: 'COMÚN',
+  uncommon: 'POCO COMÚN',
+  rare: 'RARA',
+  holo: 'HOLO',
+  secret: 'SECRETA',
 };
 
 /** CSS for showing one rectangle of a sprite sheet, scaled to the element. */
@@ -51,8 +59,8 @@ export function CardFace({ card, size = 'large', isNew = false }: CardFaceProps)
       <div className="city-card__art" style={style} data-placeholder={!style || undefined} />
       <p className="city-card__name">{card.name}</p>
       {size === 'large' && <p className="city-card__flavor">“{card.flavorText}”</p>}
-      {size === 'large' && <p className="city-card__rarity">{card.rarity.toUpperCase()}</p>}
-      {isNew && <span className="city-card__new">NEW</span>}
+      {size === 'large' && <p className="city-card__rarity">{RARITY_LABEL[card.rarity]}</p>}
+      {isNew && <span className="city-card__new">NUEVA</span>}
     </article>
   );
 }
