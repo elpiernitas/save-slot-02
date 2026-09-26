@@ -91,6 +91,8 @@ export interface WorldMap {
   background: string;
   /** Optional layer drawn over every sprite (near-camera foliage). */
   foreground?: string;
+  /** PLAYER 1 sprite for this map (defaults to `player`, CHAR-001). */
+  playerSprite?: string;
   /** Background pedestrians: pure decoration, no collision, no dialogue. */
   walkers?: readonly Walker[];
   widthTiles: number;

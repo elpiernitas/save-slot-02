@@ -1,0 +1,42 @@
+[
+  {
+    "id": "occLamp",
+    "x": 181,
+    "y": 318
+  },
+  {
+    "id": "occBoard",
+    "x": 95,
+    "y": 292
+  },
+  {
+    "id": "occBollardWest",
+    "x": 369,
+    "y": 332
+  },
+  {
+    "id": "occBollardMid",
+    "x": 531,
+    "y": 350
+  },
+  {
+    "id": "occBollardEast",
+    "x": 847,
+    "y": 355
+  },
+  {
+    "id": "occGullWest",
+    "x": 158,
+    "y": 304
+  },
+  {
+    "id": "occGullEast",
+    "x": 746,
+    "y": 350
+  },
+  {
+    "id": "occBin",
+    "x": 620,
+    "y": 352
+  }
+]

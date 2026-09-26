@@ -84,10 +84,21 @@ export function createWorldRenderer(
       list.push({
         baseY: y,
         draw: () => {
-          // Contact shadow: soft pixel ellipse under the feet.
+          // Contact shadow: soft pixel ellipse under the feet, sized to the sprite.
+          const k = (SPRITES[id]?.frameWidth ?? 40) / 40;
           ctx.fillStyle = 'rgba(40, 26, 50, 0.3)';
-          ctx.fillRect(Math.round(x) - 8, Math.round(y) - 1, 16, 2);
-          ctx.fillRect(Math.round(x) - 6, Math.round(y) - 2, 12, 4);
+          ctx.fillRect(
+            Math.round(x - 8 * k),
+            Math.round(y - k),
+            Math.round(16 * k),
+            Math.round(2 * k),
+          );
+          ctx.fillRect(
+            Math.round(x - 6 * k),
+            Math.round(y - 2 * k),
+            Math.round(12 * k),
+            Math.round(4 * k),
+          );
           blit(id, x, y, frame, CHARACTER_ROWS[facing]);
         },
       });
@@ -96,7 +107,7 @@ export function createWorldRenderer(
       const w = walkerPose(walker, still ? 0 : snap.timeMs);
       character(walker.sprite, w.x, walker.y, w.facing, still ? 0 : w.frame);
     }
-    character('player', snap.pos.x, snap.pos.y, snap.facing, snap.walkFrame);
+    character(map.playerSprite ?? 'player', snap.pos.x, snap.pos.y, snap.facing, snap.walkFrame);
 
     list.sort((a, b) => a.baseY - b.baseY);
     for (const d of list) d.draw();

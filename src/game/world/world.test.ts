@@ -259,11 +259,25 @@ describe('La Muralla map', () => {
     for (const banned of ['wall', 'gate']) expect(ids).not.toContain(banned);
   });
 
-  it('draws no decorative sprites over the painted ENV-001 background', () => {
+  it('only re-draws ENV-001 pixels (occluders) over the painted background', () => {
     expect(SPRITES[map.background]!.status).toBe('final');
-    expect(map.props).toEqual([]);
+    for (const prop of map.props) {
+      expect(prop.sprite, prop.id).toMatch(/^occ/);
+      expect(SPRITES[prop.sprite]!.status, prop.id).toBe('final');
+    }
     expect(map.npcs).toEqual([]);
     expect(map.walkers ?? []).toEqual([]);
+  });
+
+  it('shows PLAYER 1 at the reference proportion: CHAR-001 at exact ×2', () => {
+    const base = SPRITES.player!;
+    const large = SPRITES[map.playerSprite!]!;
+    expect(map.playerSprite).toBe('playerLarge');
+    expect([large.frameWidth, large.frameHeight]).toEqual([
+      base.frameWidth * 2,
+      base.frameHeight * 2,
+    ]);
+    expect([large.frames, large.rows]).toEqual([base.frames, base.rows]);
   });
 
   it('the bar door is faced from the sidewalk next to the terrace', () => {
@@ -274,14 +288,16 @@ describe('La Muralla map', () => {
   });
 
   it('no walk-through: every prop and NPC stands on a collider (single PLAYER 1)', () => {
-    // A 1×1 probe at the sprite's ground anchor must be solid, so PLAYER 1
-    // can never stand on (and draw over) a table, bench, bike or person.
-    const standing = [...map.props, ...map.npcs];
-    for (const s of standing) {
-      expect(world.isBlocked({ x: s.x - 0.5, y: s.y - 1.5, w: 1, h: 1 }), s.id).toBe(true);
+    // A 1×1 probe at the middle of each sprite's ground line must be solid,
+    // so PLAYER 1 can never stand on (and draw over) what it depicts.
+    for (const s of [...map.props, ...map.npcs]) {
+      const info = SPRITES[s.sprite]!;
+      const midX = s.x - info.anchorX + info.frameWidth / 2;
+      expect(world.isBlocked({ x: midX - 0.5, y: s.y - 1.5, w: 1, h: 1 }), s.id).toBe(true);
     }
-    // PLAYER 1 is only ever the dynamic `player` sprite.
-    expect([...map.props, ...map.npcs].some((s) => s.sprite === 'player')).toBe(false);
+    // PLAYER 1 is only ever the dynamic player sprite.
+    const playerArt = ['player', 'playerLarge'];
+    expect([...map.props, ...map.npcs].some((s) => playerArt.includes(s.sprite))).toBe(false);
   });
 
   it('background walkers pace back and forth inside their lane', () => {

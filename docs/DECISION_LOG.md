@@ -772,3 +772,25 @@ comensales, camarera, peatones, árbol, banco, bici, gaviotas, farola, bolardos.
   el arte (mesa libre, pegatina del bolardo).
 
 Capturas: `docs/art/review/env-001/`.
+
+### D-066 · 2026-09-26 · GAME-04R: reconstrucción fiel de la referencia de ChatGPT
+
+Manu fija que las imágenes de ChatGPT son la especificación visual. Plan en el
+PR (comentario 5847081795), ejecutado así:
+
+- **Fondo = ENV-001 píxel a píxel.** Terraza, camarera, banco con lector, bici
+  y árbol quedan pintados; las colisiones mantienen a PLAYER 1 en la acera,
+  siempre delante de ellos, así que el orden fondo → Luis es correcto.
+- **Oclusores** (`tools/art/occluders.mjs`): farola, pizarra, 3 bolardos,
+  papelera y 2 gaviotas, recortados de ENV-001 con su contorno, colocados
+  donde se cortaron y ordenados por Y. Tapan a Luis cuando pasa detrás; si no,
+  son idénticos al fondo. Sin arte nuevo.
+- **Escala:** PLAYER 1 usa `playerLarge` = CHAR-001 ×2 exacto
+  (`tools/art/scale-player.mjs`), ~108 px como los adultos de la referencia.
+  CHAR-001 original intacto. Cambio mínimo: `WorldMap.playerSprite` y sombra
+  de contacto proporcional al sprite.
+- Tests de guarda: sin atravesar (cada sprite sobre su collider), PLAYER 1
+  único, oclusores solo con píxeles de ENV-001.
+
+Pendiente de ChatGPT: franja central y rótulo de ENV-001; CHAR-001 nativo a
+80×120 si se quiere más detalle que el ×2; textos de "mesa libre"/pegatina.

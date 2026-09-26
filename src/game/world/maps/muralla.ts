@@ -1,20 +1,24 @@
 import type { Interactable, Rect, WorldMap } from '../types';
 import LAYOUT from './muralla.layout.json';
+import OCCLUDERS from './muralla.occluders.json';
 
 /**
  * GAME-04 vertical slice: the street in front of La Muralla — the bar/café,
  * NOT a defensive wall — on an ordinary late afternoon in Cimavilla, Gijón.
  *
- * The background is ENV-001 (ChatGPT, final): façade, terrace, diners, the
- * waitress, pedestrians, tree, bench, bike, gulls, lamps and light are all
- * painted into it. The map therefore draws no decorative sprites; it only
- * describes where PLAYER 1 can walk and what can be looked at, measured on
- * ENV-001 in world pixels (1:1 with the image).
+ * The background is ENV-001 (ChatGPT, final) used pixel for pixel: façade,
+ * terrace (diners, umbrellas, waitress), bench, bike, tree and pedestrians
+ * are painted in. Colliders keep PLAYER 1 on the sidewalk, so he is always
+ * in front of the terrace and the bench and never walks behind them.
  *
- * The art is a front view with little free paving: PLAYER 1 walks the
- * sidewalk strip in front of the terrace and the corner by the tree. Things
- * he cannot walk up to (door, shop windows, waitress) are faced from the
- * nearest free ground.
+ * Sidewalk furniture he CAN walk behind (lamp, board, bollards, bin, gulls)
+ * is re-drawn as occluder sprites cut from the same ENV-001 pixels
+ * (tools/art/occluders.mjs), placed where they were cut and depth-sorted.
+ * PLAYER 1 uses `playerLarge` (CHAR-001 at exact ×2) to match the adults
+ * painted in the reference (~100–110 px).
+ *
+ * Things he cannot walk up to (door, shop windows, waitress) are faced from
+ * the nearest free ground. Coordinates: world px, 1:1 with ENV-001.
  *
  * `muralla.layout.json` now only feeds the placeholder generator (tools/art).
  */
@@ -75,6 +79,7 @@ export const MURALLA_MAP: WorldMap = {
   displayName: 'LA MURALLA',
   timeOfDay: 'afternoon',
   background: 'background',
+  playerSprite: 'playerLarge',
   // FG-001 is pending; the old placeholder foreground would duplicate the
   // painted foliage, so no foreground layer is drawn until it arrives.
   widthTiles: MURALLA_W,
@@ -109,7 +114,7 @@ export const MURALLA_MAP: WorldMap = {
     box(748, 342, 780, 356), // gull (east)
     box(850, 340, 870, 356), // bollard
   ],
-  props: [],
+  props: OCCLUDERS.map((o) => ({ id: o.id, sprite: o.id, x: o.x, y: o.y })),
   npcs: [],
   interactables,
   zones: [
