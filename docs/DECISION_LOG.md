@@ -753,3 +753,22 @@ layering, cámara, recortes, importación, validación, tests, capturas de QA).
 - Siguiente bloqueante: ENV-001 (y FG-001, la capa de foreground). Al llegar:
   integrar sin rediseñar y devolver 4 capturas (sin HUD, Luis ante el café,
   interacción en terraza, 1366×768). Sin GAME-05 ni merge hasta cerrar GAME-04R.
+
+### D-065 · 2026-09-26 · GAME-04R: ENV-001 integrado con ambiente horneado
+
+`background.png` = ENV-001 de ChatGPT (960×400, opaco), importado sin cambios
+(0 píxeles distintos del entregado) y marcado `final`. Por decisión de ChatGPT
+(PR, comentario 5846820753) el ambiente decorativo va pintado en el fondo:
+comensales, camarera, peatones, árbol, banco, bici, gaviotas, farola, bolardos.
+
+- El mapa ya no dibuja props, NPCs ni peatones (duplicarían lo pintado). El
+  foreground placeholder se desactiva hasta que llegue FG-001.
+- Colisiones y hotspots medidos sobre ENV-001 (coordenadas 1:1). El arte deja
+  poco suelo libre: PLAYER 1 recorre la acera ante la terraza y la esquina del
+  árbol; puerta, escaparates y camarera se miran desde el suelo libre más
+  cercano.
+- Pendiente de ChatGPT: escala de Luis frente a las figuras pintadas (~½),
+  artefactos en ENV-001 (franja central, rótulo) y textos que ya no casan con
+  el arte (mesa libre, pegatina del bolardo).
+
+Capturas: `docs/art/review/env-001/`.

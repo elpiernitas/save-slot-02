@@ -4,7 +4,7 @@
   "sprites": {
     "background": {
       "file": "background.png",
-      "status": "placeholder",
+      "status": "final",
       "width": 960,
       "height": 400,
       "frameWidth": 960,

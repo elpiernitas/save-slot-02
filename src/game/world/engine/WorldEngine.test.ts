@@ -24,7 +24,7 @@ function fakeScheduler() {
 
 const spawnAt = (id: string): Spawn => MURALLA_MAP.spawns.find((s) => s.id === id)!;
 /** Just below the waitress, facing her. */
-const NEAR_WAITRESS: Spawn = { id: 'test', x: 556, y: 282, facing: 'up' };
+const NEAR_WAITRESS: Spawn = { id: 'test', x: 497, y: 306, facing: 'up' };
 
 function setup(options: { spawn?: Spawn; held?: Facing | null; active?: boolean } = {}) {
   const input = { held: options.held ?? null, active: options.active ?? true };
