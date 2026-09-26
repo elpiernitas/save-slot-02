@@ -1,0 +1,4 @@
+decoded_bytes=7827
+sha256=bd17ab31e65330150e626abcdba92b7d7e61f59a46defc6e8c5cdc77a23a6ca4
+git_blob_sha1=4bd23fc2000c8b2108b44f7feb1a17f8458adceb
+format=PNG 120x240 indexed+transparency
