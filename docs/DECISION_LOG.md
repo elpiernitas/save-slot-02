@@ -794,3 +794,16 @@ PR (comentario 5847081795), ejecutado así:
 
 Pendiente de ChatGPT: franja central y rótulo de ENV-001; CHAR-001 nativo a
 80×120 si se quiere más detalle que el ×2; textos de "mesa libre"/pegatina.
+
+### D-067 · 2026-09-26 · GAME-04R: FIXES de ChatGPT — textos y HOLD visual
+
+ChatGPT acepta la estrategia de reconstrucción (D-066) y pide FIXES
+(comentario 5847187352):
+
+- Textos corregidos a lo visible en ENV-001: la terraza está llena (mesa y
+  respuesta de la camarera), el bolardo es de hierro oscuro sin pegatina.
+- `playerLarge` (×2) es solo proxy de integración, no arte final. ENV-001 es
+  provisional (franja central, rótulo).
+- HOLD visual hasta recibir ENV-001 corregido (misma composición 960×400) y
+  CHAR-001 nativo 240×480 con frames de 80×120. Sin mover composición ni
+  añadir props mientras tanto. Sin GAME-05, sin merge.

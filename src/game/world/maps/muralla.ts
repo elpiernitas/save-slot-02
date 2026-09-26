@@ -53,7 +53,7 @@ const interactables: Interactable[] = [
   },
   {
     id: 'table',
-    label: 'mesa libre',
+    label: 'terraza',
     script: 'muralla.table',
     rect: box(300, TERRACE_FRONT - 6, 478, TERRACE_FRONT),
   },

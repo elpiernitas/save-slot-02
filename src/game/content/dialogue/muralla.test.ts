@@ -73,11 +73,11 @@ describe('La Muralla dialogues', () => {
     expect(read(MURALLA_SCRIPTS['muralla.bollard']!, fresh()).text[1]).toMatch(/No pasa nada más/);
   });
 
-  it('the empty table remembers being checked', () => {
+  it('the full terrace remembers being checked', () => {
     const first = read(MURALLA_SCRIPTS['muralla.table']!, fresh());
     expect(first.save.flags[MURALLA_FLAGS.tableSeen]).toBe(true);
     expect(read(MURALLA_SCRIPTS['muralla.table']!, first.save).text).toEqual([
-      'Sigue libre. Empieza a dar un poco de miedo.',
+      'Sigue llena. Nadie tiene prisa por irse.',
     ]);
   });
 

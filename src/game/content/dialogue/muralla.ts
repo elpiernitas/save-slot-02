@@ -78,12 +78,12 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
       first: line(
         'first',
         [
-          'Una mesa libre en una terraza, a esta hora.',
-          'Esto no pasa.[pause] Algo va [em]muy[/em] mal en el mundo.',
+          'La terraza está llena. Ni una silla libre.',
+          'Todo el mundo ha tenido la misma idea que tú.[pause] Antes.',
         ],
         { effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.tableSeen, value: true }] },
       ),
-      again: line('again', ['Sigue libre.[pause] Empieza a dar un poco de miedo.']),
+      again: line('again', ['Sigue llena.[pause] Nadie tiene prisa por irse.']),
     },
   },
 
@@ -94,7 +94,7 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
     nodes: {
       intro: {
         ...line('intro', [
-          'Un bolardo algo torcido, con una pegatina a medio arrancar. Muy convencido de su papel.',
+          'Un bolardo de hierro oscuro, bien plantado en la acera. Muy convencido de su papel.',
         ]),
         next: 'route',
       } as DialogueScript['nodes'][string],
@@ -115,7 +115,7 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
         'Te apoyas en él.[pause] Aguantáis los dos sin moveros. Hay respeto mutuo.',
       ]),
       healer: line('healer', [
-        'Tiene un arañazo en la pintura. Le quitas el polvo con la manga.',
+        'Le quitas el polvo con la manga.',
         '[pause]Nadie te lo había pedido.',
       ]),
       none: line('none', ['Lo miras. Te mira.[pause] No pasa nada más.']),
@@ -152,9 +152,13 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
         ['Marchando.[pause] Bueno, cuando la cafetera vuelva de su descanso, que va por libre.'],
         { speaker: 'waitress' },
       ),
-      table: line('table', ['Hay una libre ahí delante.[pause] No me preguntes cómo.'], {
-        speaker: 'waitress',
-      }),
+      table: line(
+        'table',
+        ['Ahora mismo, todo lleno.[pause] Si alguien se levanta, eres el primero.'],
+        {
+          speaker: 'waitress',
+        },
+      ),
       looking: line('looking', ['Mirar es gratis.[pause] Sentarse ya es otra conversación.'], {
         speaker: 'waitress',
       }),
