@@ -990,3 +990,17 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
   inglés; el texto final es el del código.
 - Filtro de idioma en la QA: el recorrido completo recoge cada nodo de texto
   visible y falla si aparece vocabulario en inglés fuera de la lista anterior.
+
+### D-078 · 2026-09-26 · RC-FIX-01: auditoría de idioma y glifo C
+
+- Test estático `src/game/content/visibleCopy.test.ts`: recorre todo `src`
+  (menos tests y la demo de desarrollo) y falla si un literal o texto JSX
+  contiene vocabulario de UI en inglés fuera de las etiquetas aceptadas.
+  Se comprobó que detecta una regresión inyectada.
+- `PANTALLA NO COMPATIBLE` (redacción del director). La etiqueta del viernes
+  vuelve a salir de `calendar.ts` (`MISIÓN PRINCIPAL YA ACTIVA`), una sola
+  fuente. Títulos internos de puzzles también en castellano.
+- Glifo C: a tamaño de etiqueta pequeña (1366) la C de Pixelify se distingue
+  de la O (`docs/art/review/rc-fix-01/glyph-c-pixelify-vs-mono-1366.png`). Se
+  mantiene Pixelify; la confusión solo aparece en tamaños medianos o en
+  negrita y no se cambia la dirección tipográfica.

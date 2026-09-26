@@ -35,7 +35,7 @@ function IncompatibleDisplay() {
     <div className="display-gate" role="alert">
       <div className="display-gate__panel">
         <p className="display-gate__heading">COMPROBACIÓN DEL SISTEMA</p>
-        <p className="display-gate__error">PANTALLA INCOMPATIBLE</p>
+        <p className="display-gate__error">PANTALLA NO COMPATIBLE</p>
         <p>ESTA MISIÓN NECESITA UN ORDENADOR.</p>
         <div className="display-gate__list">
           <p className="display-gate__dim">VUELVE CON:</p>

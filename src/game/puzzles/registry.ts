@@ -4,14 +4,14 @@ import type { PuzzleDefinition, PuzzleId } from './types';
 export const PUZZLES = {
   'route.muralla_beacons': {
     id: 'route.muralla_beacons',
-    title: 'ROUTE BEACONS',
+    title: 'BALIZAS DE RUTA',
     kind: 'routeSequence',
     optional: false,
     estimatedSeconds: 90,
   },
   'system.player_sync': {
     id: 'system.player_sync',
-    title: 'SYNC TERMINAL',
+    title: 'TERMINAL DE SINCRONIZACIÓN',
     kind: 'syncGrid',
     optional: false,
     estimatedSeconds: 90,

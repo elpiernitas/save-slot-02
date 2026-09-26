@@ -92,7 +92,7 @@ export function dateGates(now: Date): GateView[] {
     view: {
       kind: 'mainQuest',
       label: shortLabel(friday.dateKey),
-      sub: DATE_GATE_COPY.mainQuest,
+      sub: friday.label,
       time: `${pad(hour)}:${pad(minute)} · TEATRO`,
     },
   });
@@ -104,7 +104,6 @@ export const chosenRouteLabel = (id: DateOptionId) => longLabel(getDateOption(id
 /** Locked copy (GAME_08_COPY). One human line: Manu's. */
 export const DATE_GATE_COPY = {
   title: 'ELIGE RUTA',
-  mainQuest: 'MISIÓN PRINCIPAL YA ACTIVA',
   speaker: 'MANU',
   line: 'elige día y yo hago como que todo esto era un plan perfectamente normal.',
   confirm: '¿FIJAR ESTA RUTA?',

@@ -36,11 +36,11 @@ export const DATE_OPTIONS: readonly DateOption[] = [
 
 /**
  * Friday already has a real plan (theatre at 18:30, maybe a party after).
- * It may appear in-game as "MAIN QUEST ALREADY ACTIVE" but is never selectable.
+ * Shown in-game as "MISIÓN PRINCIPAL YA ACTIVA" (D-077); never selectable.
  */
 export const MAIN_QUEST_ALREADY_ACTIVE = {
   dateKey: '2026-10-02',
-  label: 'MAIN QUEST ALREADY ACTIVE',
+  label: 'MISIÓN PRINCIPAL YA ACTIVA',
   startsAt: { hour: 18, minute: 30 },
   selectable: false,
 } as const;
