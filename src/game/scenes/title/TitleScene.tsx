@@ -38,7 +38,9 @@ export function TitleScene(_: SceneProps) {
         <h1 className="title__name">
           SAVE SLOT <span className="title__number">02</span>
         </h1>
-        <p className="title__tagline">SIDE QUEST: UNIDENTIFIED</p>
+        <p className="title__tagline">
+          {save.timestamps.completedAt ? 'SIDE QUEST: COMPLETE' : 'SIDE QUEST: UNIDENTIFIED'}
+        </p>
       </header>
 
       <nav className="title__menu">

@@ -80,7 +80,7 @@ const TIME_LABEL = { morning: 'MAÑANA', afternoon: 'TARDE', sunset: 'ATARDECER'
  * interactions and zone changes through callbacks.
  */
 export function OverworldScene(_: SceneProps) {
-  const { save, dispatch } = useGame();
+  const { save, dispatch, services } = useGame();
   const router = useContext(InputContext);
   if (!router) throw new Error('OverworldScene needs <InputProvider>');
   const reduced = useReducedMotion();
@@ -190,6 +190,15 @@ export function OverworldScene(_: SceneProps) {
         const { state, outcome } = activateBeacon(beaconsRef.current, step.symbol);
         beaconsRef.current = state;
         setBeacons(state);
+        if (outcome !== 'ignored') {
+          services.audio.playSfx(
+            outcome === 'solved'
+              ? 'puzzleComplete'
+              : outcome === 'rejected'
+                ? 'puzzleWrong'
+                : 'interact',
+          );
+        }
         if (outcome === 'solved') {
           dispatch({ type: 'puzzle/complete', puzzle: BEACONS_ID, attempts: state.attempts });
           openDialogue(ROUTE_SOLVED);

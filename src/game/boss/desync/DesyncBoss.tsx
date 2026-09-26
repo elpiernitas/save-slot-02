@@ -160,7 +160,7 @@ export function DesyncBoss(_: SceneProps) {
     // routes to the reveal and never replays the boss.
     dispatch({ type: 'boss/defeat' });
     markFreshDefeat();
-    services.audio.playSfx('boot');
+    services.audio.playSfx('bossDefeat');
     setStage({ kind: 'terminated' });
   }, [dispatch, services.audio]);
 
@@ -199,9 +199,9 @@ export function DesyncBoss(_: SceneProps) {
             ? walkedRef.current +
               Math.hypot(next.player.x - prev.player.x, next.player.y - prev.player.y)
             : 0;
-        if (next.integrity < prev.integrity) services.audio.playSfx('cancel');
-        if (next.nodes !== prev.nodes) services.audio.playSfx('confirm');
-        if (next.banner && next.banner !== prev.banner) services.audio.playSfx('cursor');
+        if (next.integrity < prev.integrity) services.audio.playSfx('hit');
+        if (next.nodes !== prev.nodes) services.audio.playSfx('bossNode');
+        if (next.banner && next.banner !== prev.banner) services.audio.playSfx('warning');
         stateRef.current = next;
         const h = hudOf(next);
         setHud((cur) => (sameHud(cur, h) ? cur : h));

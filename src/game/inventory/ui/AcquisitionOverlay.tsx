@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { INPUT_PRIORITY } from '../../input/inputRouter';
 import { useInput } from '../../input/useInput';
 import { useGame } from '../../state/useGame';
@@ -19,6 +19,9 @@ export function AcquisitionOverlay({ entries, onDone }: AcquisitionOverlayProps)
   const { services } = useGame();
   const [index, setIndex] = useState(0);
   const entry = entries[index];
+  useEffect(() => {
+    services.audio.playSfx('cardGet');
+  }, [index, services.audio]);
   const next = () => {
     services.audio.playSfx('confirm');
     if (index + 1 < entries.length) setIndex(index + 1);

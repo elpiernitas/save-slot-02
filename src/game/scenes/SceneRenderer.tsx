@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { musicForScene } from '../audio/music';
 import { InputBlocker } from '../input/useInput';
 import { useGame } from '../state/useGame';
 import { useReducedMotion } from '../ui/useReducedMotion';
@@ -16,7 +17,7 @@ import './SceneTransition.css';
  * with reduced motion. State changes only happen in timer callbacks.
  */
 export function SceneRenderer() {
-  const { save } = useGame();
+  const { save, services } = useGame();
   const reduced = useReducedMotion();
   const target = save.progress.sceneId;
   const [shown, setShown] = useState<SceneId>(target);
@@ -41,6 +42,13 @@ export function SceneRenderer() {
     const id = window.setTimeout(() => setRevealing(false), TRANSITION_REVEAL_MS);
     return () => window.clearTimeout(id);
   }, [revealing]);
+
+  // One place decides the music: the scene on screen (GAME_11_SPEC §8).
+  const track = musicForScene(displayed);
+  useEffect(() => {
+    if (track) services.audio.playMusic(track, { fadeMs: 500 });
+    else services.audio.stopMusic({ fadeMs: 300 });
+  }, [track, services.audio]);
 
   const Scene = getSceneDefinition(displayed)?.component ?? PlaceholderScene;
 

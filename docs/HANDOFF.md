@@ -222,7 +222,11 @@ Ejecución autónoma hasta GAME-12 (sin esperar ACCEPT; sin merge ni deploy).
 
 Final y save slot persistente en `src/game/ending/`.
 
+## GAME-10 — recortado (D-074) · GAME-11 — hecho (D-075)
+
+Música y SFX en `src/game/audio/`; pulido de la ruta crítica.
+
 ## Próximo paso exacto
 
-1. GAME-10 (recortable) → GAME-11 → GAME-12.
+1. GAME-12 — QA de producción y release candidate (sin merge ni deploy).
 3. Arte no bloqueante: CHAR-003 (sprite de Manu) y CHAR-004 (retrato).

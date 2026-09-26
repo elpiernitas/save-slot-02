@@ -75,7 +75,7 @@ export function DateGateScene(_: SceneProps) {
       setStage('confirm');
     } else {
       // Friday / elapsed: informative only, nothing to confirm.
-      services.audio.playSfx('cancel');
+      services.audio.playSfx('gateLocked');
     }
   };
 
@@ -86,6 +86,13 @@ export function DateGateScene(_: SceneProps) {
         return;
       }
       if (stage !== 'select') return;
+      if (!anyOpen) {
+        // Nothing left to choose: Enter/Esc leave instead of a dead end.
+        if ((input === 'confirm' || input === 'cancel') && !repeat) {
+          dispatch({ type: 'scene/goTo', scene: 'title' });
+        }
+        return;
+      }
       if (input === 'left') move(-1);
       else if (input === 'right') move(1);
       else if (input === 'confirm' && !repeat) open(index);
@@ -96,7 +103,7 @@ export function DateGateScene(_: SceneProps) {
   const lock = () => {
     if (gate?.kind !== 'route') return;
     dispatch({ type: 'date/choose', option: gate.id });
-    services.audio.playSfx('boot');
+    services.audio.playSfx('save');
     setStage('locked');
   };
 
@@ -139,6 +146,7 @@ export function DateGateScene(_: SceneProps) {
         <div className="date-gate__expired" role="status">
           <p>{DATE_GATE_COPY.expired}</p>
           <p className="date-gate__expired-line">{DATE_GATE_COPY.expiredLine}</p>
+          <p className="date-gate__expired-hint">{DATE_GATE_COPY.expiredHint}</p>
         </div>
       )}
 

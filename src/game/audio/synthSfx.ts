@@ -30,6 +30,54 @@ export const SYNTH_SFX: Readonly<Record<SfxId, readonly SynthNote[]>> = {
     { frequency: 392, duration: 0.16, wave: 'triangle', gain: 0.12 },
   ],
   blip: [{ frequency: 740, duration: 0.02, wave: 'square', gain: 0.03 }],
+  // GAME-11 vocabulary (softer triangle/sine where it repeats often).
+  interact: [{ frequency: 988, duration: 0.04, wave: 'triangle', gain: 0.08 }],
+  cardGet: [
+    { frequency: 784, duration: 0.06, wave: 'triangle', gain: 0.08 },
+    { frequency: 988, duration: 0.06, wave: 'triangle', gain: 0.08 },
+    { frequency: 1319, duration: 0.12, wave: 'triangle', gain: 0.08 },
+  ],
+  puzzleWrong: [
+    { frequency: 330, duration: 0.07, wave: 'triangle', gain: 0.1 },
+    { frequency: 262, duration: 0.1, wave: 'triangle', gain: 0.1 },
+  ],
+  puzzleComplete: [
+    { frequency: 523, duration: 0.07, wave: 'triangle', gain: 0.09 },
+    { frequency: 659, duration: 0.07, wave: 'triangle', gain: 0.09 },
+    { frequency: 784, duration: 0.14, wave: 'triangle', gain: 0.09 },
+  ],
+  warning: [
+    { frequency: 587, duration: 0.05, wave: 'triangle', gain: 0.07 },
+    { frequency: 587, duration: 0.05, wave: 'sine', gain: 0 },
+    { frequency: 587, duration: 0.05, wave: 'triangle', gain: 0.07 },
+  ],
+  hit: [
+    { frequency: 220, duration: 0.05, wave: 'square', gain: 0.06 },
+    { frequency: 147, duration: 0.09, wave: 'triangle', gain: 0.12 },
+  ],
+  bossNode: [
+    { frequency: 659, duration: 0.04, wave: 'triangle', gain: 0.08 },
+    { frequency: 880, duration: 0.06, wave: 'triangle', gain: 0.08 },
+  ],
+  bossDefeat: [
+    { frequency: 392, duration: 0.08, wave: 'triangle', gain: 0.1 },
+    { frequency: 523, duration: 0.08, wave: 'triangle', gain: 0.1 },
+    { frequency: 659, duration: 0.2, wave: 'triangle', gain: 0.1 },
+  ],
+  signalFound: [
+    { frequency: 1047, duration: 0.05, wave: 'sine', gain: 0.1 },
+    { frequency: 1568, duration: 0.18, wave: 'sine', gain: 0.08 },
+  ],
+  save: [
+    { frequency: 523, duration: 0.06, wave: 'sine', gain: 0.1 },
+    { frequency: 784, duration: 0.06, wave: 'sine', gain: 0.1 },
+    { frequency: 1047, duration: 0.14, wave: 'sine', gain: 0.1 },
+  ],
+  gateLocked: [{ frequency: 262, duration: 0.08, wave: 'triangle', gain: 0.08 }],
+  gateOpen: [
+    { frequency: 440, duration: 0.07, wave: 'triangle', gain: 0.09 },
+    { frequency: 659, duration: 0.16, wave: 'triangle', gain: 0.09 },
+  ],
 };
 
 export function sfxDuration(notes: readonly SynthNote[]): number {
@@ -46,6 +94,7 @@ export const VOICE_BLIPS: Readonly<Record<VoiceId, SynthNote>> = {
   archivist: { frequency: 330, duration: 0.035, wave: 'square', gain: 0.035 },
   system: { frequency: 1480, duration: 0.02, wave: 'triangle', gain: 0.05 },
   narrator: { frequency: 520, duration: 0.025, wave: 'triangle', gain: 0.03 },
+  manu: { frequency: 620, duration: 0.026, wave: 'triangle', gain: 0.035 },
 };
 
 export const VOICE_PITCH_CYCLE = [1, 1.06, 0.96, 1.03] as const;

@@ -14,8 +14,8 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | GAME-07 | Boss + aparición PLAYER 2                  | 🟡 Hecho, falta ACCEPT |
 | GAME-08 | Portales y selección de fecha              | 🟡 Hecho (autónomo)    |
 | GAME-09 | Final + save slot                          | 🟡 Hecho (autónomo)    |
-| GAME-10 | Desbloqueos posteriores                    | Pendiente              |
-| GAME-11 | Easter eggs, sonido, animaciones y pulido  | Pendiente              |
+| GAME-10 | Desbloqueos posteriores                    | ✂️ Recortado           |
+| GAME-11 | Easter eggs, sonido, animaciones y pulido  | 🟡 Hecho (autónomo)    |
 | GAME-12 | QA en ordenador + producción Netlify       | Pendiente              |
 
 ## Detalle por fase

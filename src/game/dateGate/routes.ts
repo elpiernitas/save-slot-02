@@ -110,5 +110,6 @@ export const DATE_GATE_COPY = {
   saving: 'SAVING...',
   elapsed: 'ROUTE ELAPSED',
   expired: 'ROUTES EXPIRED',
+  expiredHint: 'ENTER — RETURN TO TITLE',
   expiredLine: 'Las fechas de este guardado ya pasaron. Esta parte toca hablarla fuera del juego.',
 } as const;

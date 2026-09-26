@@ -926,3 +926,32 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
   menú CITY CARDS, SETTINGS, RETURN TO TITLE. No hay reset ni "play again";
   nada en esta pantalla cambia la fecha.
 - Sin hora ni lugar inventados; sin créditos automáticos.
+
+### D-074 · 2026-09-26 · GAME-10: CUT FOR RELEASE
+
+- Post-game recortado. Es la primera fase recortable (RELEASE_CRITICAL_PATH)
+  y añadiría superficie de QA antes del 28 sin tocar la ruta crítica.
+  `TimeGate` y `relativeToChosenDate` siguen disponibles para retomarlo.
+
+### D-075 · 2026-09-26 · GAME-11: pulido P0 de la ruta crítica
+
+- Música procedural original (`src/game/audio/music.ts`): un motivo de cinco
+  grados transformado en cuatro pistas (`system`, `muralla_afternoon`,
+  `desync`, `ending`). Programada por adelantado con el reloj de audio, un
+  nodo de ganancia por pista (fundidos, volumen de música, mute). Nada suena
+  antes del primer gesto. Enrutado central `musicForScene`, aplicado en
+  `SceneRenderer`. Sin pista `puzzle`: los puzzles son overlays del mundo y
+  cambiar de pista al abrir/cerrar sería más ruido que ayuda.
+- SFX nuevos (interact, cardGet, puzzleWrong/Complete, warning, hit, bossNode,
+  bossDefeat, signalFound, save, gateLocked, gateOpen) usados en balizas,
+  cartas, jefe, reveal, date gate y final. Voz `manu` preparada.
+- Título tras completar: `SIDE QUEST: COMPLETE`. `ROUTES EXPIRED` ya no es un
+  callejón: Enter/Esc vuelve al título.
+- Bundle de producción: sin handles de QA (`__desync`, `__reveal`,
+  `__worldEngine`). `AREA NOT GENERATED` solo queda como red de seguridad para
+  ids sin escena (`dungeon`, inalcanzable).
+- Recortado (P1/P2): logros, cameo de Randy, easter eggs, SEAGULL PROTOCOL.
+- Deuda no bloqueante: Luis nativo 80×120 y limpieza de ENV-001 (sin asset);
+  sprite/retrato de Manu (CHAR-003/004); en Pixelify Sans la C mayúscula se
+  confunde con la O a tamaños pequeños (cambiar de fuente sería un cambio de
+  dirección visual, queda para ChatGPT/Manu).

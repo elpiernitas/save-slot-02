@@ -47,7 +47,7 @@ export function EndingScene(_: SceneProps) {
   useEffect(() => {
     if (beat.id === 'complete') {
       dispatch({ type: 'game/complete' });
-      services.audio.playSfx('boot');
+      services.audio.playSfx('save');
     }
     if (beat.id === 'updated') services.audio.playSfx('confirm');
   }, [beat, dispatch, services.audio]);

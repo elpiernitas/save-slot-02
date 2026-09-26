@@ -69,7 +69,7 @@ export function Player2Reveal(_: SceneProps) {
 
   // Save writes happen on reaching a beat, so skipping never skips them.
   useEffect(() => {
-    if (beat.id === 'found') services.audio.playSfx('confirm');
+    if (beat.id === 'found') services.audio.playSfx('signalFound');
     if (beat.id === 'party') {
       services.audio.playSfx('boot');
       dispatch({ type: 'flag/set', flag: STORY_FLAGS.player2Found, value: true });
@@ -129,7 +129,7 @@ export function Player2Reveal(_: SceneProps) {
         const moved = Math.hypot(s.p1.x - prev.p1.x, s.p1.y - prev.p1.y);
         walked = moved > 0 ? walked + moved : 0;
         if (s.stage !== prev.stage) {
-          services.audio.playSfx(s.stage === 'open' ? 'boot' : 'confirm');
+          services.audio.playSfx(s.stage === 'open' ? 'gateOpen' : 'interact');
           setLines(gateLines(s));
           if (s.stage === 'open') onGateOpen.current();
         }
