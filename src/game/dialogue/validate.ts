@@ -1,4 +1,6 @@
 import { parseMarkup, plainText } from './markup';
+import { cardDefinition } from '../content/cards';
+import { itemDefinition } from '../content/items';
 import { UNSUPPORTED_EFFECTS } from './effects';
 import type { DialogueEffect, DialogueNodeId, DialogueScript, Speaker } from './types';
 
@@ -69,6 +71,15 @@ export function validateDialogueScript(
       if (unsupported) warn(nodeId, `effect "${effect.kind}" unsupported: ${unsupported}`);
       if (effect.kind === 'action' && actionIds && !actionIds.includes(effect.action)) {
         error(nodeId, `action "${effect.action}" has no registered handler`);
+      }
+      if (
+        (effect.kind === 'giveItem' || effect.kind === 'takeItem') &&
+        !itemDefinition(effect.item)
+      ) {
+        error(nodeId, `${effect.kind}: unknown item "${effect.item}"`);
+      }
+      if (effect.kind === 'giveCard' && !cardDefinition(effect.card)) {
+        error(nodeId, `giveCard: unknown card "${effect.card}"`);
       }
       if (effect.kind === 'goToScene') {
         warn(nodeId, 'goToScene inside a dialogue unmounts it; prefer onFinish unless intended');

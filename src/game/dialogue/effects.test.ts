@@ -44,16 +44,29 @@ describe('interpretEffect', () => {
     });
   });
 
-  it.each<DialogueEffect>([
-    { kind: 'giveItem', item: 'key' },
-    { kind: 'takeItem', item: 'key' },
-    { kind: 'giveCard', card: 'c1' },
-    { kind: 'setQuest', quest: 'q', status: 'active' },
-  ])('marks $kind as unsupported in this phase (never silently dropped)', (effect) => {
-    const outcome = interpretEffect(effect);
-    expect(outcome.kind).toBe('unsupported');
-    expect(outcome.kind === 'unsupported' && outcome.reason).toMatch(/not supported yet/);
+  it('maps inventory and card effects to reducer commands (GAME-05)', () => {
+    expect(interpretEffect({ kind: 'giveItem', item: 'key', quantity: 2 })).toEqual({
+      kind: 'command',
+      command: { type: 'item/give', item: 'key', quantity: 2 },
+    });
+    expect(interpretEffect({ kind: 'takeItem', item: 'key' })).toEqual({
+      kind: 'command',
+      command: { type: 'item/take', item: 'key' },
+    });
+    expect(interpretEffect({ kind: 'giveCard', card: 'c1' })).toEqual({
+      kind: 'command',
+      command: { type: 'card/give', card: 'c1' },
+    });
   });
+
+  it.each<DialogueEffect>([{ kind: 'setQuest', quest: 'q', status: 'active' }])(
+    'marks $kind as unsupported in this phase (never silently dropped)',
+    (effect) => {
+      const outcome = interpretEffect(effect);
+      expect(outcome.kind).toBe('unsupported');
+      expect(outcome.kind === 'unsupported' && outcome.reason).toMatch(/not supported yet/);
+    },
+  );
 });
 
 describe('executeEffects', () => {
@@ -79,7 +92,7 @@ describe('executeEffects', () => {
     executeEffects(
       [
         { kind: 'action', action: 'toString' }, // prototype keys are not handlers
-        { kind: 'giveCard', card: 'c1' },
+        { kind: 'setQuest', quest: 'q', status: 'active' },
       ],
       ex,
     );

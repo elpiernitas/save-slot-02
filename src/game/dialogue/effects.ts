@@ -19,10 +19,7 @@ export type EffectOutcome =
 
 /** Effects whose game systems belong to later phases. */
 export const UNSUPPORTED_EFFECTS: Readonly<Partial<Record<DialogueEffect['kind'], string>>> = {
-  giveItem: 'inventory arrives in GAME-05',
-  takeItem: 'inventory arrives in GAME-05',
-  giveCard: 'cards arrive in GAME-05',
-  setQuest: 'quest log arrives in GAME-04+',
+  setQuest: 'quest log arrives in a later phase',
 };
 
 export function interpretEffect(effect: DialogueEffect): EffectOutcome {
@@ -49,8 +46,25 @@ export function interpretEffect(effect: DialogueEffect): EffectOutcome {
     case 'action':
       return { kind: 'action', action: effect.action, payload: effect.payload };
     case 'giveItem':
+      return {
+        kind: 'command',
+        command: {
+          type: 'item/give',
+          item: effect.item,
+          ...(effect.quantity !== undefined && { quantity: effect.quantity }),
+        },
+      };
     case 'takeItem':
+      return {
+        kind: 'command',
+        command: {
+          type: 'item/take',
+          item: effect.item,
+          ...(effect.quantity !== undefined && { quantity: effect.quantity }),
+        },
+      };
     case 'giveCard':
+      return { kind: 'command', command: { type: 'card/give', card: effect.card } };
     case 'setQuest':
       return {
         kind: 'unsupported',

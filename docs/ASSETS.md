@@ -17,6 +17,17 @@ Notas:
 
 ## Gráficos
 
+**Estado actual de La Muralla (D-066, D-068).** Lo que describe el resto de
+esta sección de mundo es el generador de placeholders, que ya no es el arte
+en uso:
+
+- `background.png` = ENV-001 de ChatGPT (960×400), final.
+- `occ*.png`: oclusores recortados de ENV-001 (`tools/art/occluders.mjs`).
+- `player.png` = CHAR-001 de ChatGPT (final); `playerLarge.png` = CHAR-001 ×2
+  exacto (`tools/art/scale-player.mjs`), proxy hasta un CHAR-001 nativo.
+- CITY CARDS (GAME-05): sus ilustraciones son ventanas sobre ENV-001
+  (`art` en `src/game/content/cards.ts`); no hay archivos de arte nuevos.
+
 Todo original, dibujado en código:
 
 - Cristal del título, horizonte y estrellas: `src/game/scenes/title/TitleBackdrop.tsx`

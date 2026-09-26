@@ -195,18 +195,15 @@ Composición canónica congelada en `17d6b53`; textos alineados en `df8868d`.
 - Deudas de pulido para GAME-11 (`docs/GAME_11_POLISH_CHECKLIST.md`): Luis
   nativo 80×120 y limpieza de ENV-001 (franja central, rótulo), si llegan.
 
+## GAME-05 — hecho, pendiente de ACCEPT (D-069)
+
+Inventario + CITY CARDS según `docs/GAME_05_SPEC.md`: registros, reducer,
+efectos de diálogo, cartas 001/002 en La Muralla, aviso de recompensa,
+INVENTARIO y binder desde la pausa. QA en 1920×1080, 1440×900 y 1366×768
+(`docs/art/review/game-05/`).
+
 ## Próximo paso exacto
 
-1. **GAME-05 — inventario y CITY CARDS** (autorizado tras el ACCEPT de
-   GAME-04R), según las specs canónicas del repo. No rediseñar La Muralla.
-2. Leer la spec de GAME-05 y `docs/WORLD_BIBLE.md` antes de implementar.
-3. Diseñar items y cartas **originales** (inspiración: colección de cartas de
-   Luis, sin IP de terceros) según WORLD_BIBLE.
-4. Acciones de reducer (`item/give`, `item/take`, `card/give`) y soporte real
-   de los efectos de diálogo `giveItem`/`takeItem`/`giveCard` (hoy
-   `unsupported`); condiciones `hasItem` ya existen.
-5. UI de inventario y binder de cartas (teclado + ratón), accesible desde el
-   menú de pausa del mundo.
-6. Engancharlo a 1–2 interactuables del slice sin inflar la historia.
-7. Tests, QA en Chromium, `npm run check`, actualizar HANDOFF, ROADMAP,
-   DECISION_LOG, ASSETS.
+1. Esperar ACCEPT / FIXES de ChatGPT sobre GAME-05.
+2. Después: **GAME-06 — puzzles / minijuegos** (no empezar dentro de GAME-05).
+

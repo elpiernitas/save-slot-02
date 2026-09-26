@@ -1,0 +1,284 @@
+/*
+ * Inventory, CITY CARDS binder and reward notice (GAME-05). Same world UI
+ * grammar as the pause menu (docs/UI_SYSTEM_V2.md): navy panels, cream text,
+ * gold selection, coral accent. Card kinds get a subtle accent
+ * (CITY_CARDS_BIBLE); rarity is written, never colour-only.
+ */
+.inv-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.5);
+}
+
+.inv-panel,
+.inv-reward {
+  position: relative;
+  display: grid;
+  gap: calc(var(--px) * 5);
+}
+
+.inv-panel::before,
+.inv-reward::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--px) * 2);
+  right: calc(var(--px) * 2);
+  top: calc(var(--px) * 2);
+  height: var(--px);
+  background: var(--world-accent);
+}
+
+.inv-panel {
+  width: min(calc(var(--px) * 420), 92%);
+  min-height: calc(var(--px) * 180);
+  max-height: 92%;
+  grid-template-rows: auto 1fr auto;
+}
+
+.inv-panel__title,
+.inv-reward__title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 700;
+  letter-spacing: var(--px);
+  color: var(--color-system);
+}
+
+.inv-panel__body {
+  display: grid;
+  grid-template-columns: 1fr calc(var(--px) * 150);
+  gap: calc(var(--px) * 8);
+  min-height: 0;
+}
+
+.inv-list {
+  align-self: start;
+}
+
+.inv-detail {
+  display: grid;
+  align-content: start;
+  gap: calc(var(--px) * 3);
+}
+
+.inv-item__name {
+  margin: 0;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.inv-item__category {
+  margin: 0;
+  font-size: var(--text-xs);
+  letter-spacing: var(--px);
+  color: var(--color-select);
+}
+
+.inv-item__desc {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-dim);
+}
+
+.inv-empty {
+  margin: 0;
+  align-self: center;
+  justify-self: center;
+  color: var(--color-text-dim);
+}
+
+.inv-hint {
+  margin: 0;
+  justify-self: end;
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}
+
+.inv-hint kbd {
+  font: inherit;
+  color: var(--color-text);
+  padding: 0 var(--px);
+  border: var(--px) solid var(--color-border-dim);
+  margin: 0 var(--px) 0 calc(var(--px) * 3);
+}
+
+/* ---- Reward notice ---- */
+.inv-reward {
+  justify-items: center;
+  padding-top: calc(var(--px) * 8);
+  animation: inv-pop 0.18s steps(3) both;
+}
+
+.inv-reward__item {
+  display: grid;
+  gap: calc(var(--px) * 2);
+  max-width: calc(var(--px) * 160);
+}
+
+@keyframes inv-pop {
+  from {
+    transform: scale(0.94);
+    opacity: 0;
+  }
+}
+
+/* ---- Binder ---- */
+.inv-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, calc(var(--px) * 56));
+  gap: calc(var(--px) * 5);
+  align-content: start;
+}
+
+.inv-slot {
+  all: unset;
+  display: block;
+  cursor: pointer;
+  outline: var(--px) solid transparent;
+  outline-offset: var(--px);
+}
+
+.inv-slot[data-selected] {
+  outline-color: var(--color-select);
+}
+
+/* ---- CITY CARD face ---- */
+.city-card {
+  --kind: #6fae9a;
+  position: relative;
+  display: grid;
+  gap: calc(var(--px) * 2);
+  width: calc(var(--px) * 118);
+  padding: calc(var(--px) * 4);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: var(--px) solid var(--color-border);
+  box-shadow:
+    inset 0 0 0 var(--px) var(--color-bg),
+    inset 0 0 0 calc(var(--px) * 2) var(--kind),
+    var(--px) var(--px) 0 var(--color-shadow);
+  overflow: hidden;
+}
+
+.city-card[data-kind='object'] {
+  --kind: #9aa3ad;
+}
+.city-card[data-kind='npc'] {
+  --kind: #e8735a;
+}
+.city-card[data-kind='event'] {
+  --kind: #f2c14e;
+}
+.city-card[data-kind='system'] {
+  --kind: #bfeef2;
+}
+
+.city-card__head {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  letter-spacing: calc(var(--px) * 0.5);
+}
+
+.city-card__number {
+  color: var(--color-select);
+}
+
+.city-card__kind {
+  color: var(--kind);
+}
+
+.city-card__art {
+  aspect-ratio: 4 / 3;
+  background-color: var(--color-bg);
+  background-repeat: no-repeat;
+  border: var(--px) solid var(--color-bg);
+  outline: var(--px) solid var(--kind);
+  image-rendering: auto;
+}
+
+.city-card__art[data-placeholder] {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-bg) 0 calc(var(--px) * 3),
+    var(--color-surface-raised) calc(var(--px) * 3) calc(var(--px) * 6)
+  );
+}
+
+.city-card__name {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: calc(var(--px) * 0.5);
+}
+
+.city-card__flavor {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}
+
+.city-card__rarity {
+  margin: 0;
+  justify-self: end;
+  font-size: var(--text-xs);
+  letter-spacing: var(--px);
+  color: var(--kind);
+}
+
+.city-card[data-size='small'] {
+  width: calc(var(--px) * 56);
+  padding: calc(var(--px) * 2);
+  gap: var(--px);
+}
+
+.city-card[data-size='small'] .city-card__kind {
+  display: none;
+}
+
+.city-card[data-size='small'] .city-card__name {
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.city-card__new {
+  position: absolute;
+  top: calc(var(--px) * 2);
+  right: calc(var(--px) * 2);
+  padding: 0 var(--px);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--color-bg);
+  background: var(--color-select);
+}
+
+/* HOLO: a slow diagonal sheen (disabled with reduced motion, globally). */
+.city-card[data-rarity='holo']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 40%,
+    rgb(255 255 255 / 0.18) 50%,
+    transparent 60%
+  );
+  background-size: 250% 100%;
+  animation: city-card-sheen 3.2s steps(24) infinite;
+  pointer-events: none;
+}
+
+@keyframes city-card-sheen {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}

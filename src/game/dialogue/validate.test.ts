@@ -80,6 +80,7 @@ describe('validateDialogueScript', () => {
           id: 'a',
           type: 'effect',
           effects: [
+            { kind: 'setQuest', quest: 'q', status: 'active' },
             { kind: 'giveCard', card: 'c1' },
             { kind: 'action', action: 'mystery' },
           ],
@@ -92,8 +93,9 @@ describe('validateDialogueScript', () => {
       expect.arrayContaining([
         expect.objectContaining({
           severity: 'warning',
-          message: expect.stringMatching(/giveCard/),
+          message: expect.stringMatching(/setQuest/),
         }),
+        expect.objectContaining({ severity: 'error', message: 'giveCard: unknown card "c1"' }),
         expect.objectContaining({
           severity: 'error',
           message: 'action "mystery" has no registered handler',

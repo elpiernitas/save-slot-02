@@ -1,9 +1,14 @@
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { MURALLA_ARRIVAL, MURALLA_FLAGS } from '../../content/dialogue/muralla';
 import type { DialogueScript } from '../../dialogue/types';
+import { newAcquisitions, type Acquisition } from '../../inventory/cards';
+import { AcquisitionOverlay } from '../../inventory/ui/AcquisitionOverlay';
+import { CardBinder } from '../../inventory/ui/CardBinder';
+import { InventoryPanel } from '../../inventory/ui/InventoryPanel';
 import { DialoguePlayer } from '../../dialogue/ui/DialoguePlayer';
 import { InputContext } from '../../input/InputContext';
 import { INPUT_PRIORITY, type InputHandler } from '../../input/inputRouter';
+import type { GameSave } from '../../state/types';
 import { useGame } from '../../state/useGame';
 import { Menu } from '../../ui/Menu';
 import { useMenu } from '../../ui/useMenu';
@@ -66,7 +71,13 @@ export function OverworldScene(_: SceneProps) {
   const [dialogue, setDialogue] = useState<{ script: DialogueScript; key: number } | null>(() =>
     save.flags[MURALLA_FLAGS.arrived] ? null : { script: MURALLA_ARRIVAL, key: 0 },
   );
-  const [menuOpen, setMenuOpen] = useState(false);
+  /** Pause menu and the GAME-05 panels it opens; the world stays mounted and paused. */
+  const [panel, setPanel] = useState<'pause' | 'inventory' | 'cards' | null>(null);
+  const menuOpen = panel !== null;
+  /** Save as it was when the current dialogue opened (to spot new cards/items). */
+  const beforeDialogueRef = useRef<GameSave>(save);
+  const [rewardPending, setRewardPending] = useState(false);
+  const [rewards, setRewards] = useState<Acquisition[]>([]);
   const [images, setImages] = useState<SpriteImages | null>(null);
 
   useEffect(() => {
@@ -81,23 +92,37 @@ export function OverworldScene(_: SceneProps) {
   }, []);
 
   // Latest values for the long-lived engine/input callbacks.
-  const live = useRef({ dialogue, menuOpen, reduced });
+  const live = useRef({ dialogue, menuOpen, reduced, save });
   useLayoutEffect(() => {
-    live.current = { dialogue, menuOpen, reduced };
+    live.current = { dialogue, menuOpen, reduced, save };
   });
 
   const openDialogue = (script: DialogueScript) => {
     engineRef.current?.setPaused(true);
+    beforeDialogueRef.current = live.current.save;
     // Lower-third box would cover PLAYER 1: move it to the top instead.
     setDialogueAtTop(playerScreenYRef.current > DIALOGUE_FLIP_Y);
     setDialogue((d) => ({ script, key: (d?.key ?? 0) + 1 }));
   };
   const closeDialogue = () => {
     setDialogue(null);
+    // Next frame the save holds every effect of the dialogue: show what it
+    // granted. The world resumes once any reward notice has been dismissed.
+    const before = beforeDialogueRef.current;
+    setRewardPending(true);
+    requestAnimationFrame(() => {
+      setRewardPending(false);
+      const gained = newAcquisitions(before, live.current.save);
+      if (gained.length) setRewards(gained);
+      else engineRef.current?.setPaused(false, performance.now(), RESUME_COOLDOWN_MS);
+    });
+  };
+  const closeRewards = () => {
+    setRewards([]);
     engineRef.current?.setPaused(false, performance.now(), RESUME_COOLDOWN_MS);
   };
   const setMenu = (open: boolean) => {
-    setMenuOpen(open);
+    setPanel(open ? 'pause' : null);
     engineRef.current?.setPaused(open, performance.now(), open ? 0 : RESUME_COOLDOWN_MS);
   };
   const actions = useRef({ openDialogue, setMenu });
@@ -179,7 +204,8 @@ export function OverworldScene(_: SceneProps) {
     };
   }, [router, dispatch, map, spawn, images]);
 
-  const showPrompt = target && !dialogue && !menuOpen;
+  const busy = Boolean(dialogue) || menuOpen || rewards.length > 0 || rewardPending;
+  const showPrompt = target && !busy;
 
   return (
     <div className="scene overworld">
@@ -188,7 +214,7 @@ export function OverworldScene(_: SceneProps) {
         <span>{map.displayName}</span>
         <span className="overworld__hud-time">{TIME_LABEL[map.timeOfDay]}</span>
       </div>
-      {!dialogue && !menuOpen && (
+      {!busy && (
         <footer className="overworld__hints key-hints" data-faded={hasMoved || undefined}>
           <span>
             <kbd>WASD</kbd>
@@ -210,25 +236,45 @@ export function OverworldScene(_: SceneProps) {
           placement={dialogueAtTop ? 'top' : 'bottom'}
         />
       )}
-      {menuOpen && (
+      {rewards.length > 0 && <AcquisitionOverlay entries={rewards} onDone={closeRewards} />}
+      {panel === 'pause' && (
         <PauseMenu
           onResume={() => setMenu(false)}
+          onOpen={setPanel}
           onTitle={() => dispatch({ type: 'scene/goTo', scene: 'title' })}
         />
       )}
+      {panel === 'inventory' && <InventoryPanel onBack={() => setPanel('pause')} />}
+      {panel === 'cards' && <CardBinder onBack={() => setPanel('pause')} />}
     </div>
   );
 }
 
-function PauseMenu({ onResume, onTitle }: { onResume: () => void; onTitle: () => void }) {
-  const items = [
-    { id: 'resume', label: 'CONTINUAR' },
-    { id: 'title', label: 'VOLVER AL TÍTULO' },
-  ];
+const PAUSE_ITEMS = [
+  { id: 'resume', label: 'CONTINUAR' },
+  { id: 'inventory', label: 'INVENTARIO' },
+  { id: 'cards', label: 'CITY CARDS' },
+  { id: 'title', label: 'VOLVER AL TÍTULO' },
+];
+
+function PauseMenu({
+  onResume,
+  onOpen,
+  onTitle,
+}: {
+  onResume: () => void;
+  onOpen: (panel: 'inventory' | 'cards') => void;
+  onTitle: () => void;
+}) {
+  const items = PAUSE_ITEMS;
   const menu = useMenu({
     items,
     priority: INPUT_PRIORITY.panel,
-    onConfirm: (item) => (item.id === 'title' ? onTitle() : onResume()),
+    onConfirm: (item) => {
+      if (item.id === 'title') onTitle();
+      else if (item.id === 'inventory' || item.id === 'cards') onOpen(item.id);
+      else onResume();
+    },
     onCancel: onResume,
   });
   return (

@@ -8,8 +8,8 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | GAME-01 | Desktop-first + fullscreen + boot + title  | ✅ Hecho               |
 | GAME-02 | Motor de diálogos retro                    | ✅ Hecho               |
 | GAME-03 | World bible + selección de clase           | ✅ Hecho               |
-| GAME-04 | Mundo explorable / vertical slice de Gijón | 🔴 Visual no aprobado  |
-| GAME-05 | Inventario y cartas                        | ⏸ Tras aprobar GAME-04 |
+| GAME-04 | Mundo explorable / vertical slice de Gijón | ✅ Cerrado (D-068)     |
+| GAME-05 | Inventario y cartas                        | 🟡 Hecho, falta ACCEPT |
 | GAME-06 | Puzzles / minijuegos                       | Pendiente              |
 | GAME-07 | Boss + aparición PLAYER 2                  | Pendiente              |
 | GAME-08 | Portales y selección de fecha              | Pendiente              |
@@ -75,12 +75,19 @@ aprobada**. GAME-04R queda bloqueando GAME-05; criterios en
   bolardo), prompt contextual, pausa (Esc), checkpoints por zona, resume.
 - PLAYER 1 provisional a 32×48; arte raster PNG generado por `npm run art`.
 
-### GAME-05 — Inventario y cartas
+### GAME-05 — Inventario y CITY CARDS 🟡
 
-Contenido de items y cartas originales, UI de inventario y binder, acciones
-de reducer (`item/give`, `card/give`…) y soporte real para los efectos de
-diálogo `giveItem`/`takeItem`/`giveCard` (hoy `unsupported`), primeros
-logros. Puede engancharse a interactuables del slice de La Muralla.
+Implementado (D-069), pendiente de ACCEPT de ChatGPT.
+
+- Registros estáticos `src/game/content/items.ts` y `cards.ts`; categorías
+  `quest/object/consumable/key`; cartas con número, tipo, rareza (solo
+  visual) y arte = ventana sobre ENV-001.
+- Reducer: `item/give`, `item/take`, `card/give`, `card/markSeen`; efectos de
+  diálogo `giveItem`/`takeItem`/`giveCard` reales; ids desconocidos = error de
+  validación. Sin cambio de `SAVE_VERSION`.
+- Recompensas escasas en La Muralla: carta 001 (camarera) y 002 (bolardo).
+- UI: aviso de recompensa, INVENTARIO y binder CITY CARDS desde la pausa;
+  NEW hasta abrir la carta; teclado y ratón; mundo montado y en pausa.
 
 ### GAME-06 — Puzzles / minijuegos
 

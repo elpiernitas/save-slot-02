@@ -1,4 +1,8 @@
 import type { AchievementId } from '../achievements/types';
+import { cardDefinition } from '../content/cards';
+import { itemDefinition } from '../content/items';
+import { giveCard, giveItem, markCardSeen, takeItem } from '../inventory/inventory';
+import type { CardId, ItemId } from '../inventory/types';
 import { INITIAL_SCENE, isResumableScene, type SceneId } from '../scenes/sceneIds';
 import type {
   ChoiceId,
@@ -32,6 +36,12 @@ export type GameAction =
    * (only a game reset clears it).
    */
   | { type: 'player/assignClass'; classId: PlayerClassId; at: string }
+  /** Inventory (GAME-05). Unknown ids are content errors: no-op here, caught by tests. */
+  | { type: 'item/give'; item: ItemId; quantity?: number; at: string }
+  | { type: 'item/take'; item: ItemId; quantity?: number; at: string }
+  /** CITY CARDS: first acquisition only; `markSeen` clears the NEW badge. */
+  | { type: 'card/give'; card: CardId; at: string }
+  | { type: 'card/markSeen'; card: CardId; at: string }
   /** Once per page load: counts the session and restarts at the system check. */
   | { type: 'system/sessionStart'; at: string }
   | { type: 'system/bootCompleted'; at: string }
@@ -131,6 +141,29 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
         },
         action.at,
       );
+
+    case 'item/give': {
+      const definition = itemDefinition(action.item);
+      if (!definition) return save;
+      const inventory = giveItem(save.inventory, definition, action.quantity ?? 1, action.at);
+      return inventory === save.inventory ? save : touch({ ...save, inventory }, action.at);
+    }
+
+    case 'item/take': {
+      const inventory = takeItem(save.inventory, action.item, action.quantity ?? 1);
+      return inventory === save.inventory ? save : touch({ ...save, inventory }, action.at);
+    }
+
+    case 'card/give': {
+      if (!cardDefinition(action.card)) return save;
+      const cards = giveCard(save.cards, action.card, action.at);
+      return cards === save.cards ? save : touch({ ...save, cards }, action.at);
+    }
+
+    case 'card/markSeen': {
+      const cards = markCardSeen(save.cards, action.card);
+      return cards === save.cards ? save : touch({ ...save, cards }, action.at);
+    }
 
     case 'system/sessionStart':
       return touch(

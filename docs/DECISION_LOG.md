@@ -816,3 +816,22 @@ canónica de La Muralla y queda congelada; los textos se alinearon en
 `df8868d`. Dos deudas pasan a GAME-11: Luis nativo 80×120 por frame (hoy
 `playerLarge` ×2) y ENV-001 sin la franja central ni el fallo del rótulo.
 Siguiente: GAME-05 (inventario + CITY CARDS originales). Sin merge ni deploy.
+
+### D-069 · 2026-09-26 · GAME-05: inventario + CITY CARDS
+
+Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
+
+- Contratos estáticos: categorías `quest/object/consumable/key`; cartas con
+  número, tipo (`place/object/npc/event/system`), rareza visual, arte y
+  `hiddenUntilOwned`. Save sin cambios (`SAVE_VERSION` 2).
+- Registros solo con lo que el juego concede: cartas 001 LA MURALLA y 002
+  BOLLARD Lv. ???; items vacío (ningún candidato encaja todavía en la escena).
+- Arte de carta = ventana sobre ENV-001 (píxeles de ChatGPT), sin archivos ni
+  herramientas nuevas.
+- Recompensas: 001 en la primera conversación con la camarera, 002 en el
+  primer vistazo al bolardo (cualquier clase). Nada más da recompensa.
+- El aviso aparece al cerrar el diálogo (se comparan owned antes/después);
+  el mundo sigue en pausa hasta cerrarlo, con cooldown para que Enter no se
+  filtre.
+- Pausa: CONTINUAR, INVENTARIO, CITY CARDS, VOLVER AL TÍTULO. Binder sin
+  contador de colección; NEW hasta abrir la carta.

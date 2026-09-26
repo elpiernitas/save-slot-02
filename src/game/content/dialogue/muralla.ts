@@ -96,6 +96,8 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
         ...line('intro', [
           'Un bolardo de hierro oscuro, bien plantado en la acera. Muy convencido de su papel.',
         ]),
+        // First look → CITY CARD 002; the class only changes the flavour line.
+        effects: [{ kind: 'giveCard', card: 'city.002.bollard' }],
         next: 'route',
       } as DialogueScript['nodes'][string],
       route: {
@@ -140,7 +142,11 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
         prompt: '¡Buenas! ¿Vas a tomar algo?',
         recordAs: 'muralla.waitressAnswer',
         cancelOptionId: 'looking',
-        effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.metWaitress, value: true }],
+        // First small interaction at the café itself → CITY CARD 001 (GAME_05_SPEC §10).
+        effects: [
+          { kind: 'setFlag', flag: MURALLA_FLAGS.metWaitress, value: true },
+          { kind: 'giveCard', card: 'city.001.la_muralla' },
+        ],
         options: [
           { id: 'coffee', label: 'Un café.', next: 'coffee' },
           { id: 'table', label: '¿Hay mesa?', next: 'table' },

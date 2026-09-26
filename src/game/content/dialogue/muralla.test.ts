@@ -87,6 +87,31 @@ describe('La Muralla dialogues', () => {
     expect(read(MURALLA_SCRIPTS['muralla.waitress']!, first.save).text[0]).toMatch(/Otra vez/);
   });
 
+  it('awards sparse CITY CARDS: 001 from the waitress, 002 from the bollard, once', () => {
+    const waitress = read(MURALLA_SCRIPTS['muralla.waitress']!, fresh(), 'looking').save;
+    expect(Object.keys(waitress.cards.owned)).toEqual(['city.001.la_muralla']);
+    for (const classId of PLAYER_CLASS_IDS) {
+      const save = gameReducer(fresh(), {
+        type: 'player/assignClass',
+        classId,
+        at: now.toISOString(),
+      });
+      const first = read(MURALLA_SCRIPTS['muralla.bollard']!, save).save;
+      expect(Object.keys(first.cards.owned), classId).toEqual(['city.002.bollard']);
+      const again = read(MURALLA_SCRIPTS['muralla.bollard']!, first).save;
+      expect(again.cards).toEqual(first.cards);
+    }
+    // Every other interaction stays reward-free.
+    const others = Object.entries(MURALLA_SCRIPTS).filter(
+      ([id]) => id !== 'muralla.waitress' && id !== 'muralla.bollard',
+    );
+    for (const [id, script] of [...others, ['arrival', MURALLA_ARRIVAL] as const]) {
+      const after = read(script, fresh()).save;
+      expect(after.cards.owned, id).toEqual({});
+      expect(after.inventory.items, id).toEqual({});
+    }
+  });
+
   it('keeps out of scope topics out of the slice', () => {
     const all = [MURALLA_ARRIVAL, ...Object.values(MURALLA_SCRIPTS)]
       .flatMap((s) => Object.values(s.nodes))
