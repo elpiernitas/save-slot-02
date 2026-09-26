@@ -30,7 +30,7 @@
     },
     "player": {
       "file": "player.png",
-      "status": "placeholder",
+      "status": "final",
       "width": 120,
       "height": 240,
       "frameWidth": 40,

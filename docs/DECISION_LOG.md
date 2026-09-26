@@ -719,3 +719,18 @@ Siguiente paso: al llegar **CHAR-001** (`player.png`, 120×240, frames 40×60,
 ancla 20,57) y **ENV-001** (`background.png`, 960×400) se sustituyen los
 placeholders, se reajustan anclas/colisiones si hace falta, `npm run check`,
 capturas, y entonces se decide el ACCEPT final de GAME-04R.
+
+### D-063 · 2026-09-26 · GAME-04R: CHAR-001 (Luis) integrado como final
+
+`player.png` = CHAR-001 de ChatGPT, importado con `npm run art:import` y
+marcado `final` (120×240, 3×4 frames de 40×60, ancla 20,57 sin cambios: los
+pies terminan en y=56–57 en todos los frames).
+
+Transporte: el PNG llegó en base64 troceado (`docs/art/incoming/`). `part5`
+tenía un carácter alterado (`v`→`V`, posición 1173); la corrección es la
+única sustitución que reproduce su SHA-256 publicado, y el PNG resultante
+coincide en tamaño (7827 B), SHA-256 y blob git con los de ChatGPT, así que
+es idéntico byte a byte al original. No hay redibujado ni reinterpretación.
+
+Capturas nativas 640×360: `docs/art/review/char-001/`. ENV-001 no se toca
+hasta la revisión de CHAR-001 en contexto.
