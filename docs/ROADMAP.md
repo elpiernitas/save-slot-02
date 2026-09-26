@@ -9,8 +9,8 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | GAME-02 | Motor de diálogos retro                    | ✅ Hecho               |
 | GAME-03 | World bible + selección de clase           | ✅ Hecho               |
 | GAME-04 | Mundo explorable / vertical slice de Gijón | ✅ Cerrado (D-068)     |
-| GAME-05 | Inventario y cartas                        | 🟡 Hecho, falta ACCEPT |
-| GAME-06 | Puzzles / minijuegos                       | Pendiente              |
+| GAME-05 | Inventario y cartas                        | ✅ Aceptado            |
+| GAME-06 | Puzzles / minijuegos                       | 🟡 Hecho, falta ACCEPT |
 | GAME-07 | Boss + aparición PLAYER 2                  | Pendiente              |
 | GAME-08 | Portales y selección de fecha              | Pendiente              |
 | GAME-09 | Final + save slot                          | Pendiente              |
@@ -75,9 +75,9 @@ aprobada**. GAME-04R queda bloqueando GAME-05; criterios en
   bolardo), prompt contextual, pausa (Esc), checkpoints por zona, resume.
 - PLAYER 1 provisional a 32×48; arte raster PNG generado por `npm run art`.
 
-### GAME-05 — Inventario y CITY CARDS 🟡
+### GAME-05 — Inventario y CITY CARDS ✅
 
-Implementado (D-069), pendiente de ACCEPT de ChatGPT.
+Aceptado por ChatGPT (D-069).
 
 - Registros estáticos `src/game/content/items.ts` y `cards.ts`; categorías
   `quest/object/consumable/key`; cartas con número, tipo, rareza (solo
@@ -89,7 +89,13 @@ Implementado (D-069), pendiente de ACCEPT de ChatGPT.
 - UI: aviso de recompensa, INVENTARIO y binder CITY CARDS desde la pausa;
   NEW hasta abrir la carta; teclado y ratón; mundo montado y en pausa.
 
-### GAME-06 — Puzzles / minijuegos
+### GAME-06 — Puzzles / minijuegos 🟡
+
+Implementado (D-070), pendiente de ACCEPT. En La Muralla (no hay arte de
+Cholo): tras la camarera, SIDE QUEST ROUTE UPDATED → ROUTE BEACONS (pizarra =
+CUP, farola = LAMP, gaviota = BIRD) → carta 005 → SERVICE ACCESS (puerta del
+12) → SYNC TERMINAL: PLAYER 1 SYNCED, PLAYER 2 NOT FOUND, fallback,
+RECOVERY PROCESS ERROR. MG-01 SEAGULL PROTOCOL recortado (opcional).
 
 ### GAME-07 — Boss + aparición PLAYER 2
 

@@ -2,7 +2,7 @@ import type { AchievementId } from '../achievements/types';
 import { getDateOption, isTimeGateOpen, type TimeGate } from '../calendar';
 import type { ItemId } from '../inventory/types';
 import type { QuestId, QuestStatus } from '../quests/types';
-import type { ChoiceId, FlagId, FlagValue, GameSave, PlayerClassId } from './types';
+import type { ChoiceId, FlagId, FlagValue, GameSave, PlayerClassId, PuzzleId } from './types';
 
 /**
  * Declarative, serialisable conditions shared by dialogue, scenes, quests and
@@ -14,6 +14,7 @@ export type Condition =
   | { kind: 'hasItem'; item: ItemId; min?: number }
   | { kind: 'achievement'; achievement: AchievementId }
   | { kind: 'quest'; quest: QuestId; status: QuestStatus }
+  | { kind: 'puzzleCompleted'; puzzle: PuzzleId }
   | { kind: 'bossDefeated' }
   | { kind: 'dateChosen' }
   /** Class-specific content (GAME-03): exclusive lines, alternative options… */
@@ -44,6 +45,8 @@ export function evaluateCondition(condition: Condition, ctx: ConditionContext): 
       return Object.hasOwn(save.achievements, condition.achievement);
     case 'quest':
       return (save.quests[condition.quest]?.status ?? 'hidden') === condition.status;
+    case 'puzzleCompleted':
+      return Object.hasOwn(save.puzzles, condition.puzzle);
     case 'bossDefeated':
       return save.boss.defeated;
     case 'dateChosen':

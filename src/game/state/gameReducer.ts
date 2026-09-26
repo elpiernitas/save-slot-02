@@ -1,12 +1,14 @@
 import type { AchievementId } from '../achievements/types';
 import { cardDefinition } from '../content/cards';
 import { itemDefinition } from '../content/items';
+import { puzzleDefinition } from '../puzzles/registry';
 import { giveCard, giveItem, markCardSeen, takeItem } from '../inventory/inventory';
 import type { CardId, ItemId } from '../inventory/types';
 import { INITIAL_SCENE, isResumableScene, type SceneId } from '../scenes/sceneIds';
 import type {
   ChoiceId,
   FlagId,
+  PuzzleId,
   FlagValue,
   GameSave,
   GameSettings,
@@ -42,6 +44,8 @@ export type GameAction =
   /** CITY CARDS: first acquisition only; `markSeen` clears the NEW badge. */
   | { type: 'card/give'; card: CardId; at: string }
   | { type: 'card/markSeen'; card: CardId; at: string }
+  /** GAME-06: first completion wins; attempts are runtime-only until then (min 1). */
+  | { type: 'puzzle/complete'; puzzle: PuzzleId; attempts: number; at: string }
   /** Once per page load: counts the session and restarts at the system check. */
   | { type: 'system/sessionStart'; at: string }
   | { type: 'system/bootCompleted'; at: string }
@@ -164,6 +168,23 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
       const cards = markCardSeen(save.cards, action.card);
       return cards === save.cards ? save : touch({ ...save, cards }, action.at);
     }
+
+    case 'puzzle/complete':
+      if (!puzzleDefinition(action.puzzle) || Object.hasOwn(save.puzzles, action.puzzle))
+        return save;
+      return touch(
+        {
+          ...save,
+          puzzles: {
+            ...save.puzzles,
+            [action.puzzle]: {
+              completedAt: action.at,
+              attempts: Math.max(1, Math.floor(action.attempts)),
+            },
+          },
+        },
+        action.at,
+      );
 
     case 'system/sessionStart':
       return touch(

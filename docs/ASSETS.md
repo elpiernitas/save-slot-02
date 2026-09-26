@@ -25,6 +25,8 @@ en uso:
 - `occ*.png`: oclusores recortados de ENV-001 (`tools/art/occluders.mjs`).
 - `player.png` = CHAR-001 de ChatGPT (final); `playerLarge.png` = CHAR-001 ×2
   exacto (`tools/art/scale-player.mjs`), proxy hasta un CHAR-001 nativo.
+- GAME-06: símbolos de baliza CUP/LAMP/BIRD y tiles del SYNC TERMINAL son
+  glifos SVG de UI (`BeaconIcon.tsx`, `SyncTerminal.tsx`), no arte de escena.
 - CITY CARDS (GAME-05): sus ilustraciones son ventanas sobre ENV-001
   (`art` en `src/game/content/cards.ts`); no hay archivos de arte nuevos.
 

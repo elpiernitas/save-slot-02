@@ -195,15 +195,18 @@ Composición canónica congelada en `17d6b53`; textos alineados en `df8868d`.
 - Deudas de pulido para GAME-11 (`docs/GAME_11_POLISH_CHECKLIST.md`): Luis
   nativo 80×120 y limpieza de ENV-001 (franja central, rótulo), si llegan.
 
-## GAME-05 — hecho, pendiente de ACCEPT (D-069)
+## GAME-05 — aceptado (D-069)
 
-Inventario + CITY CARDS según `docs/GAME_05_SPEC.md`: registros, reducer,
-efectos de diálogo, cartas 001/002 en La Muralla, aviso de recompensa,
-INVENTARIO y binder desde la pausa. QA en 1920×1080, 1440×900 y 1366×768
-(`docs/art/review/game-05/`).
+Inventario + CITY CARDS (cartas 001/002; items vacío a propósito).
+
+## GAME-06 — hecho, pendiente de ACCEPT (D-070)
+
+Puzzles en La Muralla: ROUTE BEACONS + SYNC TERMINAL
+(`src/game/puzzles/`). MG-01 SEAGULL PROTOCOL recortado. QA en
+`docs/art/review/game-06/`. Estado final: `system.player2SignalMissing`,
+del que parte GAME-07.
 
 ## Próximo paso exacto
 
-1. Esperar ACCEPT / FIXES de ChatGPT sobre GAME-05.
-2. Después: **GAME-06 — puzzles / minijuegos** (no empezar dentro de GAME-05).
-
+1. Esperar ACCEPT / FIXES de ChatGPT sobre GAME-06.
+2. Después: **GAME-07 — boss + PLAYER 2 reveal** (no empezar dentro de GAME-06).

@@ -94,7 +94,11 @@ describe('content registries', () => {
     expect(new Set(cards.map(([, c]) => c.number)).size).toBe(cards.length);
     expect(cardDefinition('city.001.la_muralla')?.name).toBe('LA MURALLA');
     expect(cardDefinition('toString')).toBeUndefined();
-    expect([...Object.values(CARDS)].sort(cardOrder).map((c) => c.number)).toEqual(['001', '002']);
+    expect([...Object.values(CARDS)].sort(cardOrder).map((c) => c.number)).toEqual([
+      '001',
+      '002',
+      '005',
+    ]);
   });
 
   it('card art is a window inside an existing approved sprite', () => {

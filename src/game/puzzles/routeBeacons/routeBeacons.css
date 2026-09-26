@@ -1,0 +1,124 @@
+/* ROUTE BEACONS: SYSTEM-accented UI glyphs in the world UI grammar. */
+.beacon-icon {
+  width: 1.4em;
+  height: 1.4em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.route-pulse {
+  position: relative;
+  display: grid;
+  gap: calc(var(--px) * 6);
+  justify-items: center;
+  min-width: calc(var(--px) * 220);
+}
+
+.route-pulse__title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 700;
+  letter-spacing: var(--px);
+  color: #bfeef2;
+}
+
+.route-pulse__row {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: calc(var(--px) * 8);
+}
+
+.route-pulse__slot {
+  display: grid;
+  justify-items: center;
+  gap: calc(var(--px) * 2);
+  padding: calc(var(--px) * 4) calc(var(--px) * 6);
+  font-size: var(--text-md);
+  color: var(--color-border-dim);
+  border: var(--px) dashed var(--color-border-dim);
+}
+
+.route-pulse__slot[data-lit] {
+  color: #bfeef2;
+  border-style: solid;
+  border-color: #bfeef2;
+  animation: route-lit 0.25s steps(2) both;
+}
+
+.route-pulse__n,
+.route-pulse__name {
+  font-size: var(--text-xs);
+  letter-spacing: var(--px);
+}
+
+@keyframes route-lit {
+  from {
+    transform: scale(1.12);
+  }
+}
+
+.route-hud {
+  position: absolute;
+  top: calc(var(--px) * 20);
+  left: calc(var(--px) * 8);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--px) * 4);
+  padding: var(--px) calc(var(--px) * 4);
+  font-size: var(--text-xs);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: var(--px) solid var(--color-border);
+  border-left: calc(var(--px) * 2) solid #bfeef2;
+}
+
+.route-hud__slots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: calc(var(--px) * 2);
+}
+
+.route-hud__slot {
+  display: grid;
+  place-items: center;
+  width: calc(var(--px) * 12);
+  height: calc(var(--px) * 12);
+  color: var(--color-text-dim);
+  border: var(--px) dashed var(--color-border-dim);
+}
+
+.route-hud__slot[data-synced] {
+  color: var(--color-bg);
+  background: #bfeef2;
+  border-style: solid;
+}
+
+.route-hud__text {
+  letter-spacing: calc(var(--px) * 0.5);
+  color: var(--color-text-dim);
+}
+
+/* Symbol tags floating over the three beacons (positioned every frame). */
+.beacon-mark {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: grid;
+  place-items: center;
+  padding: calc(var(--px) * 1);
+  color: #bfeef2;
+  background: rgb(14 26 44 / 0.8);
+  border: var(--px) solid #bfeef2;
+  pointer-events: none;
+}
+
+.beacon-mark[data-synced] {
+  color: var(--color-bg);
+  background: #bfeef2;
+}

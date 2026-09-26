@@ -45,6 +45,9 @@ const TERRACE_FRONT = 297;
 const interactables: Interactable[] = [
   { id: 'tree', label: 'árbol', script: 'muralla.tree', rect: box(50, 238, 96, 250) },
   { id: 'board', label: 'pizarra', script: 'muralla.board', rect: box(100, 290, 156, 297) },
+  // GAME-06 route beacons also answer here (lamp, board = cup, gull = bird).
+  { id: 'lamp', label: 'farola', script: 'muralla.lamp', rect: box(188, 312, 212, 320) },
+  { id: 'gull', label: 'gaviota', script: 'muralla.gull', rect: box(158, 298, 176, 304) },
   {
     id: 'barWindowLeft',
     label: 'escaparate del bar',

@@ -835,3 +835,22 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
   filtre.
 - Pausa: CONTINUAR, INVENTARIO, CITY CARDS, VOLVER AL TÍTULO. Binder sin
   contador de colección; NEW hasta abrir la carta.
+
+### D-070 · 2026-09-26 · GAME-06: ROUTE BEACONS + SYNC TERMINAL en La Muralla
+
+- Ubicación: La Muralla, no Cholo (no hay arte de Cholo; plan en el PR,
+  comentario 5847383771, opción A). Cambiar a un segundo mapa será cambio de
+  datos cuando exista ENV-002.
+- Núcleo: registro `src/game/puzzles/registry.ts`, `puzzle/complete` (gana la
+  primera, intentos ≥1, no-op en duplicado), condición `puzzleCompleted`.
+  Save sin cambios (`SAVE_VERSION` 2); el estado transitorio no se guarda.
+- Flujo (`src/game/puzzles/chapter.ts`): tras la primera charla con la
+  camarera, `SIDE QUEST ROUTE UPDATED` → patrón (1 CUP, 2 LAMP, 3 BIRD,
+  repetible en la puerta del 12) → balizas pizarra/farola/gaviota → error =
+  reset + intento + pista (1ª: primer símbolo; 2ª: orden completo) → carta 005
+  → `SERVICE ACCESS` → SYNC TERMINAL.
+- SYNC TERMINAL: 3 tiles giratorios (canal PLAYER 1), PLAYER 2 inactivo y no
+  interactivo; `PLAYER 2 INPUT… NOT FOUND` → fallback → `RECOVERY PROCESS
+  ERROR`; flag `system.player2SignalMissing`. No nombra ni insinúa a Manu.
+- MG-01 SEAGULL PROTOCOL recortado: opcional, y exigiría inventar visuales
+  de arena. Queda para GAME-11 si hay tiempo.

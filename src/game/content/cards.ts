@@ -24,6 +24,15 @@ export const CARDS = {
     flavorText: 'Unmoved. Unbothered. Probably load-bearing.',
     art: { sprite: 'background', x: 503, y: 272, w: 80, h: 60 },
   },
+  'city.005.cimavilla_afternoon': {
+    id: 'city.005.cimavilla_afternoon',
+    number: '005',
+    name: 'AFTERNOON IN CIMAVILLA',
+    kind: 'event',
+    rarity: 'holo',
+    flavorText: 'The city is doing absolutely nothing dramatic.',
+    art: { sprite: 'background', x: 200, y: 40, w: 480, h: 360 },
+  },
 } as const satisfies Record<CardId, CardDefinition>;
 
 export type KnownCardId = keyof typeof CARDS;

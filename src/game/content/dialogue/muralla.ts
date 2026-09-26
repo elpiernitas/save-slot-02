@@ -35,6 +35,26 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
     },
   },
 
+  'muralla.lamp': {
+    id: 'muralla.lamp',
+    start: 'a',
+    nodes: {
+      a: line('a', [
+        'Una farola de hierro.[pause] Aún no se ha encendido; está esperando su momento.',
+      ]),
+    },
+  },
+
+  'muralla.gull': {
+    id: 'muralla.gull',
+    start: 'a',
+    nodes: {
+      a: line('a', [
+        'Una gaviota te mira fijamente.[pause] Tú no llevas comida. Ella no se lo cree.',
+      ]),
+    },
+  },
+
   'muralla.board': {
     id: 'muralla.board',
     start: 'a',

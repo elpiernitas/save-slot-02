@@ -1,5 +1,15 @@
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { MURALLA_ARRIVAL, MURALLA_FLAGS } from '../../content/dialogue/muralla';
+import {
+  BEACON_REJECTED,
+  beaconSynced,
+  ROUTE_FLAGS,
+  ROUTE_NODE,
+  ROUTE_SOLVED,
+  ROUTE_UPDATE,
+  SERVICE_ACCESS,
+  SERVICE_ACCESS_DONE,
+} from '../../content/dialogue/route';
 import type { DialogueScript } from '../../dialogue/types';
 import { newAcquisitions, type Acquisition } from '../../inventory/cards';
 import { AcquisitionOverlay } from '../../inventory/ui/AcquisitionOverlay';
@@ -9,6 +19,22 @@ import { DialoguePlayer } from '../../dialogue/ui/DialoguePlayer';
 import { InputContext } from '../../input/InputContext';
 import { INPUT_PRIORITY, type InputHandler } from '../../input/inputRouter';
 import type { GameSave } from '../../state/types';
+import {
+  BEACONS_ID,
+  chapterInteraction,
+  chapterStep,
+  routeUpdateDue,
+  TERMINAL_ID,
+} from '../../puzzles/chapter';
+import { BeaconIcon } from '../../puzzles/routeBeacons/BeaconIcon';
+import {
+  activateBeacon,
+  initialBeacons,
+  type BeaconSymbol,
+} from '../../puzzles/routeBeacons/routeBeacons';
+import { RouteHud } from '../../puzzles/routeBeacons/RouteHud';
+import { RoutePulse } from '../../puzzles/routeBeacons/RoutePulse';
+import { SyncTerminal } from '../../puzzles/syncTerminal/SyncTerminal';
 import { useGame } from '../../state/useGame';
 import { Menu } from '../../ui/Menu';
 import { useMenu } from '../../ui/useMenu';
@@ -38,6 +64,13 @@ const RESUME_COOLDOWN_MS = 250;
 /** World art is loaded once per session and shared by every mount. */
 let spriteImages: Promise<SpriteImages> | null = null;
 const loadWorldArt = () => (spriteImages ??= loadSpriteImages());
+
+/** Where the beacon symbol tags float (world px, above each painted object). */
+const BEACON_MARKS: ReadonlyArray<{ symbol: BeaconSymbol; x: number; y: number }> = [
+  { symbol: 'cup', x: 128, y: 194 },
+  { symbol: 'lamp', x: 199, y: 172 },
+  { symbol: 'bird', x: 167, y: 284 },
+];
 
 const TIME_LABEL = { morning: 'MAÑANA', afternoon: 'TARDE', sunset: 'ATARDECER', night: 'NOCHE' };
 
@@ -78,6 +111,14 @@ export function OverworldScene(_: SceneProps) {
   const beforeDialogueRef = useRef<GameSave>(save);
   const [rewardPending, setRewardPending] = useState(false);
   const [rewards, setRewards] = useState<Acquisition[]>([]);
+  /** GAME-06 overlays: calibration pattern and SYNC TERMINAL (world paused). */
+  const [overlay, setOverlay] = useState<'pulse' | 'terminal' | null>(null);
+  /** Route beacons: runtime only; a refresh restarts calibration (completion persists). */
+  const [beacons, setBeacons] = useState(initialBeacons);
+  const beaconsRef = useRef(beacons);
+  /** What happens once the current dialogue (and its rewards) is over. */
+  const nextStepRef = useRef<(() => void) | null>(null);
+  const markRefs = useRef<Array<HTMLDivElement | null>>([]);
   const [images, setImages] = useState<SpriteImages | null>(null);
 
   useEffect(() => {
@@ -97,8 +138,9 @@ export function OverworldScene(_: SceneProps) {
     live.current = { dialogue, menuOpen, reduced, save };
   });
 
-  const openDialogue = (script: DialogueScript) => {
+  const openDialogue = (script: DialogueScript, then?: () => void) => {
     engineRef.current?.setPaused(true);
+    nextStepRef.current = then ?? null;
     beforeDialogueRef.current = live.current.save;
     // Lower-third box would cover PLAYER 1: move it to the top instead.
     setDialogueAtTop(playerScreenYRef.current > DIALOGUE_FLIP_Y);
@@ -114,20 +156,69 @@ export function OverworldScene(_: SceneProps) {
       setRewardPending(false);
       const gained = newAcquisitions(before, live.current.save);
       if (gained.length) setRewards(gained);
-      else engineRef.current?.setPaused(false, performance.now(), RESUME_COOLDOWN_MS);
+      else resume();
     });
   };
   const closeRewards = () => {
     setRewards([]);
-    engineRef.current?.setPaused(false, performance.now(), RESUME_COOLDOWN_MS);
+    resume();
+  };
+  /** Runs the queued follow-up, the route update if due, or gives the world back. */
+  const resume = () => {
+    const next = nextStepRef.current;
+    nextStepRef.current = null;
+    if (next) next();
+    else if (routeUpdateDue(live.current.save))
+      openDialogue(ROUTE_UPDATE, () => setOverlay('pulse'));
+    else engineRef.current?.setPaused(false, performance.now(), RESUME_COOLDOWN_MS);
+  };
+  const closeOverlay = () => {
+    setOverlay(null);
+    resume();
+  };
+  const finishTerminal = () => {
+    dispatch({ type: 'puzzle/complete', puzzle: TERMINAL_ID, attempts: 1 });
+    dispatch({ type: 'flag/set', flag: ROUTE_FLAGS.player2SignalMissing, value: true });
+    closeOverlay();
+  };
+  /** World object faced + confirm: chapter logic first, plain dialogue otherwise. */
+  const interact = (found: Interactable) => {
+    const step = chapterInteraction(found.id, live.current.save);
+    switch (step.kind) {
+      case 'beacon': {
+        const { state, outcome } = activateBeacon(beaconsRef.current, step.symbol);
+        beaconsRef.current = state;
+        setBeacons(state);
+        if (outcome === 'solved') {
+          dispatch({ type: 'puzzle/complete', puzzle: BEACONS_ID, attempts: state.attempts });
+          openDialogue(ROUTE_SOLVED);
+        } else if (outcome === 'rejected') openDialogue(BEACON_REJECTED);
+        else if (outcome === 'synced')
+          openDialogue(beaconSynced(step.symbol, state.progress, state.sequence.length));
+        return;
+      }
+      case 'routeNode':
+        openDialogue(ROUTE_NODE, () => setOverlay('pulse'));
+        return;
+      case 'serviceAccess':
+        openDialogue(SERVICE_ACCESS, () => setOverlay('terminal'));
+        return;
+      case 'serviceDone':
+        openDialogue(SERVICE_ACCESS_DONE);
+        return;
+      case 'default': {
+        const script = scriptForInteractable(found);
+        if (script) openDialogue(script);
+      }
+    }
   };
   const setMenu = (open: boolean) => {
     setPanel(open ? 'pause' : null);
     engineRef.current?.setPaused(open, performance.now(), open ? 0 : RESUME_COOLDOWN_MS);
   };
-  const actions = useRef({ openDialogue, setMenu });
+  const actions = useRef({ interact, setMenu });
   useLayoutEffect(() => {
-    actions.current = { openDialogue, setMenu };
+    actions.current = { interact, setMenu };
   });
 
   useEffect(() => {
@@ -145,8 +236,7 @@ export function OverworldScene(_: SceneProps) {
       const engine = engineRef.current;
       if (input === 'confirm' && engine) {
         const found = engine.tryInteract(performance.now());
-        const script = found && scriptForInteractable(found);
-        if (script) actions.current.openDialogue(script);
+        if (found) actions.current.interact(found);
       } else if (input === 'cancel') {
         actions.current.setMenu(true);
       }
@@ -174,6 +264,12 @@ export function OverworldScene(_: SceneProps) {
           prompt.style.top = `${((snapshot.pos.y - snapshot.camera.y - PROMPT_LIFT) / view.h) * 100}%`;
         }
         playerScreenYRef.current = (snapshot.pos.y - snapshot.camera.y) / view.h;
+        BEACON_MARKS.forEach((mark, i) => {
+          const el = markRefs.current[i];
+          if (!el) return;
+          el.style.left = `${((mark.x - snapshot.camera.x) / view.w) * 100}%`;
+          el.style.top = `${((mark.y - snapshot.camera.y) / view.h) * 100}%`;
+        });
         if (snapshot.moving && !hasMovedRef.current) {
           hasMovedRef.current = true;
           setHasMoved(true);
@@ -204,7 +300,10 @@ export function OverworldScene(_: SceneProps) {
     };
   }, [router, dispatch, map, spawn, images]);
 
-  const busy = Boolean(dialogue) || menuOpen || rewards.length > 0 || rewardPending;
+  const busy =
+    Boolean(dialogue) || menuOpen || rewards.length > 0 || rewardPending || overlay !== null;
+  const calibrating = chapterStep(save) === 'calibrating';
+  const syncedSymbols = beacons.sequence.slice(0, beacons.progress);
   const showPrompt = target && !busy;
 
   return (
@@ -225,6 +324,21 @@ export function OverworldScene(_: SceneProps) {
           </span>
         </footer>
       )}
+      {calibrating && <RouteHud state={beacons} />}
+      {calibrating &&
+        BEACON_MARKS.map((mark, i) => (
+          <div
+            key={mark.symbol}
+            ref={(el) => {
+              markRefs.current[i] = el;
+            }}
+            className="beacon-mark"
+            data-synced={syncedSymbols.includes(mark.symbol) || undefined}
+            aria-hidden="true"
+          >
+            <BeaconIcon symbol={mark.symbol} />
+          </div>
+        ))}
       <div ref={promptRef} className="overworld__prompt" role="status" hidden={!showPrompt}>
         <kbd>E</kbd> INTERACT
       </div>
@@ -237,6 +351,10 @@ export function OverworldScene(_: SceneProps) {
         />
       )}
       {rewards.length > 0 && <AcquisitionOverlay entries={rewards} onDone={closeRewards} />}
+      {overlay === 'pulse' && <RoutePulse sequence={beacons.sequence} onDone={closeOverlay} />}
+      {overlay === 'terminal' && (
+        <SyncTerminal onComplete={finishTerminal} onLeave={closeOverlay} />
+      )}
       {panel === 'pause' && (
         <PauseMenu
           onResume={() => setMenu(false)}
