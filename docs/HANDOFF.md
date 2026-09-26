@@ -226,7 +226,12 @@ Final y save slot persistente en `src/game/ending/`.
 
 Música y SFX en `src/game/audio/`; pulido de la ruta crítica.
 
+## GAME-12 — release candidate (D-076)
+
+Checklist en `docs/RELEASE_CHECKLIST.md`. Sin merge ni deploy.
+
 ## Próximo paso exacto
 
-1. GAME-12 — QA de producción y release candidate (sin merge ni deploy).
+1. Revisión final de Manu/ChatGPT del release candidate.
+2. Solo con su decisión: merge, deploy en Netlify y smoke en producción.
 3. Arte no bloqueante: CHAR-003 (sprite de Manu) y CHAR-004 (retrato).

@@ -16,7 +16,7 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | GAME-09 | Final + save slot                          | 🟡 Hecho (autónomo)    |
 | GAME-10 | Desbloqueos posteriores                    | ✂️ Recortado           |
 | GAME-11 | Easter eggs, sonido, animaciones y pulido  | 🟡 Hecho (autónomo)    |
-| GAME-12 | QA en ordenador + producción Netlify       | Pendiente              |
+| GAME-12 | QA en ordenador + producción Netlify       | 🟡 RC listo, sin deploy |
 
 ## Detalle por fase
 

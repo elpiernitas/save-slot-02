@@ -955,3 +955,15 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
   sprite/retrato de Manu (CHAR-003/004); en Pixelify Sans la C mayúscula se
   confunde con la O a tamaños pequeños (cambiar de fuente sería un cambio de
   dirección visual, queda para ChatGPT/Manu).
+
+### D-076 · 2026-09-26 · GAME-12: release candidate (sin merge ni deploy)
+
+- QA de producción en local; resultados en `docs/RELEASE_CHECKLIST.md`
+  (sección "Estado RC") y capturas en `docs/art/review/game-12/`.
+- El recorrido completo automatizado usa el servidor de desarrollo porque el
+  bot del jefe necesita `window.__desync`, que no existe en producción. El
+  build de producción se verifica escena a escena con guardados sembrados.
+- Solo Chromium disponible en este entorno: Safari y Firefox quedan para la
+  revisión final de Manu.
+- Deuda no bloqueante: sprite/retrato de Manu, Luis nativo 80×120, limpieza
+  de ENV-001, legibilidad de la C en Pixelify Sans.
