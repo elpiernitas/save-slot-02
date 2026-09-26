@@ -734,3 +734,22 @@ es idéntico byte a byte al original. No hay redibujado ni reinterpretación.
 
 Capturas nativas 640×360: `docs/art/review/char-001/`. ENV-001 no se toca
 hasta la revisión de CHAR-001 en contexto.
+
+### D-064 · 2026-09-26 · GAME-04R: reparto de roles y dirección visual
+
+Manu fija el reparto: **ChatGPT** lleva la dirección creativa visual; **Claude**
+integra el arte final y se ocupa solo de lo técnico (anclas, colisiones,
+layering, cámara, recortes, importación, validación, tests, capturas de QA).
+
+- CHAR-001 (Luis) aceptado y congelado: no se redibuja ni se reproporciona.
+- La escena de La Muralla **no** está aceptada. Dirección objetivo: pixel art
+  moderno e ilustrado, tarde cálida, profundidad real con foreground /
+  midground / background, foreground que enmarque, terraza viva, fachada con
+  encanto, menos mapa plano y menos adoquín.
+- Sin aproximaciones procedurales del estilo. Los placeholders son solo
+  soporte técnico y no se presentan como dirección visual.
+- El arte que falte se pide como contrato técnico (nombre, tamaño, alfa,
+  ancla, huella de colisión, uso en runtime).
+- Siguiente bloqueante: ENV-001 (y FG-001, la capa de foreground). Al llegar:
+  integrar sin rediseñar y devolver 4 capturas (sin HUD, Luis ante el café,
+  interacción en terraza, 1366×768). Sin GAME-05 ni merge hasta cerrar GAME-04R.
