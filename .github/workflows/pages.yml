@@ -1,0 +1,67 @@
+# GitHub Pages review preview (Netlify credits exhausted; director 5848466167).
+# Builds the RC branch for the repository subpath /save-slot-02/ and publishes
+# it with GitHub's official Pages actions. No secrets, no paid services; the
+# game's noindex meta travels with the build. Local dev and `npm run build`
+# are unchanged: the subpath is only passed here.
+name: Pages preview
+
+on:
+  push:
+    branches:
+      - claude/save-slot-02-game-00-5tw0pw
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Full check
+        run: npm run check
+
+      - name: Build for the Pages subpath
+        run: npx vite build --base=/save-slot-02/
+
+      # Any unknown path under the subpath still loads the game.
+      - name: SPA fallback
+        run: cp dist/index.html dist/404.html
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
