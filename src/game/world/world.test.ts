@@ -272,6 +272,17 @@ describe('La Muralla map', () => {
     expect(findInteraction(pos, 'up', map.interactables)?.id).toBe('barDoor');
   });
 
+  it('no walk-through: every prop and NPC stands on a collider (single PLAYER 1)', () => {
+    // A 1×1 probe at the sprite's ground anchor must be solid, so PLAYER 1
+    // can never stand on (and draw over) a table, bench, bike or person.
+    const standing = [...map.props, ...map.npcs];
+    for (const s of standing) {
+      expect(world.isBlocked({ x: s.x - 0.5, y: s.y - 1.5, w: 1, h: 1 }), s.id).toBe(true);
+    }
+    // PLAYER 1 is only ever the dynamic `player` sprite.
+    expect([...map.props, ...map.npcs].some((s) => s.sprite === 'player')).toBe(false);
+  });
+
   it('background walkers pace back and forth inside their lane', () => {
     const walker = { sprite: 'walkerA', y: 100, x0: 0, x1: 100, speed: 50, phase: 0 };
     expect(walkerPose(walker, 1000)).toMatchObject({ x: 50, facing: 'right' });
