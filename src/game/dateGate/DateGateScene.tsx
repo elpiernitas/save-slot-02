@@ -127,8 +127,12 @@ export function DateGateScene(_: SceneProps) {
               onMouseMove={() => stage === 'select' && i !== index && setIndex(i)}
               onClick={() => stage === 'select' && open(i)}
             >
-              <span className="date-gate__arch" aria-hidden="true" />
               <span className="date-gate__label">{g.label}</span>
+              <span
+                className="date-gate__art"
+                data-art={g.kind === 'route' ? g.id : 'friday'}
+                aria-hidden="true"
+              />
               {g.kind === 'route' ? (
                 <span className="date-gate__sub">
                   {g.status === 'elapsed' ? DATE_GATE_COPY.elapsed : g.sub}

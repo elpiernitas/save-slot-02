@@ -230,8 +230,16 @@ Música y SFX en `src/game/audio/`; pulido de la ruta crítica.
 
 Checklist en `docs/RELEASE_CHECKLIST.md`. Sin merge ni deploy.
 
+## Pasada visual — VISUAL MASTER PACK (D-079)
+
+La build real se acerca al pack de ChatGPT sin tocar jugabilidad: compositing
+de personajes, selección de clase según el target, DESYNC en La Muralla de
+noche, paseo marítimo al atardecer en reveal/fecha/final, sprite y retrato de
+Manu, foto final. Evidencia BEFORE/AFTER en `docs/art/review/visual-master/`.
+
 ## Próximo paso exacto
 
-1. Revisión final de Manu/ChatGPT del release candidate.
-2. Solo con su decisión: merge, deploy en Netlify y smoke en producción.
-3. Arte no bloqueante: CHAR-003 (sprite de Manu) y CHAR-004 (retrato).
+1. Revisión de Manu/ChatGPT de la pasada visual (PR #1).
+2. Solo con su decisión: merge y deploy.
+3. Pendiente de arte, no bloqueante: FG-001 (foreground de La Muralla) y un
+   CHAR-001 nativo a la escala de `playerLarge` (hoy ×2 exacto).

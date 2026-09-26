@@ -7,6 +7,7 @@ import { useInput } from '../../input/useInput';
 import type { SceneProps } from '../../scenes/types';
 import { useGame } from '../../state/useGame';
 import { useReducedMotion } from '../../ui/useReducedMotion';
+import { loadImage, MANU_SPRITE, PACK_ART } from '../../art/pack';
 import { loadSpriteImages, type SpriteImages } from '../../world/art/assets';
 import { clearFreshDefeat, isFreshDefeat, revealBeats, STORY_FLAGS } from '../story';
 import '../desync/desync.css';
@@ -51,7 +52,13 @@ export function Player2Reveal(_: SceneProps) {
 
   useEffect(() => {
     let alive = true;
-    (playerArt ??= loadSpriteImages(['player'])).then(
+    (playerArt ??= Promise.all([
+      loadSpriteImages(['player']),
+      loadImage(PACK_ART.seafront),
+      loadImage(MANU_SPRITE.url),
+    ]).then(
+      ([sprites, seafront, manu]) => new Map([...sprites, ['seafront', seafront], ['manu', manu]]),
+    )).then(
       (loaded) => alive && setImages(loaded),
       (error: unknown) => console.error('Reveal art failed to load', error),
     );
@@ -183,9 +190,13 @@ export function Player2Reveal(_: SceneProps) {
               <span className="reveal__slot-status">{REVEAL_COPY.recovered}</span>
             </header>
             <div className="reveal__slot-body">
-              {/* Empty player slot (no face): only the name resolves. */}
+              {/* The slot stays empty until the name resolves; then his face loads. */}
               <div className="reveal__frame" aria-hidden="true">
-                <span>02</span>
+                {beat.id === 'name' ? (
+                  <img src={PACK_ART.manuPortrait} alt="" draggable={false} />
+                ) : (
+                  <span>02</span>
+                )}
               </div>
               <div className="reveal__id">
                 <span className="reveal__label">PLAYER 2</span>

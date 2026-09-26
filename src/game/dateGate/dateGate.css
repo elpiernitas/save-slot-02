@@ -3,56 +3,84 @@
  * Selected = gold edge + cursor; Friday = an occupied, glowing quest (not an
  * error); elapsed = dim with written status. Nothing is colour-only.
  */
+/* The world behind the gates: sunset seafront (master pack), dimmed for UI. */
 .date-gate__sky {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to bottom, transparent 62%, rgb(191 238 242 / 0.08) 62.3%, transparent 62.6%),
-    linear-gradient(to bottom, #0b1626 0%, #13243d 55%, #1c2b44 62%, #0b1626 100%);
+    linear-gradient(rgb(11 22 38 / 0.55), rgb(11 22 38 / 0.15) 45%, rgb(11 22 38 / 0.6)),
+    url('../../assets/pack/seafront.png') center bottom / cover no-repeat;
 }
 
 .date-gate__title {
   position: absolute;
-  top: calc(var(--px) * 14);
+  top: calc(var(--px) * 10);
   left: 0;
   right: 0;
   margin: 0;
   text-align: center;
-  font-size: var(--text-lg);
-  color: var(--color-system);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: calc(var(--px) * 2);
+  color: var(--color-select);
+  text-shadow:
+    calc(var(--px) * 2) calc(var(--px) * 2) 0 #0b1626,
+    0 0 calc(var(--px) * 10) rgb(242 193 78 / 0.5);
 }
 
 .date-gate__row {
   position: absolute;
-  top: calc(var(--px) * 44);
+  top: calc(var(--px) * 40);
   left: 50%;
   transform: translateX(-50%);
   display: grid;
-  grid-template-columns: repeat(4, calc(var(--px) * 92));
-  gap: calc(var(--px) * 12);
+  grid-template-columns: repeat(4, calc(var(--px) * 96));
+  gap: calc(var(--px) * 10);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+/* DATE PORTALS (master pack collage): a navy card with the place's art. */
 .date-gate__gate {
   position: relative;
   display: grid;
   justify-items: center;
   align-content: start;
-  gap: calc(var(--px) * 3);
-  cursor: pointer;
+  gap: calc(var(--px) * 2);
+  padding: calc(var(--px) * 4) calc(var(--px) * 3) calc(var(--px) * 5);
   text-align: center;
+  cursor: pointer;
+  background: rgb(14 26 44 / 0.9);
+  border: var(--px) solid var(--color-border-dim);
+  box-shadow: calc(var(--px) * 3) calc(var(--px) * 3) 0 rgb(0 0 0 / 0.45);
+  transition: transform var(--duration-fast) steps(2);
 }
 
-.date-gate__arch {
-  width: calc(var(--px) * 64);
-  height: calc(var(--px) * 88);
+.date-gate__art {
+  width: 100%;
+  aspect-ratio: 1;
+  background-size: cover;
+  background-position: center;
   border: var(--px) solid var(--color-border-dim);
-  border-bottom: none;
-  border-radius: calc(var(--px) * 32) calc(var(--px) * 32) 0 0;
-  background: linear-gradient(to top, rgb(242 193 78 / 0.18), transparent 70%);
-  box-shadow: inset 0 0 0 calc(var(--px) * 3) var(--color-bg);
+  image-rendering: auto;
+}
+
+.date-gate__art[data-art='wed-30-sep'] {
+  background-image: url('../../assets/pack/date-wed.png');
+}
+.date-gate__art[data-art='thu-01-oct'] {
+  background-image: url('../../assets/pack/date-thu.png');
+}
+.date-gate__art[data-art='sun-04-oct'] {
+  background-image: url('../../assets/pack/date-sun.png');
+}
+.date-gate__art[data-art='friday'] {
+  background-image: url('../../assets/pack/date-fri.png');
+  background-size: 100% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #10182a;
 }
 
 .date-gate__label {
@@ -68,9 +96,18 @@
   color: var(--color-text-dim);
 }
 
-.date-gate__gate[data-selected] .date-gate__arch {
+.date-gate__gate[data-selected] {
   border-color: var(--color-select);
-  background: linear-gradient(to top, rgb(242 193 78 / 0.4), transparent 75%);
+  box-shadow:
+    inset 0 0 0 var(--px) #0b1626,
+    inset 0 0 0 calc(var(--px) * 2) var(--color-select),
+    0 0 calc(var(--px) * 12) rgb(242 193 78 / 0.45),
+    calc(var(--px) * 3) calc(var(--px) * 4) 0 rgb(0 0 0 / 0.45);
+  transform: translateY(calc(var(--px) * -4));
+}
+
+.date-gate__gate[data-selected] .date-gate__art {
+  border-color: var(--color-select);
 }
 
 .date-gate__gate[data-selected] .date-gate__label {
@@ -80,19 +117,23 @@
 .date-gate__gate[data-selected]::before {
   content: '▼';
   position: absolute;
-  top: calc(var(--px) * -11);
+  top: calc(var(--px) * -12);
   font-size: var(--text-xs);
   color: var(--color-select);
+}
+
+.date-gate__gate:not([data-selected]) .date-gate__art {
+  filter: saturate(0.8) brightness(0.85);
 }
 
 /* Friday: the quest that already exists, lit and occupied. */
 .date-gate__gate[data-kind='mainQuest'] {
   cursor: default;
+  border-color: var(--color-system);
 }
 
-.date-gate__gate[data-kind='mainQuest'] .date-gate__arch {
+.date-gate__gate[data-kind='mainQuest'] .date-gate__art {
   border-color: var(--color-system);
-  background: linear-gradient(to top, rgb(191 238 242 / 0.45), rgb(191 238 242 / 0.12));
 }
 
 .date-gate__gate[data-kind='mainQuest'] .date-gate__sub {
@@ -105,12 +146,11 @@
 
 .date-gate__gate[data-status='elapsed'] {
   cursor: default;
+  border-style: dashed;
 }
 
-.date-gate__gate[data-status='elapsed'] .date-gate__arch {
-  border-style: dashed;
-  border-bottom-style: none;
-  background: none;
+.date-gate__gate[data-status='elapsed'] .date-gate__art {
+  filter: grayscale(1) brightness(0.5);
 }
 
 .date-gate__gate[data-status='elapsed'] .date-gate__label {
@@ -119,27 +159,16 @@
 
 .date-gate__party {
   position: absolute;
-  bottom: calc(var(--px) * 16);
+  bottom: calc(var(--px) * 4);
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  align-items: flex-end;
-  gap: calc(var(--px) * 26);
 }
 
-.date-gate__p1 {
+.party__canvas {
   display: block;
-  background-repeat: no-repeat;
+  width: calc(var(--px) * 100);
+  height: calc(var(--px) * 66);
   image-rendering: pixelated;
-}
-
-.date-gate__p2 {
-  margin-bottom: calc(var(--px) * 30);
-  padding: 0 calc(var(--px) * 3);
-  font-size: var(--text-xs);
-  font-weight: 700;
-  color: var(--color-bg);
-  background: var(--color-system);
 }
 
 .date-gate__human {

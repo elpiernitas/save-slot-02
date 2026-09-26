@@ -1004,3 +1004,38 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
   de la O (`docs/art/review/rc-fix-01/glyph-c-pixelify-vs-mono-1366.png`). Se
   mantiene Pixelify; la confusión solo aparece en tamaños medianos o en
   negrita y no se cambia la dirección tipográfica.
+
+### D-079 · 2026-09-26 · Pasada visual desde el VISUAL MASTER PACK de ChatGPT
+
+- Fuente de verdad visual: `SAVE_SLOT_02_CHATGPT_VISUAL_MASTER_PACK` (ZIP 1–3
+  de 3). Prioridad: 01_PRIMARY_CANON > 03_UI_FLOW > 04_CHARACTERS >
+  05_PROPS_ASSETS > 02_ATMOSPHERE_STYLE > 06_RUNTIME_REFERENCE. Sustituye, para
+  esta pasada, la regla anterior de "sin arte de Claude": no se dibuja nada;
+  todo píxel nuevo es un recorte del pack (`tools/art/pack_crops.py`,
+  coordenadas documentadas en `docs/ASSETS.md`).
+- Capa de compositing reutilizable `src/game/render/compositing.ts`: tinte de
+  luz (multiply), oclusión hacia los pies, rim de 1 px del lado del sol,
+  sombra proyectada con la silueta del propio sprite, sombra de contacto y
+  grade (lavado + viñeta). Tres luces: `GOLDEN_HOUR` (La Muralla),
+  `SEAFRONT_SUNSET` (reveal/fecha/final), `LAMPLIT_NIGHT` (DESYNC).
+- La Muralla: CHAR-001 no se sustituye; se integra con la capa anterior. Luis
+  y los NPC siguen siendo capa B (y-sort), ENV-001 capa A, grade capa D.
+- Selección de clase: la build real era negra en la intro y navy plano después.
+  Se reconstruye la presentación según `03_UI_FLOW/04_CLASS_SELECT_TARGET.png`
+  (cabecera con skyline, carta PLAYER 1 con retrato, tres cartas ilustradas).
+  Máquina de estados, textos de clase y guardado sin cambios.
+- DESYNC: el fondo pasa a ser La Muralla de noche (ENV-001 con grade nocturno,
+  como la variante NOCHE del canon 08); la arena es un panel navy translúcido.
+  Mecánicas intactas.
+- PLAYER 2: CHAR-003 = hoja de `04_MANU_SPRITE_SHEET_ART_TARGET` reducida a la
+  rejilla de CHAR-001 (40×60, ancla 20,57, 55 px de figura); CHAR-004 = retrato
+  de `09_MASTER_CONCEPT_SHEET`. El marcador de texto "MANU" desaparece. El slot
+  02 sigue vacío hasta el beat del nombre (reconocimiento primero).
+- Reveal, puerta cooperativa, elección de ruta, final y SAVE SLOT: fondo del
+  paseo marítimo al atardecer (recorte limpio de `03_TITLE_ATMOSPHERE`, sin
+  personajes). Las fechas usan las ilustraciones de DATE PORTALS del collage;
+  solo imagen, sin texto de actividad nuevo. El final muestra la foto del
+  malecón (panel FINAL SAVE CONFIRMATION, recortada sin Randy).
+- Randy (perro) no entra: fue recortado del alcance y se excluye de todos los
+  recortes. Sin GAME nuevo, sin cambios de jugabilidad, sin merge.
+

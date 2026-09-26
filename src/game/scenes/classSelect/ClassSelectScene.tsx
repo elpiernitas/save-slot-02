@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CLASS_ASSIGNED, CLASS_SELECT_INTRO } from '../../content/dialogue/classSelect';
-import { PLAYER_SILHOUETTE, SIGILS } from '../../content/sigils';
+import { PACK_ART } from '../../art/pack';
+import { SIGILS } from '../../content/sigils';
 import { DialoguePlayer } from '../../dialogue/ui/DialoguePlayer';
 import { INPUT_PRIORITY } from '../../input/inputRouter';
 import { useInput } from '../../input/useInput';
@@ -18,6 +19,10 @@ import './ClassSelectScene.css';
  * Character-creation screen: pick GUERRERO, TANQUE or CURADOR.
  * Logic lives in `classSelectMachine`; this component only renders it and
  * turns its commands into game actions. Nothing is saved before SÍ.
+ *
+ * Presentation follows 03_UI_FLOW/04_CLASS_SELECT_TARGET (master pack):
+ * sunset header, PLAYER 1 portrait card on the left, three illustrated
+ * class cards on the right.
  */
 export function ClassSelectScene(_: SceneProps) {
   const { save, services, dispatch } = useGame();
@@ -62,11 +67,27 @@ export function ClassSelectScene(_: SceneProps) {
 
   return (
     <div className="scene class-select" data-phase={state.phase}>
-      <p className="class-select__label">PLAYER 1 // ELECCIÓN DE CLASE</p>
+      <div className="class-select__sky" style={{ backgroundImage: `url(${PACK_ART.classSky})` }} />
+      <header className="class-select__header">
+        <p className="class-select__label">PLAYER 1 // ELECCIÓN DE CLASE</p>
+        <h1 className="class-select__heading">ELIGE TU CLASE</h1>
+        <p className="class-select__sub">TRES CAMINOS, LA MISMA AVENTURA</p>
+      </header>
+
+      <PlayerPanel def={showCards ? selected : null} />
+
+      {!showCards && (
+        <ul className="class-select__cards" aria-hidden="true">
+          {PLAYER_CLASS_LIST.map((def) => (
+            <li key={def.id} className="class-card class-card--empty">
+              ???
+            </li>
+          ))}
+        </ul>
+      )}
 
       {showCards && (
         <>
-          <h1 className="class-select__heading">ELIGE TU CLASE.</h1>
           <ul className="class-select__cards" role="listbox" aria-label="Clases">
             {PLAYER_CLASS_LIST.map((def, index) => (
               <ClassCard
@@ -89,16 +110,25 @@ export function ClassSelectScene(_: SceneProps) {
               />
             ))}
           </ul>
-          <ClassDetail def={selected} />
           {state.phase === 'browse' && (
             <footer className="class-select__hints key-hints">
               <span>
                 <kbd>← →</kbd>
                 <kbd>A D</kbd>CAMBIAR
               </span>
-              <span>
+              <button
+                type="button"
+                className="class-select__confirm"
+                tabIndex={-1}
+                // Mouse only: keyboard ENTER is already handled by useInput.
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => {
+                  services.audio.playSfx('confirm');
+                  send({ type: 'requestConfirm' });
+                }}
+              >
                 <kbd>ENTER</kbd>ELEGIR
-              </span>
+              </button>
               <span>
                 <kbd>ESC</kbd>TÍTULO
               </span>
@@ -158,34 +188,40 @@ function ClassCard({
       onMouseMove={onHover}
       onClick={onClick}
     >
-      <Sigil id={def.sigil} className="class-card__sigil" />
       <h2 className="class-card__name">{def.displayName}</h2>
+      <p className="class-card__traits">{def.traitLabels.join(' · ')}</p>
+      <div className="class-card__art">
+        <img src={PACK_ART.classArt[def.id]} alt="" draggable={false} />
+      </div>
+      <span className="class-card__badge">
+        <Sigil id={def.sigil} className="class-card__sigil" />
+      </span>
       <p className="class-card__short">{def.shortDescription}</p>
       <p className="class-card__flavor">«{def.flavorLine}»</p>
     </li>
   );
 }
 
-/** Abstract preview: generic figure + the class sigil floating above it. */
-function ClassDetail({ def }: { def: PlayerClassDefinition }) {
+/** PLAYER 1 card: Luis's portrait, and the highlighted class's long text. */
+function PlayerPanel({ def }: { def: PlayerClassDefinition | null }) {
   return (
-    <section className="class-detail rpg-box" data-accent={def.accent} aria-live="polite">
-      <div className="class-detail__preview" aria-hidden="true">
-        <Sigil id={def.sigil} className="class-detail__halo" />
-        <PixelSprite
-          className="class-detail__figure"
-          rows={PLAYER_SILHOUETTE.rows}
-          palette={PLAYER_SILHOUETTE.palette}
-        />
-        <span className="class-detail__ground" />
+    <section className="class-player" data-accent={def?.accent} aria-live="polite">
+      <p className="class-player__bar">
+        <span>PLAYER 1</span>
+        <span>LUIS</span>
+      </p>
+      <div className="class-player__portrait">
+        <img src={PACK_ART.classPlayer1} alt="" draggable={false} />
       </div>
-      <div className="class-detail__text">
-        <p className="class-detail__long">{def.longDescription}</p>
-        <ul className="class-detail__traits">
-          {def.traitLabels.map((label) => (
-            <li key={label}>{label}</li>
-          ))}
-        </ul>
+      <div className="class-player__text">
+        {def ? (
+          <>
+            <p className="class-player__class">{def.displayName}</p>
+            <p className="class-player__long">{def.longDescription}</p>
+          </>
+        ) : (
+          <p className="class-player__class class-player__class--empty">CLASE: ???</p>
+        )}
       </div>
     </section>
   );

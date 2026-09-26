@@ -119,7 +119,7 @@ export function DesyncBoss(_: SceneProps) {
 
   useEffect(() => {
     let alive = true;
-    (playerArt ??= loadSpriteImages(['player'])).then(
+    (playerArt ??= loadSpriteImages(['player', 'background'])).then(
       (loaded) => alive && setImages(loaded),
       (error: unknown) => console.error('Boss art failed to load', error),
     );

@@ -1,3 +1,9 @@
+import {
+  createLitCache,
+  drawLitCharacter,
+  GOLDEN_HOUR,
+  gradeFrame,
+} from '../../render/compositing';
 import { CHARACTER_ROWS, SPRITES, type SpriteImages } from '../art/assets';
 import type { WorldSnapshot } from '../engine/WorldEngine';
 import type { Facing, Walker, WorldMap } from '../types';
@@ -9,7 +15,10 @@ import type { Facing, Walker, WorldMap } from '../types';
  *
  * All art is pre-rendered PNG (see art/assets.ts): the background holds the
  * façades, paving and baked shadows; props, NPCs and the player are y-sorted
- * every frame by their ground anchor.
+ * every frame by their ground anchor. Characters go through the compositing
+ * layer (render/compositing.ts): lit, rim-lit, with cast + contact shadow,
+ * and the finished frame gets a light grade so sprites and paint share one
+ * light.
  */
 export interface WorldRenderer {
   /** Adapts the backing store to the displayed canvas height (device px). */
@@ -26,6 +35,7 @@ export function createWorldRenderer(
   options: { reducedMotion: () => boolean },
 ): WorldRenderer {
   const ctx = canvas.getContext('2d')!;
+  const light = createLitCache(GOLDEN_HOUR);
   let scale = 1;
 
   const resize = (displayHeightPx: number) => {
@@ -84,22 +94,24 @@ export function createWorldRenderer(
       list.push({
         baseY: y,
         draw: () => {
-          // Contact shadow: soft pixel ellipse under the feet, sized to the sprite.
-          const k = (SPRITES[id]?.frameWidth ?? 40) / 40;
-          ctx.fillStyle = 'rgba(40, 26, 50, 0.3)';
-          ctx.fillRect(
-            Math.round(x - 8 * k),
-            Math.round(y - k),
-            Math.round(16 * k),
-            Math.round(2 * k),
+          const info = SPRITES[id];
+          const img = images.get(id);
+          if (!info || !img) return;
+          drawLitCharacter(
+            ctx,
+            light,
+            id,
+            {
+              img,
+              sx: frame * info.frameWidth,
+              sy: CHARACTER_ROWS[facing] * info.frameHeight,
+              w: info.frameWidth,
+              h: info.frameHeight,
+            },
+            { x: info.anchorX, y: info.anchorY },
+            x,
+            y,
           );
-          ctx.fillRect(
-            Math.round(x - 6 * k),
-            Math.round(y - 2 * k),
-            Math.round(12 * k),
-            Math.round(4 * k),
-          );
-          blit(id, x, y, frame, CHARACTER_ROWS[facing]);
         },
       });
     for (const npc of map.npcs) character(npc.sprite, npc.x, npc.y, npc.facing, 0);
@@ -116,7 +128,14 @@ export function createWorldRenderer(
     const front = map.foreground ? images.get(map.foreground) : undefined;
     if (front) ctx.drawImage(front, 0, 0);
 
-    // No global colour grade: lighting lives in the art (GAME_04R_VISUAL_REBUILD §8).
+    // Light grade in screen space: warm wash from the sun side + vignette.
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    gradeFrame(ctx, view.w, view.h, {
+      wash: 'rgb(255 190 110)',
+      washAlpha: 0.14,
+      washFrom: [0.8, 0.1],
+      vignette: 0.32,
+    });
   };
 
   return { resize, draw, destroy: () => undefined };

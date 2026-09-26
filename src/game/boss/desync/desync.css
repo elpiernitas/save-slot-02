@@ -25,6 +25,13 @@
   letter-spacing: var(--px);
 }
 
+.reveal {
+  background:
+    linear-gradient(rgb(11 22 38 / 0.25), rgb(11 22 38 / 0.6)),
+    url('../../../assets/pack/seafront.png') center bottom / cover no-repeat,
+    #0b1626;
+}
+
 .desync__canvas {
   position: absolute;
   inset: 0;
@@ -153,7 +160,7 @@
   place-content: center;
   gap: calc(var(--px) * 4);
   text-align: center;
-  background: #0b1626;
+  background: rgb(8 14 30 / 0.72);
   cursor: pointer;
 }
 

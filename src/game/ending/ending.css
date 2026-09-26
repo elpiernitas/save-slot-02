@@ -3,7 +3,17 @@
  * Warm gold for the chosen route; no confetti, no hearts.
  */
 .ending__card {
-  background: transparent;
+  background: rgb(11 22 38 / 0.45);
+}
+
+.ending__card > * {
+  justify-self: center;
+  padding: calc(var(--px) * 3) calc(var(--px) * 10);
+  background: rgb(14 26 44 / 0.88);
+}
+
+.ending__card > .ending__bar {
+  padding: 0;
 }
 
 .ending__bar {
@@ -48,7 +58,7 @@
 
 .ending__route {
   position: absolute;
-  top: 34%;
+  top: 8%;
   left: 0;
   right: 0;
   display: grid;
@@ -61,6 +71,40 @@
   margin: 0;
 }
 
+/* The payoff: the seawall photo from the master pack, kept as a keepsake. */
+.ending__polaroid {
+  margin: 0 0 calc(var(--px) * 4);
+  padding: calc(var(--px) * 5) calc(var(--px) * 5) calc(var(--px) * 16);
+  background: #f6efe0;
+  box-shadow: calc(var(--px) * 3) calc(var(--px) * 4) 0 rgb(0 0 0 / 0.45);
+  transform: rotate(-3deg);
+  animation: polaroid-in 0.5s steps(5) both;
+}
+
+.ending__polaroid img {
+  display: block;
+  width: calc(var(--px) * 110);
+  height: auto;
+}
+
+@keyframes polaroid-in {
+  from {
+    opacity: 0;
+    transform: rotate(-3deg) translateY(calc(var(--px) * 8));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ending__polaroid {
+    animation: none;
+  }
+}
+
+.ending__route-label {
+  padding: var(--px) calc(var(--px) * 6);
+  background: rgb(14 26 44 / 0.88);
+}
+
 .ending__route-label {
   font-size: var(--text-sm);
   color: var(--color-system);
@@ -68,6 +112,7 @@
 
 .ending__route-date {
   padding: calc(var(--px) * 3) calc(var(--px) * 10);
+  background: rgb(14 26 44 / 0.88);
   font-size: var(--text-lg);
   font-weight: 700;
   color: var(--color-select);
@@ -85,7 +130,7 @@
   top: calc(var(--px) * 24);
   left: 50%;
   transform: translateX(-50%);
-  width: calc(var(--px) * 250);
+  width: calc(var(--px) * 300);
   display: grid;
   gap: calc(var(--px) * 6);
   padding: calc(var(--px) * 8);
@@ -103,6 +148,20 @@
 
 .save-slot__ok {
   color: var(--color-system);
+}
+
+.save-slot__body {
+  display: grid;
+  grid-template-columns: calc(var(--px) * 64) 1fr;
+  gap: calc(var(--px) * 8);
+  align-items: center;
+}
+
+.save-slot__photo {
+  display: block;
+  width: 100%;
+  border: calc(var(--px) * 3) solid #f6efe0;
+  box-shadow: calc(var(--px) * 2) calc(var(--px) * 2) 0 rgb(0 0 0 / 0.45);
 }
 
 .save-slot__rows {
@@ -132,10 +191,13 @@
 
 .save-slot__menu {
   position: absolute;
-  top: calc(var(--px) * 142);
+  top: calc(var(--px) * 150);
   left: 50%;
   transform: translateX(-50%);
   width: calc(var(--px) * 140);
+  padding: calc(var(--px) * 4);
+  background: rgb(14 26 44 / 0.9);
+  border: var(--px) solid var(--color-border-dim);
 }
 
 .save-slot .ending__party,
@@ -144,5 +206,4 @@
   left: auto;
   right: calc(var(--px) * 24);
   transform: none;
-  gap: calc(var(--px) * 10);
 }

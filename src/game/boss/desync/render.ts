@@ -1,11 +1,16 @@
 /**
  * DESYNC PROCESS arena drawing. System geometry only (no creature, no face):
- * a navy field, a thin stable grid, the three nodes, the core and PLAYER 1
- * (CHAR-001). The renderer reads state; it never changes it.
+ * a translucent navy system panel with a thin grid, the three nodes, the core
+ * and PLAYER 1 (CHAR-001). The renderer reads state; it never changes it.
+ *
+ * The world stays in the frame: behind the panel is La Muralla at night
+ * (ENV-001 through a night grade, as the master pack's NOCHE variant) and
+ * Luis is lit by the compositing layer. Navy + gold is interface, not scenery.
  *
  * Telegraphs are outlines + chevrons (shape and position, not colour only);
  * active danger is a filled coral shape with a solid edge.
  */
+import { createLitCache, drawLitCharacter, LAMPLIT_NIGHT } from '../../render/compositing';
 import { CHARACTER_ROWS, SPRITES, type SpriteImages } from '../../world/art/assets';
 import {
   ARENA,
@@ -38,8 +43,58 @@ const C = {
 /** Walked distance (px) per step frame. */
 const STEP_PX = 10;
 
+/** ENV-001 → La Muralla at night, pre-rendered once at arena size. */
+function nightBackdrop(bg: CanvasImageSource & { width: number; height: number }) {
+  const c = document.createElement('canvas');
+  c.width = ARENA.w;
+  c.height = ARENA.h;
+  const g = c.getContext('2d')!;
+  const k = Math.max(ARENA.w / bg.width, ARENA.h / bg.height);
+  const w = bg.width * k;
+  const h = bg.height * k;
+  const x = (ARENA.w - w) / 2;
+  const y = (ARENA.h - h) / 2;
+  g.imageSmoothingEnabled = true;
+  g.drawImage(bg, x, y, w, h);
+  // Night: cool multiply over the whole street...
+  g.globalCompositeOperation = 'multiply';
+  g.fillStyle = 'rgb(64 78 140)';
+  g.fillRect(0, 0, ARENA.w, ARENA.h);
+  // ...then the painting's own lights (windows, lamps) glow back through:
+  // the image multiplied by itself keeps only its brightest, warmest areas.
+  const glow = document.createElement('canvas');
+  glow.width = ARENA.w;
+  glow.height = ARENA.h;
+  const gg = glow.getContext('2d')!;
+  gg.drawImage(bg, x, y, w, h);
+  gg.globalCompositeOperation = 'multiply';
+  gg.drawImage(bg, x, y, w, h);
+  gg.drawImage(bg, x, y, w, h);
+  g.globalCompositeOperation = 'lighter';
+  g.globalAlpha = 0.55;
+  g.drawImage(glow, 0, 0);
+  g.globalAlpha = 1;
+  g.globalCompositeOperation = 'source-over';
+  const v = g.createRadialGradient(
+    ARENA.w / 2,
+    ARENA.h / 2,
+    ARENA.h * 0.3,
+    ARENA.w / 2,
+    ARENA.h / 2,
+    ARENA.w * 0.65,
+  );
+  v.addColorStop(0, 'rgb(6 10 24 / 0)');
+  v.addColorStop(1, 'rgb(6 10 24 / 0.6)');
+  g.fillStyle = v;
+  g.fillRect(0, 0, ARENA.w, ARENA.h);
+  return c;
+}
+
 export function createDesyncRenderer(canvas: HTMLCanvasElement, images: SpriteImages | null) {
   const ctx = canvas.getContext('2d')!;
+  const light = createLitCache(LAMPLIT_NIGHT);
+  const bg = images?.get('background');
+  const backdrop = bg ? nightBackdrop(bg) : null;
   let scale = 1;
 
   const resize = (displayHeightPx: number) => {
@@ -202,20 +257,22 @@ export function createDesyncRenderer(canvas: HTMLCanvasElement, images: SpriteIm
     if (hurt && !reduced && Math.floor(s.t / 100) % 2 === 0) return;
     const { x, y, facing } = s.player;
     ctx.globalAlpha = hurt && reduced ? 0.55 : 1;
-    ctx.fillStyle = 'rgba(0,0,0,0.35)';
-    ctx.fillRect(Math.round(x) - 7, Math.round(y) - 2, 14, 3);
     if (img && info) {
       const frame = walked > 0 ? (Math.floor(walked / STEP_PX) % 2) + 1 : 0;
-      ctx.drawImage(
-        img,
-        frame * info.frameWidth,
-        CHARACTER_ROWS[facing] * info.frameHeight,
-        info.frameWidth,
-        info.frameHeight,
-        Math.round(x) - info.anchorX,
-        Math.round(y) - info.anchorY,
-        info.frameWidth,
-        info.frameHeight,
+      drawLitCharacter(
+        ctx,
+        light,
+        'player',
+        {
+          img,
+          sx: frame * info.frameWidth,
+          sy: CHARACTER_ROWS[facing] * info.frameHeight,
+          w: info.frameWidth,
+          h: info.frameHeight,
+        },
+        { x: info.anchorX, y: info.anchorY },
+        x,
+        y,
       );
     }
     ctx.globalAlpha = 1;
@@ -228,9 +285,14 @@ export function createDesyncRenderer(canvas: HTMLCanvasElement, images: SpriteIm
       ctx.imageSmoothingEnabled = false;
       // The page's letter-spacing would otherwise leak into canvas text.
       ctx.letterSpacing = '0px';
-      ctx.fillStyle = C.bg;
-      ctx.fillRect(0, 0, ARENA.w, ARENA.h);
-      ctx.fillStyle = C.field;
+      if (backdrop) {
+        ctx.drawImage(backdrop, 0, 0);
+      } else {
+        ctx.fillStyle = C.bg;
+        ctx.fillRect(0, 0, ARENA.w, ARENA.h);
+      }
+      // The system panel: navy glass over the night street.
+      ctx.fillStyle = 'rgb(14 26 44 / 0.5)';
       ctx.fillRect(SAFE.x, SAFE.y, SAFE.w, SAFE.h);
       ctx.strokeStyle = C.grid;
       ctx.lineWidth = 1;

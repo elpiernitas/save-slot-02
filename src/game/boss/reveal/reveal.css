@@ -10,7 +10,7 @@
   place-content: center;
   justify-items: center;
   gap: calc(var(--px) * 8);
-  background: #0b1626;
+  background: rgb(11 22 38 / 0.25);
 }
 
 .reveal__slot {
@@ -49,12 +49,29 @@
 
 .reveal__frame {
   aspect-ratio: 1;
+  overflow: hidden;
   display: grid;
   place-items: center;
   font-size: var(--text-lg);
   color: var(--color-border-dim);
   background: var(--color-bg);
   border: var(--px) solid var(--color-border-dim);
+}
+
+.reveal__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: reveal-load 0.4s steps(4) both;
+}
+
+@keyframes reveal-load {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
 }
 
 .reveal__slot[data-resolved] .reveal__frame {
@@ -104,9 +121,12 @@
   display: grid;
   justify-items: center;
   gap: var(--px);
+  padding: calc(var(--px) * 2) calc(var(--px) * 8);
   font-size: var(--text-sm);
   color: var(--color-system);
   white-space: nowrap;
+  background: rgb(14 26 44 / 0.86);
+  border: var(--px) solid var(--color-border-dim);
 }
 
 .reveal__gate-prompt {
@@ -127,7 +147,7 @@
   place-content: center;
   gap: calc(var(--px) * 4);
   text-align: center;
-  background: rgb(11 22 38 / 0.94);
+  background: rgb(11 22 38 / 0.72);
 }
 
 .reveal__end p {

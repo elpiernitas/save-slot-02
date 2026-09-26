@@ -8,6 +8,7 @@ import type { SceneProps } from '../scenes/types';
 import { useGame } from '../state/useGame';
 import '../boss/desync/desync.css';
 import '../dateGate/dateGate.css';
+import { PACK_ART } from '../art/pack';
 import { Party } from './Party';
 import { ENDING_BEATS, ENDING_COPY } from './ending';
 import './ending.css';
@@ -90,11 +91,14 @@ export function EndingScene(_: SceneProps) {
         <div className="ending__stage" onClick={beat.id === 'route' ? next : undefined}>
           {beat.id === 'route' && (
             <div className="ending__route" role="status">
+              <figure className="ending__polaroid" aria-hidden="true">
+                <img src={PACK_ART.polaroid} alt="" draggable={false} />
+              </figure>
               <p className="ending__route-label">{ENDING_COPY.route}</p>
               <p className="ending__route-date">{chosenRouteLabel(option)}</p>
             </div>
           )}
-          <Party />
+          {beat.id === 'party' && <Party />}
           {beat.id === 'party' && (
             <div className="dlg-layer" data-placement="top">
               <DialogueBox speaker={MANU_SPEAKER} waiting onClick={next}>

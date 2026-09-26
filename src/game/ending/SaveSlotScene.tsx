@@ -10,6 +10,7 @@ import { useMenu, type MenuItem } from '../ui/useMenu';
 import '../boss/desync/desync.css';
 import '../dateGate/dateGate.css';
 import { saveSlotRows } from './ending';
+import { PACK_ART } from '../art/pack';
 import { Party } from './Party';
 import './ending.css';
 
@@ -51,14 +52,17 @@ export function SaveSlotScene(_: SceneProps) {
           <span>SAVE SLOT 02</span>
           <span className="save-slot__ok">ESTADO — OK</span>
         </header>
-        <dl className="save-slot__rows">
-          {rows.map((row) => (
-            <div key={row.label} className="save-slot__row" data-row={row.label}>
-              <dt>{row.label}</dt>
-              <dd>{row.value}</dd>
-            </div>
-          ))}
-        </dl>
+        <div className="save-slot__body">
+          <img className="save-slot__photo" src={PACK_ART.polaroid} alt="" draggable={false} />
+          <dl className="save-slot__rows">
+            {rows.map((row) => (
+              <div key={row.label} className="save-slot__row" data-row={row.label}>
+                <dt>{row.label}</dt>
+                <dd>{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </section>
       <nav className="save-slot__menu">
         <Menu

@@ -17,6 +17,22 @@ Notas:
 
 ## Gráficos
 
+**VISUAL MASTER PACK (D-079).** Arte de ChatGPT aportado por Manu como fuente
+de verdad visual. `src/assets/pack/` contiene solo recortes (y la hoja de Manu
+reducida) generados por `python3 tools/art/pack_crops.py <carpeta del pack>`:
+
+| Archivo | Origen (pack) | Uso |
+| --- | --- | --- |
+| `seafront.png` | 02_ATMOSPHERE_STYLE/03_TITLE_ATMOSPHERE (0,500)-(712,941) | Fondo de reveal, puerta, fecha, final, SAVE SLOT |
+| `polaroid.png` | 03_UI_FLOW/02_GAME_FLOW_COLLAGE panel 4, sin Randy | Foto del final y del SAVE SLOT |
+| `date-wed/thu/fri/sun.png` | 02_GAME_FLOW_COLLAGE panel 3 (DATE PORTALS) | Arte de cada carta de fecha |
+| `class-player1/warrior/tank/healer/sky.png` | 03_UI_FLOW/04_CLASS_SELECT_TARGET | Selección de clase |
+| `manu.png` | 04_CHARACTERS/04_MANU_SPRITE_SHEET_ART_TARGET → 120×240 (40×60) | CHAR-003, sprite de Manu |
+| `manu-portrait.png` | 01_PRIMARY_CANON/09_MASTER_CONCEPT_SHEET | CHAR-004, retrato del reveal |
+
+Iluminación de sprites en runtime: `src/game/render/compositing.ts` (no genera
+arte, solo luz/sombra/grade sobre los sprites aprobados).
+
 **Estado actual de La Muralla (D-066, D-068).** Lo que describe el resto de
 esta sección de mundo es el generador de placeholders, que ya no es el arte
 en uso:
@@ -28,9 +44,8 @@ en uso:
 - GAME-06: símbolos de baliza CUP/LAMP/BIRD y tiles del SYNC TERMINAL son
   glifos SVG de UI (`BeaconIcon.tsx`, `SyncTerminal.tsx`), no arte de escena.
 - GAME-07: la arena de DESYNC PROCESS y la sala del gate son geometría de
-  sistema en canvas (rejilla, nodos, contornos), no arte de escena. Manu no
-  tiene asset: se muestra como texto y como marcador "MANU" sin figura hasta
-  CHAR-003 (sprite 120×240, frames 40×60) y CHAR-004 (retrato).
+  sistema en canvas (rejilla, nodos, contornos) sobre fondos del mundo
+  (D-079). Manu: CHAR-003 y CHAR-004 salen del VISUAL MASTER PACK.
 - CITY CARDS (GAME-05): sus ilustraciones son ventanas sobre ENV-001
   (`art` en `src/game/content/cards.ts`); no hay archivos de arte nuevos.
 
