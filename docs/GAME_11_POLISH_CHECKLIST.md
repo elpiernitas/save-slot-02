@@ -10,6 +10,13 @@
 - [ ] no unreadable tiny player
 - [ ] dialogue placement safe
 - [ ] selected/disabled states clear
+- [ ] GAME-04R debt (D-068): native CHAR-001 at 80×120 per frame (240×480
+      sheet, same design/rows) replaces the ×2 proxy `playerLarge`, if
+      ChatGPT delivers it
+- [ ] GAME-04R debt (D-068): corrected ENV-001 without the blurred centre
+      repair strip and with clean "LA MURALLA" lettering, same 960×400
+      composition, if ChatGPT delivers it (then re-run
+      `node tools/art/occluders.mjs`)
 
 ## Motion
 - [ ] scene transitions consistent

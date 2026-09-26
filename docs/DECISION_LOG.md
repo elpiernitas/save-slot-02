@@ -807,3 +807,12 @@ ChatGPT acepta la estrategia de reconstrucción (D-066) y pide FIXES
 - HOLD visual hasta recibir ENV-001 corregido (misma composición 960×400) y
   CHAR-001 nativo 240×480 con frames de 80×120. Sin mover composición ni
   añadir props mientras tanto. Sin GAME-05, sin merge.
+
+### D-068 · 2026-09-26 · GAME-04R cerrado; siguiente GAME-05
+
+ChatGPT (director) acepta GAME-04R como base visual jugable (PR, comentario
+5847231933) y cierra el bloqueo por arte: la composición de `17d6b53` es la
+canónica de La Muralla y queda congelada; los textos se alinearon en
+`df8868d`. Dos deudas pasan a GAME-11: Luis nativo 80×120 por frame (hoy
+`playerLarge` ×2) y ENV-001 sin la franja central ni el fallo del rótulo.
+Siguiente: GAME-05 (inventario + CITY CARDS originales). Sin merge ni deploy.

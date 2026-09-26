@@ -183,20 +183,23 @@ GUERRERO / TANQUE / CURADOR con `player/assignClass` y condición
   marca `final`. `art:check` decodifica cualquier PNG estándar (autotest de
   tipos de color, profundidades, filtros y Adam7).
 
-## Estado GAME-04R (D-062)
+## Estado GAME-04R — CERRADO (D-068)
 
-**Estructura, composición e integración ACEPTADAS.** Modo integración: no
-iterar la escena sin assets finales. Pendiente: CHAR-001 y ENV-001 (ver ART
-REQUESTS en el PR y `docs/art/requests/`) → sustituir, reajustar, check,
-capturas → ACCEPT final.
+**ACCEPT** de ChatGPT (PR, comentario 5847231933) como base visual jugable.
+Composición canónica congelada en `17d6b53`; textos alineados en `df8868d`.
+
+- Fondo: ENV-001 de ChatGPT píxel a píxel; colisiones medidas sobre él.
+- Oclusores recortados de ENV-001 (`tools/art/occluders.mjs`): farola,
+  pizarra, bolardos, papelera, gaviotas.
+- PLAYER 1: `playerLarge` = CHAR-001 ×2 (`tools/art/scale-player.mjs`).
+- Deudas de pulido para GAME-11 (`docs/GAME_11_POLISH_CHECKLIST.md`): Luis
+  nativo 80×120 y limpieza de ENV-001 (franja central, rótulo), si llegan.
 
 ## Próximo paso exacto
 
-1. Ejecutar **GAME-04R** siguiendo `docs/GAME_04R_VISUAL_REBUILD.md`.
-   El motor se conserva; se sustituye la calidad/composición del arte.
-2. Entregar las 6 capturas de aceptación definidas en ese documento.
-3. Solo con aprobación explícita de Manu: **GAME-05 — inventario y cartas**
-
+1. **GAME-05 — inventario y CITY CARDS** (autorizado tras el ACCEPT de
+   GAME-04R), según las specs canónicas del repo. No rediseñar La Muralla.
+2. Leer la spec de GAME-05 y `docs/WORLD_BIBLE.md` antes de implementar.
 3. Diseñar items y cartas **originales** (inspiración: colección de cartas de
    Luis, sin IP de terceros) según WORLD_BIBLE.
 4. Acciones de reducer (`item/give`, `item/take`, `card/give`) y soporte real
