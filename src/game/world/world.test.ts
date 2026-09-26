@@ -257,18 +257,19 @@ describe('La Muralla map', () => {
     const ids = map.interactables.map((i) => i.id);
     expect(ids).toEqual(expect.arrayContaining(['barDoor', 'barWindowLeft', 'table', 'waitress']));
     for (const banned of ['wall', 'gate']) expect(ids).not.toContain(banned);
-    expect(map.props.filter((p) => p.sprite.startsWith('table')).length).toBeGreaterThanOrEqual(3);
   });
 
-  it('the terrace can be entered through the gap in the windbreak', () => {
-    let pos = { x: 510, y: 360 };
-    const visited = new Set<string | undefined>();
-    for (let i = 0; i < 60; i++) {
-      pos = stepMovement(pos, 'up', 'up', 50, world).pos;
-      visited.add(zoneAt(pos, map.zones)?.id);
-    }
-    expect(visited).toContain('terrace');
-    // …and straight on to the bar door on the sidewalk.
+  it('draws no decorative sprites over the painted ENV-001 background', () => {
+    expect(SPRITES[map.background]!.status).toBe('final');
+    expect(map.props).toEqual([]);
+    expect(map.npcs).toEqual([]);
+    expect(map.walkers ?? []).toEqual([]);
+  });
+
+  it('the bar door is faced from the sidewalk next to the terrace', () => {
+    let pos = { x: 725, y: 350 };
+    for (let i = 0; i < 30; i++) pos = stepMovement(pos, 'up', 'up', 50, world).pos;
+    expect(world.isBlocked(feetRect(pos))).toBe(false);
     expect(findInteraction(pos, 'up', map.interactables)?.id).toBe('barDoor');
   });
 
@@ -294,8 +295,8 @@ describe('La Muralla map', () => {
     }
   });
 
-  it('has at least 3 interactables and one generic NPC', () => {
+  it('has at least 3 interactables, the waitress among them', () => {
     expect(map.interactables.length).toBeGreaterThanOrEqual(3);
-    expect(map.npcs).toHaveLength(1);
+    expect(map.interactables.map((i) => i.id)).toContain('waitress');
   });
 });
