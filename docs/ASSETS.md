@@ -27,6 +27,10 @@ en uso:
   exacto (`tools/art/scale-player.mjs`), proxy hasta un CHAR-001 nativo.
 - GAME-06: símbolos de baliza CUP/LAMP/BIRD y tiles del SYNC TERMINAL son
   glifos SVG de UI (`BeaconIcon.tsx`, `SyncTerminal.tsx`), no arte de escena.
+- GAME-07: la arena de DESYNC PROCESS y la sala del gate son geometría de
+  sistema en canvas (rejilla, nodos, contornos), no arte de escena. Manu no
+  tiene asset: se muestra como texto y como marcador "MANU" sin figura hasta
+  CHAR-003 (sprite 120×240, frames 40×60) y CHAR-004 (retrato).
 - CITY CARDS (GAME-05): sus ilustraciones son ventanas sobre ENV-001
   (`art` en `src/game/content/cards.ts`); no hay archivos de arte nuevos.
 

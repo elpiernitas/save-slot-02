@@ -10,8 +10,8 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | GAME-03 | World bible + selección de clase           | ✅ Hecho               |
 | GAME-04 | Mundo explorable / vertical slice de Gijón | ✅ Cerrado (D-068)     |
 | GAME-05 | Inventario y cartas                        | ✅ Aceptado            |
-| GAME-06 | Puzzles / minijuegos                       | 🟡 Hecho, falta ACCEPT |
-| GAME-07 | Boss + aparición PLAYER 2                  | Pendiente              |
+| GAME-06 | Puzzles / minijuegos                       | ✅ Aceptado            |
+| GAME-07 | Boss + aparición PLAYER 2                  | 🟡 Hecho, falta ACCEPT |
 | GAME-08 | Portales y selección de fecha              | Pendiente              |
 | GAME-09 | Final + save slot                          | Pendiente              |
 | GAME-10 | Desbloqueos posteriores                    | Pendiente              |
@@ -89,15 +89,20 @@ Aceptado por ChatGPT (D-069).
 - UI: aviso de recompensa, INVENTARIO y binder CITY CARDS desde la pausa;
   NEW hasta abrir la carta; teclado y ratón; mundo montado y en pausa.
 
-### GAME-06 — Puzzles / minijuegos 🟡
+### GAME-06 — Puzzles / minijuegos ✅
 
-Implementado (D-070), pendiente de ACCEPT. En La Muralla (no hay arte de
+Aceptado (D-070). En La Muralla (no hay arte de
 Cholo): tras la camarera, SIDE QUEST ROUTE UPDATED → ROUTE BEACONS (pizarra =
 CUP, farola = LAMP, gaviota = BIRD) → carta 005 → SERVICE ACCESS (puerta del
 12) → SYNC TERMINAL: PLAYER 1 SYNCED, PLAYER 2 NOT FOUND, fallback,
 RECOVERY PROCESS ERROR. MG-01 SEAGULL PROTOCOL recortado (opcional).
 
-### GAME-07 — Boss + aparición PLAYER 2
+### GAME-07 — Boss + aparición PLAYER 2 🟡
+
+Implementado (D-071), pendiente de ACCEPT. DESYNC PROCESS: tres fases
+(CHECKSUM MISMATCH, SIGNAL SPLIT, MISSING CHANNEL), SIGNAL 3/3, RETRY y assist
+tras 2 fallos. Reveal sobrio: SIGNAL FOUND → PLAYER 2 — MANU → una línea →
+PARTY STATUS — 2/2 → gate cooperativo → DESTINATION DATA AVAILABLE → GAME-08.
 
 ### GAME-08 — Portales y selección de fecha
 

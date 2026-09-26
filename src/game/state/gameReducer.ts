@@ -46,6 +46,9 @@ export type GameAction =
   | { type: 'card/markSeen'; card: CardId; at: string }
   /** GAME-06: first completion wins; attempts are runtime-only until then (min 1). */
   | { type: 'puzzle/complete'; puzzle: PuzzleId; attempts: number; at: string }
+  /** GAME-07: one per real encounter start (no-op once defeated); first defeat wins. */
+  | { type: 'boss/attempt'; at: string }
+  | { type: 'boss/defeat'; at: string }
   /** Once per page load: counts the session and restarts at the system check. */
   | { type: 'system/sessionStart'; at: string }
   | { type: 'system/bootCompleted'; at: string }
@@ -181,6 +184,27 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
               completedAt: action.at,
               attempts: Math.max(1, Math.floor(action.attempts)),
             },
+          },
+        },
+        action.at,
+      );
+
+    case 'boss/attempt':
+      if (save.boss.defeated) return save;
+      return touch(
+        { ...save, boss: { ...save.boss, attempts: save.boss.attempts + 1 } },
+        action.at,
+      );
+
+    case 'boss/defeat':
+      if (save.boss.defeated) return save;
+      return touch(
+        {
+          ...save,
+          boss: {
+            defeated: true,
+            attempts: Math.max(1, save.boss.attempts),
+            defeatedAt: action.at,
           },
         },
         action.at,

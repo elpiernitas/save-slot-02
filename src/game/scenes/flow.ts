@@ -1,3 +1,4 @@
+import { storyScene } from '../boss/story';
 import type { GameSave } from '../state/types';
 import { DEV_SCENES, FIRST_GAMEPLAY_SCENE, isSceneId, type SceneId } from './sceneIds';
 
@@ -24,6 +25,9 @@ export function resolveClassSelect(save: GameSave): SceneId {
 
 /** Where the title screen's CONTINUE leads. */
 export function continueTarget(save: GameSave): SceneId {
+  // Story progress proven by the save wins over the last scene visited.
+  const story = storyScene(save);
+  if (story) return story;
   const resume = save.progress.resumeSceneId ?? FIRST_GAMEPLAY_SCENE;
   return resume === 'classSelect' ? resolveClassSelect(save) : resume;
 }

@@ -199,14 +199,22 @@ Composición canónica congelada en `17d6b53`; textos alineados en `df8868d`.
 
 Inventario + CITY CARDS (cartas 001/002; items vacío a propósito).
 
-## GAME-06 — hecho, pendiente de ACCEPT (D-070)
+## GAME-06 — aceptado (D-070)
 
 Puzzles en La Muralla: ROUTE BEACONS + SYNC TERMINAL
-(`src/game/puzzles/`). MG-01 SEAGULL PROTOCOL recortado. QA en
-`docs/art/review/game-06/`. Estado final: `system.player2SignalMissing`,
-del que parte GAME-07.
+(`src/game/puzzles/`). MG-01 SEAGULL PROTOCOL recortado. Estado final:
+`system.player2SignalMissing`, del que parte GAME-07.
+
+## GAME-07 — hecho, pendiente de ACCEPT (D-071)
+
+DESYNC PROCESS (`src/game/boss/desync/`) y reveal de PLAYER 2 + gate
+cooperativo (`src/game/boss/reveal/`). Enrutado por `storyScene`
+(`src/game/boss/story.ts`). Termina en `dateGate`, que sigue siendo el
+placeholder "AREA NOT GENERATED YET" hasta GAME-08. En desarrollo,
+`window.__desync` y `window.__reveal` exponen el estado para QA.
 
 ## Próximo paso exacto
 
-1. Esperar ACCEPT / FIXES de ChatGPT sobre GAME-06.
-2. Después: **GAME-07 — boss + PLAYER 2 reveal** (no empezar dentro de GAME-06).
+1. Esperar ACCEPT / FIXES de ChatGPT sobre GAME-07.
+2. Después: **GAME-08 — portales y selección de fecha** (no empezar antes).
+3. Arte no bloqueante: CHAR-003 (sprite de Manu) y CHAR-004 (retrato).

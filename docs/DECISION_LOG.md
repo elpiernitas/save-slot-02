@@ -854,3 +854,40 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
   ERROR`; flag `system.player2SignalMissing`. No nombra ni insinúa a Manu.
 - MG-01 SEAGULL PROTOCOL recortado: opcional, y exigiría inventar visuales
   de arena. Queda para GAME-11 si hay tiempo.
+
+### D-071 · 2026-09-26 · GAME-07: DESYNC PROCESS + PLAYER 2 (Manu)
+
+- Save sin cambio de versión (`SAVE_VERSION` 2). `boss/attempt` (+1, no-op
+  tras la derrota) y `boss/defeat` (gana la primera, intentos ≥1). Flags
+  genéricos `story.player2Found` (al mostrarse PARTY STATUS — 2/2) y
+  `story.player2GateComplete` (al abrirse la puerta).
+- Enrutado puro `storyScene` (`src/game/boss/story.ts`), consultado primero
+  por CONTINUE: gate completo → `dateGate` (GAME-08, sin implementar);
+  derrotado → `player2Reveal`; terminal hecho → `boss`. Un refresh nunca
+  repite el boss.
+- RECOVERY PROCESS ERROR pasa directo a `boss` (sin paso intermedio).
+- Boss: estado puro `advanceBoss(state, dt, input)` en
+  `src/game/boss/desync/state.ts`, sin RNG, dt limitado a 50 ms, probado a
+  60/120/144 Hz. Mecánica única: estabilizar nodos (3 commits por nodo, uno
+  por ciclo de peligro, bloqueo de 300 ms) esquivando barridos, pulsos y un
+  anillo final, todos con aviso (contorno + chevrons) antes de estar activos.
+  Fases CHECKSUM MISMATCH (A) → SIGNAL SPLIT (B + C) → MISSING CHANNEL
+  (anillo → núcleo `E — RECOVER INPUT`). SIGNAL 3/3, 1 s de invulnerabilidad.
+- Fallo: SIGNAL LOST → RETRY / RETURN TO TITLE; la intro no se repite. Tras 2
+  fallos, ASSIST MODE AVAILABLE ("Longer warnings. Same result."): avisos
+  ×1,3. Se descartó el "velocidad ×0,78" del plan: los peligros no se
+  desplazan, así que el aviso es la única palanca real.
+- Clase: solo microlínea de sistema en el banner de CHECKSUM MISMATCH.
+- Reveal (`src/game/boss/reveal/`): SCANNING → SIGNAL FOUND → PLAYER SLOT 02 /
+  IDENTITY DATA RECOVERED → PLAYER 2 — MANU → MANU: "¿me ha cargado bien por
+  lo menos?" → PLAYER LINK — STABLE / PARTY STATUS — 2/2 → gate cooperativo →
+  FINAL SIDE QUEST DATA RECOVERED / DESTINATION DATA AVAILABLE → `dateGate`.
+  Re-entrada tras refresh: versión comprimida (sin SCANNING ni tarjeta, con la
+  línea humana); con `player2Found`, solo el gate.
+- Sin asset de Manu: identidad tipográfica (nombre como texto) y, en el gate,
+  un marcador de sistema "MANU" (anillo + etiqueta), sin figura ni cara.
+  CHAR-003/004 pendientes; entran sin rediseño.
+- Gate: máquina pura con waypoints fijos, salvaguarda de 6 s y salto
+  inmediato con reduced motion; no puede bloquearse.
+- Única cadena de UI fuera del copy bloqueado: el aviso `E — READY` junto al
+  interruptor de PLAYER 1.

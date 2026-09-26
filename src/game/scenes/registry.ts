@@ -1,3 +1,5 @@
+import { DesyncBoss } from '../boss/desync/DesyncBoss';
+import { Player2Reveal } from '../boss/reveal/Player2Reveal';
 import { BootScene } from './boot/BootScene';
 import { ClassSelectScene } from './classSelect/ClassSelectScene';
 import { DialogueDemoScene } from './dialogueDemo/DialogueDemoScene';
@@ -22,6 +24,9 @@ export const SCENE_REGISTRY: Partial<Record<SceneId, SceneDefinition>> = {
   /** Exploration (GAME-04 vertical slice: La Muralla, afternoon). */
   overworld: { id: 'overworld', component: OverworldScene },
   dialogueDemo: { id: 'dialogueDemo', component: DialogueDemoScene },
+  /** GAME-07: DESYNC PROCESS, then the PLAYER 2 reveal + cooperative gate. */
+  boss: { id: 'boss', component: DesyncBoss },
+  player2Reveal: { id: 'player2Reveal', component: Player2Reveal },
 };
 
 export function getSceneDefinition(id: SceneId): SceneDefinition | undefined {

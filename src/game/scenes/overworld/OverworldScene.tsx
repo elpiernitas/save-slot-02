@@ -179,7 +179,8 @@ export function OverworldScene(_: SceneProps) {
   const finishTerminal = () => {
     dispatch({ type: 'puzzle/complete', puzzle: TERMINAL_ID, attempts: 1 });
     dispatch({ type: 'flag/set', flag: ROUTE_FLAGS.player2SignalMissing, value: true });
-    closeOverlay();
+    // RECOVERY PROCESS ERROR flows straight into DESYNC PROCESS (GAME-07).
+    dispatch({ type: 'scene/goTo', scene: 'boss' });
   };
   /** World object faced + confirm: chapter logic first, plain dialogue otherwise. */
   const interact = (found: Interactable) => {
