@@ -13,7 +13,7 @@ Fecha límite: el juego se envía el **lunes 28 de septiembre de 2026**.
 | GAME-06 | Puzzles / minijuegos                       | ✅ Aceptado            |
 | GAME-07 | Boss + aparición PLAYER 2                  | 🟡 Hecho, falta ACCEPT |
 | GAME-08 | Portales y selección de fecha              | 🟡 Hecho (autónomo)    |
-| GAME-09 | Final + save slot                          | Pendiente              |
+| GAME-09 | Final + save slot                          | 🟡 Hecho (autónomo)    |
 | GAME-10 | Desbloqueos posteriores                    | Pendiente              |
 | GAME-11 | Easter eggs, sonido, animaciones y pulido  | Pendiente              |
 | GAME-12 | QA en ordenador + producción Netlify       | Pendiente              |
@@ -112,7 +112,10 @@ teatro, dom 4), disponibilidad en Europe/Madrid, guardado solo al confirmar.
 Solo `DATE_OPTIONS`; el viernes aparece como `MAIN QUEST ALREADY ACTIVE`.
 Guardar `dateQuest.chosenOptionId`.
 
-### GAME-09 — Final + save slot
+### GAME-09 — Final + save slot 🟡
+
+Implementado (D-073): final corto con la fecha elegida y slot persistente
+como destino de CONTINUE.
 
 ### GAME-10 — Desbloqueos posteriores
 

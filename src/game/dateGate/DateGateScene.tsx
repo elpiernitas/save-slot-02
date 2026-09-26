@@ -7,7 +7,7 @@ import type { SceneProps } from '../scenes/types';
 import { useGame } from '../state/useGame';
 import { Menu } from '../ui/Menu';
 import { useMenu, type MenuItem } from '../ui/useMenu';
-import { CHARACTER_ROWS, SPRITES, SPRITE_URLS } from '../world/art/assets';
+import { Party } from '../ending/Party';
 import '../boss/desync/desync.css';
 import { DATE_GATE_COPY, dateGates, type GateView } from './routes';
 import './dateGate.css';
@@ -142,10 +142,7 @@ export function DateGateScene(_: SceneProps) {
         </div>
       )}
 
-      <div className="date-gate__party" aria-hidden="true">
-        <Luis />
-        <span className="date-gate__p2">MANU</span>
-      </div>
+      <Party facing="up" />
 
       {stage === 'intro' && (
         <div className="dlg-layer">
@@ -166,25 +163,6 @@ export function DateGateScene(_: SceneProps) {
         </div>
       )}
     </div>
-  );
-}
-
-/** PLAYER 1 (CHAR-001), idle, facing the gates. */
-function Luis() {
-  const info = SPRITES.player;
-  const url = SPRITE_URLS.player;
-  if (!info || !url) return null;
-  return (
-    <span
-      className="date-gate__p1"
-      style={{
-        backgroundImage: `url(${url})`,
-        backgroundPosition: `0 calc(var(--px) * ${-CHARACTER_ROWS.up * info.frameHeight})`,
-        backgroundSize: `calc(var(--px) * ${info.width}) calc(var(--px) * ${info.height})`,
-        width: `calc(var(--px) * ${info.frameWidth})`,
-        height: `calc(var(--px) * ${info.frameHeight})`,
-      }}
-    />
   );
 }
 

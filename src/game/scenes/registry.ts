@@ -1,6 +1,8 @@
 import { DesyncBoss } from '../boss/desync/DesyncBoss';
 import { Player2Reveal } from '../boss/reveal/Player2Reveal';
 import { DateGateScene } from '../dateGate/DateGateScene';
+import { EndingScene } from '../ending/EndingScene';
+import { SaveSlotScene } from '../ending/SaveSlotScene';
 import { BootScene } from './boot/BootScene';
 import { ClassSelectScene } from './classSelect/ClassSelectScene';
 import { DialogueDemoScene } from './dialogueDemo/DialogueDemoScene';
@@ -30,6 +32,9 @@ export const SCENE_REGISTRY: Partial<Record<SceneId, SceneDefinition>> = {
   player2Reveal: { id: 'player2Reveal', component: Player2Reveal },
   /** GAME-08: choose the real-world date route. */
   dateGate: { id: 'dateGate', component: DateGateScene },
+  /** GAME-09: ending beat, then the persistent completed save. */
+  ending: { id: 'ending', component: EndingScene },
+  saveSlot: { id: 'saveSlot', component: SaveSlotScene },
 };
 
 export function getSceneDefinition(id: SceneId): SceneDefinition | undefined {

@@ -1,0 +1,148 @@
+/*
+ * GAME-09 ending + save slot: the same system field, now calm and stable.
+ * Warm gold for the chosen route; no confetti, no hearts.
+ */
+.ending__card {
+  background: transparent;
+}
+
+.ending__bar {
+  justify-self: center;
+  width: calc(var(--px) * 120);
+  height: calc(var(--px) * 4);
+  border: var(--px) solid var(--color-system);
+}
+
+.ending__bar i {
+  display: block;
+  height: 100%;
+  background: var(--color-system);
+  animation: ending-fill 1.6s steps(8) forwards;
+}
+
+@keyframes ending-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ending__bar i {
+    animation: none;
+    width: 100%;
+  }
+}
+
+.ending__checksum {
+  font-size: var(--text-xs) !important;
+  color: var(--color-text-dim) !important;
+}
+
+.ending__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.ending__route {
+  position: absolute;
+  top: 34%;
+  left: 0;
+  right: 0;
+  display: grid;
+  justify-items: center;
+  gap: calc(var(--px) * 4);
+  text-align: center;
+}
+
+.ending__route p {
+  margin: 0;
+}
+
+.ending__route-label {
+  font-size: var(--text-sm);
+  color: var(--color-system);
+}
+
+.ending__route-date {
+  padding: calc(var(--px) * 3) calc(var(--px) * 10);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-select);
+  border-top: var(--px) solid var(--color-select);
+  border-bottom: var(--px) solid var(--color-select);
+}
+
+.ending__party {
+  bottom: calc(var(--px) * 24);
+}
+
+/* ---- Save slot ---- */
+.save-slot__card {
+  position: absolute;
+  top: calc(var(--px) * 24);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(var(--px) * 250);
+  display: grid;
+  gap: calc(var(--px) * 6);
+  padding: calc(var(--px) * 8);
+  background: var(--color-surface);
+  border: var(--px) solid var(--color-border);
+  box-shadow: var(--px) var(--px) 0 var(--color-shadow);
+}
+
+.save-slot__head {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.save-slot__ok {
+  color: var(--color-system);
+}
+
+.save-slot__rows {
+  display: grid;
+  gap: calc(var(--px) * 2);
+  margin: 0;
+}
+
+.save-slot__row {
+  display: grid;
+  grid-template-columns: calc(var(--px) * 76) 1fr;
+  font-size: var(--text-xs);
+}
+
+.save-slot__row dt {
+  color: var(--color-text-dim);
+}
+
+.save-slot__row dd {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.save-slot__row[data-row='DATE ROUTE'] dd {
+  color: var(--color-select);
+}
+
+.save-slot__menu {
+  position: absolute;
+  top: calc(var(--px) * 142);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(var(--px) * 140);
+}
+
+.save-slot .ending__party,
+.save-slot .date-gate__party {
+  bottom: calc(var(--px) * 10);
+  left: auto;
+  right: calc(var(--px) * 24);
+  transform: none;
+  gap: calc(var(--px) * 10);
+}

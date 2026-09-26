@@ -911,3 +911,18 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
 - Todas las rutas caducadas (desde el 5 oct): `ROUTES EXPIRED` con una línea
   en castellano; no se puede elegir una fecha pasada.
 - Sin microlínea de clase: la spec la deja opcional y no añade nada aquí.
+
+### D-073 · 2026-09-26 · GAME-09: final + save slot persistente
+
+- `game/complete` (la primera gana; exige ruta elegida, así que un guardado
+  completado nunca muestra una fecha nula). `storyScene`: completado →
+  `saveSlot` (CONTINUE y refresh).
+- Escena `ending` (`src/game/ending/`): `SAVING...` → `CHECKSUM — OK` /
+  `SIDE QUEST — COMPLETE` (aquí se escribe `completedAt`) → Luis + marcador
+  MANU con una línea: "bien. ahora ya solo falta hacer la parte que no cabe
+  aquí." → `DATE ROUTE` + fecha canónica en largo → `SAVE SLOT 02 — UPDATED`
+  → `saveSlot`. Un refresh a partir de COMPLETE aterriza en el slot.
+- Escena `saveSlot`: PLAYER 1 / CLASS / PLAYER 2 / SIDE QUEST / DATE ROUTE, y
+  menú CITY CARDS, SETTINGS, RETURN TO TITLE. No hay reset ni "play again";
+  nada en esta pantalla cambia la fecha.
+- Sin hora ni lugar inventados; sin créditos automáticos.

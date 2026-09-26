@@ -218,7 +218,11 @@ placeholder "AREA NOT GENERATED YET" hasta GAME-08. En desarrollo,
 Date gate en `src/game/dateGate/`; disponibilidad en `src/game/calendar`.
 Ejecución autónoma hasta GAME-12 (sin esperar ACCEPT; sin merge ni deploy).
 
+## GAME-09 — hecho (D-073)
+
+Final y save slot persistente en `src/game/ending/`.
+
 ## Próximo paso exacto
 
-1. GAME-09 — final + save slot persistente.
+1. GAME-10 (recortable) → GAME-11 → GAME-12.
 3. Arte no bloqueante: CHAR-003 (sprite de Manu) y CHAR-004 (retrato).
