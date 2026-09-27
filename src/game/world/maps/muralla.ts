@@ -55,7 +55,7 @@ const interactables: Interactable[] = [
   {
     id: 'barWindowLeft',
     label: 'escaparate del bar',
-    script: 'muralla.window',
+    script: 'muralla.windowLeft',
     rect: box(226, TERRACE_FRONT - 6, 300, TERRACE_FRONT),
   },
   {
@@ -73,7 +73,7 @@ const interactables: Interactable[] = [
   {
     id: 'barWindowRight',
     label: 'escaparate del bar',
-    script: 'muralla.window',
+    script: 'muralla.windowRight',
     rect: box(514, TERRACE_FRONT - 6, 696, TERRACE_FRONT),
   },
   // The door sits behind the bench and planter: looked at from the sidewalk.

@@ -1,0 +1,135 @@
+/* Chapter cards and status line: navy + gold/cyan UI over the world. */
+.chapter-card {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: rgb(8 14 30 / 0.55);
+  cursor: pointer;
+}
+
+.chapter-card__band {
+  display: grid;
+  justify-items: center;
+  gap: calc(var(--px) * 3);
+  width: 100%;
+  padding: calc(var(--px) * 12) 0;
+  text-align: center;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(14 26 44 / 0.92) 18%,
+    rgb(14 26 44 / 0.92) 82%,
+    transparent
+  );
+  animation: chapter-in 0.36s steps(4) both;
+}
+
+.chapter-card p,
+.chapter-card h2 {
+  margin: 0;
+}
+
+.chapter-card__alert {
+  padding: 0 calc(var(--px) * 6);
+  font-size: var(--text-sm);
+  letter-spacing: calc(var(--px) * 2);
+  color: #0b1626;
+  background: #e8735a;
+}
+
+.chapter-card__level {
+  font-size: var(--text-sm);
+  letter-spacing: calc(var(--px) * 3);
+  color: #bfeef2;
+}
+
+.chapter-card__title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: calc(var(--px) * 2);
+  color: var(--color-select);
+  text-shadow: calc(var(--px) * 2) calc(var(--px) * 2) 0 #0b1626;
+}
+
+.chapter-card[data-alert] .chapter-card__title {
+  color: #f4ecda;
+}
+
+.chapter-card__goal {
+  font-size: var(--text-sm);
+  color: #f4ecda;
+}
+
+.chapter-pips {
+  display: inline-flex;
+  gap: calc(var(--px) * 2);
+}
+
+.chapter-pips i {
+  width: calc(var(--px) * 6);
+  height: calc(var(--px) * 3);
+  border: var(--px) solid #bfeef2;
+  opacity: 0.6;
+}
+
+.chapter-pips i[data-state='done'] {
+  background: #bfeef2;
+}
+
+.chapter-pips i[data-state='now'] {
+  background: var(--color-select);
+  border-color: var(--color-select);
+  opacity: 1;
+}
+
+.chapter-hud {
+  position: absolute;
+  top: calc(var(--px) * 6);
+  right: calc(var(--px) * 8);
+  display: grid;
+  gap: var(--px);
+  max-width: calc(var(--px) * 210);
+  padding: calc(var(--px) * 2) calc(var(--px) * 5);
+  text-align: right;
+  background: rgb(14 26 44 / 0.86);
+  border: var(--px) solid var(--color-border-dim);
+  border-right: calc(var(--px) * 2) solid var(--color-select);
+}
+
+.chapter-hud p {
+  margin: 0;
+}
+
+.chapter-hud__head {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: calc(var(--px) * 4);
+  font-size: var(--text-xs);
+  letter-spacing: var(--px);
+  color: #f4ecda;
+}
+
+.chapter-hud__level {
+  color: var(--color-select);
+}
+
+.chapter-hud__goal {
+  font-size: var(--text-xs);
+  color: #bfeef2;
+}
+
+@keyframes chapter-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chapter-card__band {
+    animation: none;
+  }
+}

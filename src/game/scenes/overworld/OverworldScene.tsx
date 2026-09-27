@@ -7,9 +7,17 @@ import {
   ROUTE_NODE,
   ROUTE_SOLVED,
   ROUTE_UPDATE,
+  SEAGULL_ALERT,
+  SEAGULL_HINT,
+  SEAGULL_INTRO,
+  seagullDone,
   SERVICE_ACCESS,
   SERVICE_ACCESS_DONE,
+  SERVICE_BLOCKED,
 } from '../../content/dialogue/route';
+import { ChapterCard, ChapterHud } from '../../progress/ChapterCard';
+import { chapterCardDue, chapterLevel, chapterSeenFlag, type Level } from '../../progress/chapters';
+import { SeagullProtocol } from '../../puzzles/seagullProtocol/SeagullProtocol';
 import type { DialogueScript } from '../../dialogue/types';
 import { newAcquisitions, type Acquisition } from '../../inventory/cards';
 import { AcquisitionOverlay } from '../../inventory/ui/AcquisitionOverlay';
@@ -24,6 +32,7 @@ import {
   chapterInteraction,
   chapterStep,
   routeUpdateDue,
+  SEAGULL_ID,
   TERMINAL_ID,
 } from '../../puzzles/chapter';
 import { BeaconIcon } from '../../puzzles/routeBeacons/BeaconIcon';
@@ -101,8 +110,14 @@ export function OverworldScene(_: SceneProps) {
   });
   const engineRef = useRef<WorldEngine | null>(null);
   const [target, setTarget] = useState<Interactable | null>(null);
+  /** Chapter title card (NIVEL 0N) the first time a level is reached. */
+  const [card, setCard] = useState<Level | null>(() =>
+    chapterCardDue(save) ? chapterLevel(save) : null,
+  );
   const [dialogue, setDialogue] = useState<{ script: DialogueScript; key: number } | null>(() =>
-    save.flags[MURALLA_FLAGS.arrived] ? null : { script: MURALLA_ARRIVAL, key: 0 },
+    save.flags[MURALLA_FLAGS.arrived] || chapterCardDue(save)
+      ? null
+      : { script: MURALLA_ARRIVAL, key: 0 },
   );
   /** Pause menu and the GAME-05 panels it opens; the world stays mounted and paused. */
   const [panel, setPanel] = useState<'pause' | 'inventory' | 'cards' | null>(null);
@@ -112,7 +127,7 @@ export function OverworldScene(_: SceneProps) {
   const [rewardPending, setRewardPending] = useState(false);
   const [rewards, setRewards] = useState<Acquisition[]>([]);
   /** GAME-06 overlays: calibration pattern and SYNC TERMINAL (world paused). */
-  const [overlay, setOverlay] = useState<'pulse' | 'terminal' | null>(null);
+  const [overlay, setOverlay] = useState<'pulse' | 'terminal' | 'seagull' | null>(null);
   /** Route beacons: runtime only; a refresh restarts calibration (completion persists). */
   const [beacons, setBeacons] = useState(initialBeacons);
   const beaconsRef = useRef(beacons);
@@ -133,9 +148,9 @@ export function OverworldScene(_: SceneProps) {
   }, []);
 
   // Latest values for the long-lived engine/input callbacks.
-  const live = useRef({ dialogue, menuOpen, reduced, save });
+  const live = useRef({ dialogue, menuOpen, reduced, save, card });
   useLayoutEffect(() => {
-    live.current = { dialogue, menuOpen, reduced, save };
+    live.current = { dialogue, menuOpen, reduced, save, card };
   });
 
   const openDialogue = (script: DialogueScript, then?: () => void) => {
@@ -163,14 +178,31 @@ export function OverworldScene(_: SceneProps) {
     setRewards([]);
     resume();
   };
-  /** Runs the queued follow-up, the route update if due, or gives the world back. */
+  /** Runs the queued follow-up, a due chapter card, the route update, or gives the world back. */
   const resume = () => {
     const next = nextStepRef.current;
     nextStepRef.current = null;
     if (next) next();
-    else if (routeUpdateDue(live.current.save))
+    else if (chapterCardDue(live.current.save)) {
+      engineRef.current?.setPaused(true);
+      setCard(chapterLevel(live.current.save));
+    } else if (routeUpdateDue(live.current.save))
       openDialogue(ROUTE_UPDATE, () => setOverlay('pulse'));
     else engineRef.current?.setPaused(false, performance.now(), RESUME_COOLDOWN_MS);
+  };
+  const closeCard = () => {
+    const shown = card;
+    setCard(null);
+    if (shown) dispatch({ type: 'flag/set', flag: chapterSeenFlag(shown.n), value: true });
+    // First visit: the arrival line follows the NIVEL 01 card.
+    if (!live.current.save.flags[MURALLA_FLAGS.arrived]) openDialogue(MURALLA_ARRIVAL);
+    else requestAnimationFrame(resume);
+  };
+  const finishSeagull = (outcome: 'cleared' | 'bored', attempts: number) => {
+    setOverlay(null);
+    dispatch({ type: 'puzzle/complete', puzzle: SEAGULL_ID, attempts });
+    dispatch({ type: 'achievement/unlock', achievement: 'signal_found' });
+    openDialogue(seagullDone(outcome));
   };
   const closeOverlay = () => {
     setOverlay(null);
@@ -201,7 +233,8 @@ export function OverworldScene(_: SceneProps) {
         }
         if (outcome === 'solved') {
           dispatch({ type: 'puzzle/complete', puzzle: BEACONS_ID, attempts: state.attempts });
-          openDialogue(ROUTE_SOLVED);
+          dispatch({ type: 'achievement/unlock', achievement: 'first_sync' });
+          openDialogue(ROUTE_SOLVED, () => openDialogue(SEAGULL_ALERT));
         } else if (outcome === 'rejected') openDialogue(BEACON_REJECTED);
         else if (outcome === 'synced')
           openDialogue(beaconSynced(step.symbol, state.progress, state.sequence.length));
@@ -209,6 +242,15 @@ export function OverworldScene(_: SceneProps) {
       }
       case 'routeNode':
         openDialogue(ROUTE_NODE, () => setOverlay('pulse'));
+        return;
+      case 'seagull':
+        openDialogue(SEAGULL_INTRO, () => setOverlay('seagull'));
+        return;
+      case 'seagullHint':
+        openDialogue(SEAGULL_HINT);
+        return;
+      case 'serviceBlocked':
+        openDialogue(SERVICE_BLOCKED);
         return;
       case 'serviceAccess':
         openDialogue(SERVICE_ACCESS, () => setOverlay('terminal'));
@@ -292,7 +334,7 @@ export function OverworldScene(_: SceneProps) {
     engineRef.current = engine;
     // Development-only handle for automated QA (stripped from production builds).
     if (import.meta.env.DEV) Object.assign(window, { __worldEngine: engine });
-    if (live.current.dialogue || live.current.menuOpen) engine.setPaused(true);
+    if (live.current.dialogue || live.current.menuOpen || live.current.card) engine.setPaused(true);
     engine.start();
 
     const observer = new ResizeObserver(([entry]) => {
@@ -311,7 +353,12 @@ export function OverworldScene(_: SceneProps) {
   }, [router, dispatch, map, spawn, images]);
 
   const busy =
-    Boolean(dialogue) || menuOpen || rewards.length > 0 || rewardPending || overlay !== null;
+    Boolean(dialogue) ||
+    menuOpen ||
+    rewards.length > 0 ||
+    rewardPending ||
+    overlay !== null ||
+    card !== null;
   const calibrating = chapterStep(save) === 'calibrating';
   const syncedSymbols = beacons.sequence.slice(0, beacons.progress);
   const showPrompt = target && !busy;
@@ -334,6 +381,7 @@ export function OverworldScene(_: SceneProps) {
           </span>
         </footer>
       )}
+      {!card && overlay === null && <ChapterHud level={chapterLevel(save)} />}
       {calibrating && <RouteHud state={beacons} />}
       {calibrating &&
         BEACON_MARKS.map((mark, i) => (
@@ -362,6 +410,10 @@ export function OverworldScene(_: SceneProps) {
       )}
       {rewards.length > 0 && <AcquisitionOverlay entries={rewards} onDone={closeRewards} />}
       {overlay === 'pulse' && <RoutePulse sequence={beacons.sequence} onDone={closeOverlay} />}
+      {overlay === 'seagull' && (
+        <SeagullProtocol onComplete={finishSeagull} onLeave={closeOverlay} />
+      )}
+      {card && <ChapterCard level={card} onDone={closeCard} />}
       {overlay === 'terminal' && (
         <SyncTerminal onComplete={finishTerminal} onLeave={closeOverlay} />
       )}

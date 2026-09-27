@@ -11,6 +11,9 @@ export const MURALLA_FLAGS = {
   tableSeen: 'muralla.tableSeen',
   metWaitress: 'muralla.metWaitress',
   arrived: 'muralla.arrived',
+  /** Optional extras: a second look at each shop window. */
+  windowLeftSeen: 'muralla.windowLeftSeen',
+  windowRightSeen: 'muralla.windowRightSeen',
 } as const;
 
 const line = (id: string, pages: string[], extra: Partial<DialogueScript['nodes'][string]> = {}) =>
@@ -71,6 +74,56 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
     start: 'a',
     nodes: {
       a: line('a', ['Dentro, alguien discute con la cafetera.[pause] Va ganando la cafetera.']),
+    },
+  },
+
+  /** Second look: the one joke about Luis's enormous game library. */
+  'muralla.windowLeft': {
+    id: 'muralla.windowLeft',
+    start: 'route',
+    nodes: {
+      route: {
+        id: 'route',
+        type: 'branch',
+        branches: [{ when: { kind: 'flag', flag: MURALLA_FLAGS.windowLeftSeen }, next: 'library' }],
+        fallback: 'first',
+      },
+      first: line(
+        'first',
+        ['Dentro, alguien discute con la cafetera.[pause] Va ganando la cafetera.'],
+        {
+          effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.windowLeftSeen, value: true }],
+        },
+      ),
+      library: line('library', [
+        'En el reflejo del cristal intentas calcular cuántos juegos de tu biblioteca siguen sin empezar.',
+        '[pause]Paras en los cuatrocientos. Por salud mental.',
+      ]),
+    },
+  },
+
+  /** Second look: a tarot card face down, reversed (Three of Swords). Not a sign of anything. */
+  'muralla.windowRight': {
+    id: 'muralla.windowRight',
+    start: 'route',
+    nodes: {
+      route: {
+        id: 'route',
+        type: 'branch',
+        branches: [{ when: { kind: 'flag', flag: MURALLA_FLAGS.windowRightSeen }, next: 'tarot' }],
+        fallback: 'first',
+      },
+      first: line(
+        'first',
+        ['Dentro, alguien discute con la cafetera.[pause] Va ganando la cafetera.'],
+        {
+          effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.windowRightSeen, value: true }],
+        },
+      ),
+      tarot: line('tarot', [
+        'Junto al servilletero, alguien ha olvidado una carta: el tres de espadas, del revés.',
+        '[pause]Alguien la ha dejado así. Del revés, las heridas se cierran.[pause] O eso dicen.',
+      ]),
     },
   },
 

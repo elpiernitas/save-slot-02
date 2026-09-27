@@ -8,11 +8,13 @@ import { useGame } from '../state/useGame';
 import { Menu } from '../ui/Menu';
 import { useMenu, type MenuItem } from '../ui/useMenu';
 import { Party } from '../ending/Party';
+import { ChapterCard } from '../progress/ChapterCard';
+import { chapterCardDue, chapterSeenFlag, LEVELS } from '../progress/chapters';
 import '../boss/desync/desync.css';
 import { DATE_GATE_COPY, dateGates, type GateView } from './routes';
 import './dateGate.css';
 
-type Stage = 'intro' | 'select' | 'confirm' | 'locked' | 'saving';
+type Stage = 'chapter' | 'intro' | 'select' | 'confirm' | 'locked' | 'saving';
 
 const LOCKED_MS = 1300;
 const SAVING_MS = 1100;
@@ -39,7 +41,7 @@ export function DateGateScene(_: SceneProps) {
   // Availability is fixed for the visit (Madrid calendar, injected clock).
   const [gates] = useState(() => dateGates(services.clock.now()));
   const anyOpen = gates.some(selectable);
-  const [stage, setStage] = useState<Stage>('intro');
+  const [stage, setStage] = useState<Stage>(() => (chapterCardDue(save, 7) ? 'chapter' : 'intro'));
   const [index, setIndex] = useState(() => Math.max(0, gates.findIndex(selectable)));
   const gate = gates[index];
 
@@ -155,6 +157,16 @@ export function DateGateScene(_: SceneProps) {
       )}
 
       <Party facing="up" />
+
+      {stage === 'chapter' && (
+        <ChapterCard
+          level={LEVELS[6]!}
+          onDone={() => {
+            dispatch({ type: 'flag/set', flag: chapterSeenFlag(7), value: true });
+            setStage('intro');
+          }}
+        />
+      )}
 
       {stage === 'intro' && (
         <div className="dlg-layer">

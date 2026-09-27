@@ -12,6 +12,7 @@ import '../dateGate/dateGate.css';
 import { saveSlotRows } from './ending';
 import { PACK_ART } from '../art/pack';
 import { Party } from './Party';
+import { postgameStatus, RANDY_LINE, RANDY_UNLOCK } from './postgame';
 import './ending.css';
 
 const ITEMS: readonly MenuItem[] = [
@@ -25,8 +26,21 @@ const ITEMS: readonly MenuItem[] = [
  * only reads the save; nothing here can reset it or change the date.
  */
 export function SaveSlotScene(_: SceneProps) {
-  const { save, dispatch } = useGame();
+  const { save, dispatch, services } = useGame();
   const rows = saveSlotRows(save);
+  // GAME-10 (small): route status derived from today's Madrid date.
+  const [status] = useState(() =>
+    save.dateQuest.chosenOptionId
+      ? postgameStatus(save.dateQuest.chosenOptionId, services.clock.now())
+      : null,
+  );
+  // The one post-game unlock: Randy turns up on the completed save slot.
+  const completed = Boolean(rows);
+  useEffect(() => {
+    if (completed) dispatch({ type: 'unlock/grant', unlock: RANDY_UNLOCK });
+  }, [completed, dispatch]);
+  const randy = Object.hasOwn(save.unlocks, RANDY_UNLOCK);
+  const [randyTalks, setRandyTalks] = useState(false);
   const [panel, setPanel] = useState<'cards' | 'settings' | null>(null);
 
   // Not complete (should not happen through normal flow): back to the story.
@@ -61,6 +75,12 @@ export function SaveSlotScene(_: SceneProps) {
                 <dd>{row.value}</dd>
               </div>
             ))}
+            {status && (
+              <div className="save-slot__row save-slot__row--status" data-row="ESTADO">
+                <dt>{status.label}</dt>
+                <dd>{status.value}</dd>
+              </div>
+            )}
           </dl>
         </div>
       </section>
@@ -74,6 +94,19 @@ export function SaveSlotScene(_: SceneProps) {
         />
       </nav>
       <Party />
+      {randy && (
+        <button
+          type="button"
+          tabIndex={-1}
+          className="save-slot__randy"
+          aria-label="Randy"
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => setRandyTalks((t) => !t)}
+        >
+          <img src={PACK_ART.randy} alt="" draggable={false} />
+          {randyTalks && <span className="save-slot__randy-line">{RANDY_LINE}</span>}
+        </button>
+      )}
 
       {panel === 'cards' && (
         <div className="inv-layer">

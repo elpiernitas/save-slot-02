@@ -25,6 +25,15 @@ export const CARDS = {
     flavorText: 'Inmóvil. Imperturbable. Probablemente estructural.',
     art: { sprite: 'murallaFull', x: 503, y: 272, w: 80, h: 60 },
   },
+  'city.003.seagull': {
+    id: 'city.003.seagull',
+    number: '003',
+    name: 'GAVIOTA CON INTENCIONES',
+    kind: 'npc',
+    rarity: 'rare',
+    flavorText: 'Sabe lo que hiciste con aquel bocadillo.',
+    art: { sprite: 'murallaFull', x: 736, y: 312, w: 56, h: 42 },
+  },
   'city.005.cimavilla_afternoon': {
     id: 'city.005.cimavilla_afternoon',
     number: '005',

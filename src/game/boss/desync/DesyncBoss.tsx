@@ -8,6 +8,8 @@ import { useGame } from '../../state/useGame';
 import { Menu } from '../../ui/Menu';
 import { useMenu, type MenuItem } from '../../ui/useMenu';
 import { useReducedMotion } from '../../ui/useReducedMotion';
+import { ChapterCard } from '../../progress/ChapterCard';
+import { chapterSeenFlag, LEVELS } from '../../progress/chapters';
 import { loadSpriteImages, type SpriteImages } from '../../world/art/assets';
 import { markFreshDefeat } from '../story';
 import { createDesyncRenderer } from './render';
@@ -50,6 +52,8 @@ const PHASE_LABEL = {
 } as const;
 
 type Stage =
+  /** NIVEL 05 — JEFE FINAL title card and alert, before the intro lines. */
+  | { kind: 'chapter' }
   | { kind: 'intro'; line: number }
   | { kind: 'title' }
   | { kind: 'fight' }
@@ -99,7 +103,7 @@ export function DesyncBoss(_: SceneProps) {
   if (!router) throw new Error('DesyncBoss needs <InputProvider>');
   const reduced = useReducedMotion();
 
-  const [stage, setStage] = useState<Stage>({ kind: 'intro', line: 0 });
+  const [stage, setStage] = useState<Stage>({ kind: 'chapter' });
   const [assist, setAssist] = useState(false);
   const [assistDeclined, setAssistDeclined] = useState(false);
   /** Failed attempts: this visit's plus earlier page loads' unfinished ones. */
@@ -308,6 +312,17 @@ export function DesyncBoss(_: SceneProps) {
         {hud.prompt}
       </div>
 
+      {stage.kind === 'chapter' && (
+        <ChapterCard
+          level={LEVELS[4]!}
+          heading="JEFE FINAL: DESYNC PROCESS"
+          alert="ALERTA — PROCESO HOSTIL DETECTADO"
+          onDone={() => {
+            dispatch({ type: 'flag/set', flag: chapterSeenFlag(5), value: true });
+            setStage({ kind: 'intro', line: 0 });
+          }}
+        />
+      )}
       {(stage.kind === 'intro' || stage.kind === 'title') && (
         <div className="desync__card" onClick={advanceIntro}>
           {stage.kind === 'intro' ? (

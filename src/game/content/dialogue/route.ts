@@ -87,3 +87,72 @@ export const SERVICE_ACCESS_DONE: DialogueScript = {
     b: say('b', ['La puerta ha vuelto a ser una puerta.[pause] Sospechosamente normal.']),
   },
 };
+
+/* ---- PZ-03 PROTOCOLO DE LA GAVIOTA (content expansion) ---- */
+
+/** Right after the beacons: something in the street blocks the route. */
+export const SEAGULL_ALERT: DialogueScript = {
+  id: 'route.seagullAlert',
+  start: 'a',
+  nodes: {
+    a: sys('a', ['INTERFERENCIA EN LA RUTA\nORIGEN: GAVIOTA'], { next: 'b' }),
+    b: say(
+      'b',
+      ['La gaviota de antes no ha dejado de mirarte.[pause] Ahora tiene una alerta con su nombre.'],
+      {
+        next: 'c',
+      },
+    ),
+    c: sys('c', ['PROTOCOLO DE LA GAVIOTA — PENDIENTE']),
+  },
+};
+
+export const SEAGULL_INTRO: DialogueScript = {
+  id: 'route.seagullIntro',
+  start: 'a',
+  nodes: {
+    a: say('a', ['La gaviota da un paso hacia ti.[pause] Te está calculando.'], { next: 'b' }),
+    b: sys('b', ['PROTOCOLO DE LA GAVIOTA — INICIANDO']),
+  },
+};
+
+/** The board, while the protocol is pending: the hint. */
+export const SEAGULL_HINT: DialogueScript = {
+  id: 'route.seagullHint',
+  start: 'a',
+  nodes: {
+    a: say('a', [
+      'En la pizarra, con letra nueva:[pause] [sys]NO DAR DE COMER A LAS GAVIOTAS.[/sys]',
+      'Debajo, más pequeño:[pause] «si veis su sombra, moveos».',
+    ]),
+  },
+};
+
+export const SERVICE_BLOCKED: DialogueScript = {
+  id: 'route.serviceBlocked',
+  start: 'a',
+  nodes: {
+    a: sys('a', ['ACCESO DE SERVICIO — BLOQUEADO\nINTERFERENCIA EN LA RUTA'], { next: 'b' }),
+    b: say('b', ['La puerta zumba, pero no se abre.[pause] Algo en la calle no la deja.']),
+  },
+};
+
+export const seagullDone = (outcome: 'cleared' | 'bored'): DialogueScript => ({
+  id: 'route.seagullDone',
+  start: 'a',
+  nodes: {
+    a: sys(
+      'a',
+      [
+        outcome === 'cleared'
+          ? 'PROTOCOLO DE LA GAVIOTA — SUPERADO'
+          : 'LA GAVIOTA HA PERDIDO EL INTERÉS',
+      ],
+      { effects: [{ kind: 'giveCard', card: 'city.003.seagull' }], next: 'b' },
+    ),
+    b: say('b', ['La gaviota se aleja muy digna.[pause] Como si hubiera sido idea suya.'], {
+      next: 'c',
+    }),
+    c: sys('c', ['INTERFERENCIA RESUELTA\nACCESO DE SERVICIO EN LÍNEA']),
+  },
+});

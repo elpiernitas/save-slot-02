@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { AchievementToast } from '../achievements/AchievementToast';
 import { musicForScene } from '../audio/music';
 import { InputBlocker } from '../input/useInput';
 import { useGame } from '../state/useGame';
@@ -55,6 +56,7 @@ export function SceneRenderer() {
   return (
     <div className="game-root" data-reduced-motion={reduced} data-scene={displayed}>
       <Scene key={displayed} sceneId={displayed} />
+      <AchievementToast />
       {phase !== 'idle' && (
         <>
           <div className="scene-transition" data-phase={phase} aria-hidden="true" />

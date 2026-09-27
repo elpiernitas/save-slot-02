@@ -8,6 +8,7 @@ import {
   chapterInteraction,
   chapterStep,
   routeUpdateDue,
+  SEAGULL_ID,
   TERMINAL_ID,
 } from './chapter';
 
@@ -26,8 +27,22 @@ describe('GAME-06 chapter flow in La Muralla', () => {
     const updated = flag(met, ROUTE_FLAGS.updated);
     expect([chapterStep(updated), routeUpdateDue(updated)]).toEqual(['calibrating', false]);
     const beacons = done(updated, BEACONS_ID);
-    expect(chapterStep(beacons)).toBe('serviceAccess');
+    expect(chapterStep(beacons)).toBe('seagull');
+    const gull = done(beacons, SEAGULL_ID);
+    expect(chapterStep(gull)).toBe('serviceAccess');
+    expect(chapterStep(done(gull, TERMINAL_ID))).toBe('done');
+    // A save that finished the terminal before PZ-03 existed stays done.
     expect(chapterStep(done(beacons, TERMINAL_ID))).toBe('done');
+  });
+
+  it('the seagull protocol: gull opens it, board hints, the door stays blocked', () => {
+    const beacons = done(flag(base, ROUTE_FLAGS.updated), BEACONS_ID);
+    expect(chapterInteraction('gull', beacons)).toEqual({ kind: 'seagull' });
+    expect(chapterInteraction('board', beacons)).toEqual({ kind: 'seagullHint' });
+    expect(chapterInteraction('barDoor', beacons)).toEqual({ kind: 'serviceBlocked' });
+    expect(chapterInteraction('lamp', beacons)).toEqual({ kind: 'default' });
+    const gull = done(beacons, SEAGULL_ID);
+    expect(chapterInteraction('gull', gull)).toEqual({ kind: 'default' });
   });
 
   it('beacons answer only while calibrating; other times objects keep their lines', () => {
@@ -45,8 +60,9 @@ describe('GAME-06 chapter flow in La Muralla', () => {
     const beacons = done(updated, BEACONS_ID);
     expect(chapterInteraction('barDoor', base).kind).toBe('default');
     expect(chapterInteraction('barDoor', updated).kind).toBe('routeNode');
-    expect(chapterInteraction('barDoor', beacons).kind).toBe('serviceAccess');
-    expect(chapterInteraction('barDoor', done(beacons, TERMINAL_ID)).kind).toBe('serviceDone');
+    const gull = done(beacons, SEAGULL_ID);
+    expect(chapterInteraction('barDoor', gull).kind).toBe('serviceAccess');
+    expect(chapterInteraction('barDoor', done(gull, TERMINAL_ID)).kind).toBe('serviceDone');
   });
 
   it('prototype keys are not beacons', () => {

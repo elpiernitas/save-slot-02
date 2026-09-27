@@ -207,3 +207,48 @@
   right: calc(var(--px) * 24);
   transform: none;
 }
+
+/* GAME-10 (small): route status row and Randy's cameo. */
+.save-slot__row--status {
+  margin-top: calc(var(--px) * 2);
+  padding-top: calc(var(--px) * 2);
+  border-top: var(--px) dashed var(--color-border-dim);
+}
+
+.save-slot__row--status dt,
+.save-slot__row--status dd {
+  color: #bfeef2;
+}
+
+.save-slot__randy {
+  position: absolute;
+  right: calc(var(--px) * 128);
+  bottom: calc(var(--px) * 12);
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.save-slot__randy img {
+  display: block;
+  width: calc(var(--px) * 28);
+  height: calc(var(--px) * 40);
+  image-rendering: pixelated;
+  filter: drop-shadow(0 calc(var(--px) * 2) 0 rgb(20 10 24 / 0.45));
+}
+
+.save-slot__randy-line {
+  position: absolute;
+  bottom: calc(100% + var(--px) * 4);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(var(--px) * 160);
+  padding: calc(var(--px) * 2) calc(var(--px) * 4);
+  font: inherit;
+  font-size: var(--text-xs);
+  color: #f4ecda;
+  background: rgb(14 26 44 / 0.94);
+  border: var(--px) solid var(--color-border-dim);
+}

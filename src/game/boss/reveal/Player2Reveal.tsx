@@ -8,6 +8,8 @@ import type { SceneProps } from '../../scenes/types';
 import { useGame } from '../../state/useGame';
 import { useReducedMotion } from '../../ui/useReducedMotion';
 import { loadImage, MANU_SPRITE, PACK_ART } from '../../art/pack';
+import { ChapterCard } from '../../progress/ChapterCard';
+import { chapterCardDue, chapterSeenFlag, LEVELS } from '../../progress/chapters';
 import { loadSpriteImages, type SpriteImages } from '../../world/art/assets';
 import { clearFreshDefeat, isFreshDefeat, revealBeats, STORY_FLAGS } from '../story';
 import '../desync/desync.css';
@@ -84,6 +86,7 @@ export function Player2Reveal(_: SceneProps) {
     }
     if (beat.id === 'end') {
       dispatch({ type: 'flag/set', flag: STORY_FLAGS.player2GateComplete, value: true });
+      dispatch({ type: 'achievement/unlock', achievement: 'player2_online' });
     }
   }, [beat, dispatch, services.audio]);
 
@@ -101,9 +104,12 @@ export function Player2Reveal(_: SceneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gateRef = useRef<GateState>(createGate());
   const interactRef = useRef(false);
-  const live = useRef({ reduced, beat });
+  /** NIVEL 06 card, once, when the cooperative gate begins (world waits). */
+  const [gateCard, setGateCard] = useState(() => chapterCardDue(save, 6));
+  const showGateCard = gateCard && beat.id === 'gate';
+  const live = useRef({ reduced, beat, showGateCard });
   useLayoutEffect(() => {
-    live.current = { reduced, beat };
+    live.current = { reduced, beat, showGateCard };
   });
   const onGateOpen = useRef(next);
   useLayoutEffect(() => {
@@ -126,7 +132,7 @@ export function Player2Reveal(_: SceneProps) {
       const dt = now - last;
       last = now;
       const prev = gateRef.current;
-      if (live.current.beat.id === 'gate') {
+      if (live.current.beat.id === 'gate' && !live.current.showGateCard) {
         const s = advanceGate(prev, dt, {
           dir: router.heldDirection(),
           interact: interactRef.current,
@@ -165,8 +171,9 @@ export function Player2Reveal(_: SceneProps) {
   useInput(
     (input, { repeat }) => {
       if (input !== 'confirm' || repeat) return;
-      if (beat.id === 'gate') interactRef.current = true;
-      else if (skippable(beat) && beat.id !== 'end') next();
+      if (beat.id === 'gate') {
+        if (!showGateCard) interactRef.current = true;
+      } else if (skippable(beat) && beat.id !== 'end') next();
     },
     { priority: INPUT_PRIORITY.scene },
   );
@@ -242,6 +249,15 @@ export function Player2Reveal(_: SceneProps) {
           <p>{REVEAL_COPY.endA}</p>
           <p className="reveal__end-b">{REVEAL_COPY.endB}</p>
         </div>
+      )}
+      {showGateCard && (
+        <ChapterCard
+          level={LEVELS[5]!}
+          onDone={() => {
+            dispatch({ type: 'flag/set', flag: chapterSeenFlag(6), value: true });
+            setGateCard(false);
+          }}
+        />
       )}
     </div>
   );

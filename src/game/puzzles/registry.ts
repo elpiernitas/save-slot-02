@@ -1,6 +1,6 @@
 import type { PuzzleDefinition, PuzzleId } from './types';
 
-/** GAME-06 puzzles (PUZZLE_BIBLE ids: semantic, stable). */
+/** GAME-06 puzzles + PZ-03 (content expansion) (PUZZLE_BIBLE ids: semantic, stable). */
 export const PUZZLES = {
   'route.muralla_beacons': {
     id: 'route.muralla_beacons',
@@ -8,6 +8,14 @@ export const PUZZLES = {
     kind: 'routeSequence',
     optional: false,
     estimatedSeconds: 90,
+  },
+  'route.seagull_protocol': {
+    id: 'route.seagull_protocol',
+    title: 'PROTOCOLO DE LA GAVIOTA',
+    kind: 'microgame',
+    // Always completes (the fallback), so it gates the terminal without blocking.
+    optional: false,
+    estimatedSeconds: 60,
   },
   'system.player_sync': {
     id: 'system.player_sync',

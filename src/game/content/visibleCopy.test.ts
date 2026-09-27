@@ -5,7 +5,8 @@ import { describe, expect, it } from 'vitest';
  * literal and JSX text in shipped source is checked for English UI/system
  * vocabulary. Code ids are lowercase/camelCase and never match; accepted
  * labels (PLAYER 1/2, SAVE SLOT 02, CITY CARDS, LA MURALLA, MANU, DESYNC,
- * CHECKSUM, HOLO, key names) are removed before checking.
+ * CHECKSUM, HOLO, key names, and the director-named DESYNC PROCESS and
+ * achievements FIRST SYNC / PLAYER 2 ONLINE) are removed before checking.
  */
 /** Every source file as text (Vite raw import; no Node APIs needed). */
 const SOURCES = import.meta.glob<string>('/src/**/*.{ts,tsx}', {
@@ -16,6 +17,9 @@ const SOURCES = import.meta.glob<string>('/src/**/*.{ts,tsx}', {
 /** Dev-only content and files that are never player-facing. */
 const SKIP = [/\.test\.tsx?$/, /content\/dialogue\/demo\.ts$/, /\.d\.ts$/];
 const ALLOWED = [
+  'PLAYER 2 ONLINE',
+  'FIRST SYNC',
+  'DESYNC PROCESS',
   'PLAYER 1',
   'PLAYER 2',
   'SAVE SLOT 02',

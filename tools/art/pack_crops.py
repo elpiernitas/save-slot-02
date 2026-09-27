@@ -66,4 +66,20 @@ def manu_sheet():
 
 
 manu_sheet()
+
+
+def randy_sitting():
+    """06_RANDY_SPRITE_TARGET: the front sitting frame (bottom row, first),
+    its yellow/red matte fringe removed, reduced to 40 px tall (Luis is 55)."""
+    a = np.array(Image.open(PACK / '04_CHARACTERS/06_RANDY_SPRITE_TARGET.png').convert('RGBA').crop((40, 848, 188, 1062))).astype(int)
+    r, g, b, al = (a[:, :, i] for i in range(4))
+    fringe = ((r > 200) & (g > 200) & (b < 80)) | ((r > 180) & (g < 60) & (b < 60))
+    a[:, :, 3] = np.where(fringe | (al < 160), 0, 255)
+    im = Image.fromarray(a.astype('uint8'))
+    small = np.array(im.resize((round(im.width * 40 / im.height), 40), Image.BOX))
+    small[:, :, 3] = np.where(small[:, :, 3] > 120, 255, 0)
+    Image.fromarray(small).save(OUT / 'randy.png', optimize=True)
+
+
+randy_sitting()
 print('wrote', sorted(p.name for p in OUT.iterdir()))

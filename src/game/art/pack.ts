@@ -11,6 +11,7 @@ import classWarrior from '../../assets/pack/class-warrior.png';
 import manuPortrait from '../../assets/pack/manu-portrait.png';
 import manu from '../../assets/pack/manu.png';
 import polaroid from '../../assets/pack/polaroid.png';
+import randy from '../../assets/pack/randy.png';
 import seafront from '../../assets/pack/seafront.png';
 
 export const PACK_ART = {
@@ -22,6 +23,8 @@ export const PACK_ART = {
   seafront,
   polaroid,
   manuPortrait,
+  /** Randy (06_RANDY_SPRITE_TARGET, sitting), 28×40. */
+  randy,
 } as const;
 
 const loaded = new Map<string, Promise<HTMLImageElement>>();
