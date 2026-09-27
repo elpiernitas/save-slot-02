@@ -17,7 +17,7 @@
     },
     "foreground": {
       "file": "foreground.png",
-      "status": "placeholder",
+      "status": "final",
       "width": 960,
       "height": 400,
       "frameWidth": 960,
@@ -430,6 +430,97 @@
       "rows": 1,
       "anchorX": 0,
       "anchorY": 38
+    },
+    "worldTerrace": {
+      "file": "worldTerrace.png",
+      "status": "final",
+      "transparent": true,
+      "width": 521,
+      "height": 165,
+      "frameWidth": 521,
+      "frameHeight": 165,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 163
+    },
+    "worldPlanters": {
+      "file": "worldPlanters.png",
+      "status": "final",
+      "transparent": true,
+      "width": 112,
+      "height": 95,
+      "frameWidth": 112,
+      "frameHeight": 95,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 93
+    },
+    "worldTree": {
+      "file": "worldTree.png",
+      "status": "final",
+      "transparent": true,
+      "width": 95,
+      "height": 141,
+      "frameWidth": 95,
+      "frameHeight": 141,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 138
+    },
+    "worldBench": {
+      "file": "worldBench.png",
+      "status": "final",
+      "transparent": true,
+      "width": 221,
+      "height": 135,
+      "frameWidth": 221,
+      "frameHeight": 135,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 128
+    },
+    "murallaFull": {
+      "file": "murallaFull.png",
+      "status": "final",
+      "width": 960,
+      "height": 400,
+      "frameWidth": 960,
+      "frameHeight": 400,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 0,
+      "transparent": false
+    },
+    "worldWalkerWest": {
+      "file": "worldWalkerWest.png",
+      "status": "final",
+      "transparent": true,
+      "width": 20,
+      "height": 89,
+      "frameWidth": 20,
+      "frameHeight": 89,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 89
+    },
+    "worldWalkersEast": {
+      "file": "worldWalkersEast.png",
+      "status": "final",
+      "transparent": true,
+      "width": 110,
+      "height": 101,
+      "frameWidth": 110,
+      "frameHeight": 101,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 89
     }
   }
 }

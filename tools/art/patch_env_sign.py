@@ -16,7 +16,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 PACK = Path(sys.argv[1])
-BG = Path(__file__).resolve().parents[2] / 'src/assets/world/muralla/background.png'
+BG = Path(__file__).resolve().parent / 'source/env-001-full.png'
 SCALE, DX, DY = 0.487, -10, 1
 BOX = (453, 52, 493, 77)  # x0, y0, x1, y1 in ENV-001 pixels
 

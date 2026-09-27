@@ -243,9 +243,14 @@ Puerta cooperativa rehecha (solo presentación), rótulo de ENV-001 parcheado,
 oclusor de la maceta, fechas sin lugares y evidencia de La Muralla corregida.
 Evidencia en `docs/art/review/rc-fix-03/`.
 
+## RC-FIX-04 (D-081)
+
+La Muralla separada en ENV / WORLD / FG-001 con máscaras de ENV-001 y
+verificada por `art:check`. Evidencia en `docs/art/review/rc-fix-04/`.
+
 ## Próximo paso exacto
 
-1. Revisión del director sobre RC-FIX-03 (PR #1).
+1. Revisión del director sobre RC-FIX-03 + RC-FIX-04 (PR #1).
 2. Solo con su decisión: merge y deploy.
 3. Arte no bloqueante: un CHAR-001 nativo a la escala de `playerLarge` (hoy
-   ×2 exacto). FG-001 no es necesario para esta RC.
+   ×2 exacto).

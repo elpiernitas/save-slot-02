@@ -1,22 +1,25 @@
 import type { Interactable, Rect, WorldMap } from '../types';
 import LAYOUT from './muralla.layout.json';
 import OCCLUDERS from './muralla.occluders.json';
+import WORLD_PIECES from './muralla.world.json';
 
 /**
  * GAME-04 vertical slice: the street in front of La Muralla — the bar/café,
  * NOT a defensive wall — on an ordinary late afternoon in Cimavilla, Gijón.
  *
- * The background is ENV-001 (ChatGPT, final) used pixel for pixel: façade,
- * terrace (diners, umbrellas, waitress), bench, bike, tree and pedestrians
- * are painted in. Colliders keep PLAYER 1 on the sidewalk, so he is always
- * in front of the terrace and the bench and never walks behind them.
- *
- * Sidewalk furniture he CAN walk behind (lamp, board, bollards, bin, gulls,
- * the flower pot by the bench) is re-drawn as occluder sprites cut from the
- * same ENV-001 pixels
- * (tools/art/occluders.mjs), placed where they were cut and depth-sorted.
- * PLAYER 1 uses `playerLarge` (CHAR-001 at exact ×2) to match the adults
- * painted in the reference (~100–110 px).
+ * Layer contract (RC-FIX-04, D-081). ENV-001 (ChatGPT, final) is split by
+ * masks, never redrawn (tools/art/layers.py); the layers recompose ENV-001
+ * pixel for pixel (checked by `npm run art:check`):
+ *  - ENV `background`: façade, interiors, ground and light only.
+ *  - WORLD props, y-sorted with PLAYER 1: the terrace (diners, tables,
+ *    chairs, umbrellas, waitress), planters, tree trunk, bench with the
+ *    reader and the bike, pedestrians (`world*`), and the sidewalk furniture
+ *    he can walk behind — lamp, board, bollards, bin, gulls, flower pot
+ *    (`occ*`, tools/art/occluders.mjs).
+ *  - FG-001 `foreground`: canopy leaves and the out-of-focus near bushes.
+ *  - Compositing (render/compositing.ts): shadows, rim, grade.
+ * Colliders keep PLAYER 1 in front of the terrace and the bench. He uses
+ * `playerLarge` (CHAR-001 at exact ×2) to match the painted adults.
  *
  * Things he cannot walk up to (door, shop windows, waitress) are faced from
  * the nearest free ground. Coordinates: world px, 1:1 with ENV-001.
@@ -84,10 +87,7 @@ export const MURALLA_MAP: WorldMap = {
   timeOfDay: 'afternoon',
   background: 'background',
   playerSprite: 'playerLarge',
-  // No separate foreground layer (RC-FIX-03 audit): the out-of-focus bushes
-  // painted into ENV-001 already give depth, and their colliders keep PLAYER 1
-  // from ever standing behind them, so nothing needs to cover him. FG-001 is
-  // not needed for this release candidate.
+  foreground: 'foreground',
   widthTiles: MURALLA_W,
   heightTiles: MURALLA_H,
   tiles: TILES,
@@ -120,7 +120,7 @@ export const MURALLA_MAP: WorldMap = {
     box(748, 342, 780, 356), // gull (east)
     box(850, 340, 870, 356), // bollard
   ],
-  props: OCCLUDERS.map((o) => ({ id: o.id, sprite: o.id, x: o.x, y: o.y })),
+  props: [...OCCLUDERS, ...WORLD_PIECES].map((o) => ({ id: o.id, sprite: o.id, x: o.x, y: o.y })),
   npcs: [],
   interactables,
   zones: [

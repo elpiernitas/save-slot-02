@@ -93,7 +93,7 @@ function nightBackdrop(bg: CanvasImageSource & { width: number; height: number }
 export function createDesyncRenderer(canvas: HTMLCanvasElement, images: SpriteImages | null) {
   const ctx = canvas.getContext('2d')!;
   const light = createLitCache(LAMPLIT_NIGHT);
-  const bg = images?.get('background');
+  const bg = images?.get('murallaFull');
   const backdrop = bg ? nightBackdrop(bg) : null;
   let scale = 1;
 

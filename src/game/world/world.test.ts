@@ -259,10 +259,17 @@ describe('La Muralla map', () => {
     for (const banned of ['wall', 'gate']) expect(ids).not.toContain(banned);
   });
 
-  it('only re-draws ENV-001 pixels (occluders) over the painted background', () => {
+  it('draws La Muralla as ENV + WORLD + FG-001 layers cut from ENV-001', () => {
     expect(SPRITES[map.background]!.status).toBe('final');
+    expect(map.foreground).toBe('foreground');
+    expect(SPRITES.foreground!.status).toBe('final');
+    expect(SPRITES.foreground!.transparent).toBe(true);
+    const ids = map.props.map((p) => p.sprite);
+    for (const piece of ['worldTerrace', 'worldBench', 'worldTree', 'worldPlanters']) {
+      expect(ids).toContain(piece);
+    }
     for (const prop of map.props) {
-      expect(prop.sprite, prop.id).toMatch(/^occ/);
+      expect(prop.sprite, prop.id).toMatch(/^(occ|world)/);
       expect(SPRITES[prop.sprite]!.status, prop.id).toBe('final');
     }
     expect(map.npcs).toEqual([]);

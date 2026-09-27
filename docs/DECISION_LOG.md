@@ -1070,3 +1070,32 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
   y los AFTER de La Muralla eran capturas del título (el script capturaba
   antes de cambiar de escena). Los scripts de QA ahora esperan a la escena.
 
+### D-081 · 2026-09-27 · RC-FIX-04: contrato de capas de La Muralla y FG-001
+
+- El director comprobó en el HEAD que ENV-001 seguía horneando terraza,
+  comensales, sombrillas, camarera, banco, bici, árbol y peatones, y que
+  `foreground.png` era un placeholder sin usar. Corrige D-080 (que declaraba
+  FG-001 innecesario).
+- `tools/art/layers.py` divide ENV-001 con máscaras binarias, sin dibujar:
+  - ENV `background.png`: fachada, interiores, suelo y luz.
+  - WORLD (y-sort con PLAYER 1): `worldTerrace` (comensales, mesas, sillas,
+    sombrillas, camarera, maceta de la escalera), `worldPlanters`,
+    `worldTree` (tronco), `worldBench` (banco, lector y bici),
+    `worldWalkerWest`/`worldWalkersEast`, más los `occ*` existentes.
+  - FG-001 `foreground.png` (final): copa del árbol, hojas de arriba a la
+    derecha y los arbustos desenfocados de abajo. Se dibuja sobre todo.
+- Cada píxel pertenece a una sola capa. Donde dos oclusores se solapaban, el
+  más cercano se queda el píxel (20 px del tablón pasan a la gaviota).
+  `npm run art:check` comprueba que ENV + WORLD + FG-001 recomponen ENV-001
+  píxel a píxel y que no hay solapes.
+- Los huecos que deja WORLD/FG en ENV se rellenan con un promedio suave de su
+  entorno. Nunca se ven en runtime (la capa siempre está encima). Es relleno
+  técnico, no arte.
+- CITY CARDS y el fondo nocturno de DESYNC usan la imagen aplanada
+  `murallaFull.png` (idéntica a ENV-001); son ilustraciones, no la escena.
+- Colisiones, posiciones, interacciones y aspecto final sin cambios. Solo
+  cambia la profundidad donde antes era incorrecta: los arbustos cercanos ya
+  tapan a Luis si se acerca.
+- Fuente plana: `tools/art/source/env-001-full.png`. Orden de regeneración:
+  `patch_env_sign.py` → `node tools/art/occluders.mjs` → `layers.py`.
+

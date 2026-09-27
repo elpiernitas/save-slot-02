@@ -3,7 +3,8 @@ import type { CardDefinition, CardId } from '../inventory/types';
 /**
  * CITY CARDS registry (CITY_CARDS_BIBLE). Only cards the game can actually
  * award live here; later sets are added with the content that grants them.
- * Illustrations are windows onto ENV-001, ChatGPT's approved La Muralla art.
+ * Illustrations are windows onto ENV-001, ChatGPT's approved La Muralla art
+ * (the flattened `murallaFull`, not the split scene layers).
  */
 export const CARDS = {
   'city.001.la_muralla': {
@@ -13,7 +14,7 @@ export const CARDS = {
     kind: 'place',
     rarity: 'uncommon',
     flavorText: 'Misión secundaria detectada. Contexto no disponible.',
-    art: { sprite: 'background', x: 0, y: 30, w: 320, h: 240 },
+    art: { sprite: 'murallaFull', x: 0, y: 30, w: 320, h: 240 },
   },
   'city.002.bollard': {
     id: 'city.002.bollard',
@@ -22,7 +23,7 @@ export const CARDS = {
     kind: 'object',
     rarity: 'common',
     flavorText: 'Inmóvil. Imperturbable. Probablemente estructural.',
-    art: { sprite: 'background', x: 503, y: 272, w: 80, h: 60 },
+    art: { sprite: 'murallaFull', x: 503, y: 272, w: 80, h: 60 },
   },
   'city.005.cimavilla_afternoon': {
     id: 'city.005.cimavilla_afternoon',
@@ -31,7 +32,7 @@ export const CARDS = {
     kind: 'event',
     rarity: 'holo',
     flavorText: 'La ciudad no está haciendo absolutamente nada dramático.',
-    art: { sprite: 'background', x: 200, y: 40, w: 480, h: 360 },
+    art: { sprite: 'murallaFull', x: 200, y: 40, w: 480, h: 360 },
   },
 } as const satisfies Record<CardId, CardDefinition>;
 

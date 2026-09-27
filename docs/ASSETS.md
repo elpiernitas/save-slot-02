@@ -30,9 +30,12 @@ reducida) generados por `python3 tools/art/pack_crops.py <carpeta del pack>`:
 | `manu.png` | 04_CHARACTERS/04_MANU_SPRITE_SHEET_ART_TARGET → 120×240 (40×60) | CHAR-003, sprite de Manu |
 | `manu-portrait.png` | 01_PRIMARY_CANON/09_MASTER_CONCEPT_SHEET | CHAR-004, retrato del reveal |
 
-ENV-001 (`background.png`) lleva un parche mínimo en la M del rótulo con
-píxeles del canon (`tools/art/patch_env_sign.py`, D-080). `occPot.png` es un
-oclusor más recortado de ENV-001 (`tools/art/occluders.mjs`).
+ENV-001 plano (con el parche de la M del rótulo, D-080) vive en
+`tools/art/source/env-001-full.png`. `tools/art/layers.py` lo divide en
+capas (D-081): ENV `background.png`, WORLD `world*.png` + `occ*.png`
+(y-sort) y FG-001 `foreground.png`. `murallaFull.png` es la imagen plana,
+usada solo por CITY CARDS y el fondo de DESYNC. `art:check` verifica que las
+capas recomponen ENV-001 píxel a píxel.
 
 Iluminación de sprites en runtime: `src/game/render/compositing.ts` (no genera
 arte, solo luz/sombra/grade sobre los sprites aprobados).

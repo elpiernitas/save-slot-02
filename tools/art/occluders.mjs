@@ -176,7 +176,8 @@ const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'));
 if (manifest.sprites.background?.status !== 'final') {
   throw new Error('occluders: background is not the final ENV-001');
 }
-const bg = decodePng(readFileSync(`${DIR}/background.png`));
+// Source = the full, flattened ENV-001 (background.png is the split ENV layer).
+const bg = decodePng(readFileSync('tools/art/source/env-001-full.png'));
 const placements = [];
 for (const o of OCCLUDERS) {
   const { x0, y0, w, h, rgba, pixels } = cut(bg, o);

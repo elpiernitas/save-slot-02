@@ -117,9 +117,62 @@ if (!existsSync(manifestPath)) {
       if (Object.keys(sprites).length === 0) fail('manifest has no sprites');
       if (!failures) {
         console.log(`art: validated ${Object.keys(sprites).length} runtime sprites`);
+        checkLayers(sprites);
       }
     }
   }
+}
+
+/**
+ * La Muralla layer contract (RC-FIX-04): ENV (background), WORLD props
+ * (occ* + world*) and FG-001 (foreground) are disjoint masks of ENV-001 and
+ * recompose it pixel for pixel. Nothing is drawn twice, nothing invented.
+ */
+function checkLayers(sprites) {
+  const source = join(root, 'tools/art/source/env-001-full.png');
+  if (!existsSync(source)) return fail('layers: missing tools/art/source/env-001-full.png');
+  const full = decodePng(readFileSync(source));
+  const { width: W, height: H } = full;
+  const out = Buffer.from(decodePng(readFileSync(join(outDir, sprites.background.file))).rgba);
+  const covered = new Uint8Array(W * H);
+  const stamp = (file, left, top, label) => {
+    const png = decodePng(readFileSync(join(outDir, file)));
+    for (let y = 0; y < png.height; y++) {
+      for (let x = 0; x < png.width; x++) {
+        const a = png.rgba[(y * png.width + x) * 4 + 3];
+        if (a === 0) continue;
+        if (a !== 255) return fail(`layers: ${label} has partial alpha (masks must be binary)`);
+        const wx = left + x;
+        const wy = top + y;
+        if (wx < 0 || wy < 0 || wx >= W || wy >= H) return fail(`layers: ${label} outside ENV-001`);
+        const i = wy * W + wx;
+        if (covered[i]++) return fail(`layers: ${label} overlaps another layer at ${wx},${wy}`);
+        const j = (y * png.width + x) * 4;
+        for (let c = 0; c < 4; c++) out[i * 4 + c] = png.rgba[j + c];
+      }
+    }
+  };
+  const maps = join(root, 'src/game/world/maps');
+  const props = [
+    ...JSON.parse(readFileSync(join(maps, 'muralla.occluders.json'), 'utf8')),
+    ...JSON.parse(readFileSync(join(maps, 'muralla.world.json'), 'utf8')),
+  ];
+  for (const p of props) {
+    const info = sprites[p.id];
+    if (!info) return fail(`layers: ${p.id} missing from manifest`);
+    stamp(info.file, p.x - info.anchorX, p.y - info.anchorY, p.id);
+  }
+  stamp(sprites.foreground.file, 0, 0, 'foreground');
+  let diff = 0;
+  for (let i = 0; i < W * H * 4; i++) if (out[i] !== full.rgba[i]) diff++;
+  if (diff) return fail(`layers: ENV + WORLD + FG-001 differ from ENV-001 in ${diff} channels`);
+  const flat = decodePng(readFileSync(join(outDir, sprites.murallaFull.file)));
+  if (!Buffer.from(flat.rgba).equals(Buffer.from(full.rgba)))
+    fail('layers: murallaFull is not ENV-001');
+  if (!failures)
+    console.log(
+      `art: La Muralla layers recompose ENV-001 exactly (${props.length} props + FG-001)`,
+    );
 }
 
 if (failures) process.exit(1);
