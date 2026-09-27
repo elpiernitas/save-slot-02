@@ -1,0 +1,80 @@
+@import './fonts.css';
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  color-scheme: dark;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: var(--app-height);
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: var(--color-letterbox);
+  color: var(--color-text);
+  font-family: var(--font-pixel);
+  /* Pixel font: keep edges hard where the platform allows it. */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  /* A game, not a document: no text selection, no callouts, normal cursor. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  cursor: default;
+}
+
+/* Prepared for a future "hide cursor when idle" feature (not enabled yet). */
+[data-cursor='hidden'],
+[data-cursor='hidden'] * {
+  cursor: none !important;
+}
+
+#root {
+  height: 100%;
+}
+
+img,
+canvas,
+svg {
+  display: block;
+  image-rendering: pixelated;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: var(--border, 2px) solid var(--color-select);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

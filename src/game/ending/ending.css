@@ -1,0 +1,254 @@
+/*
+ * GAME-09 ending + save slot: the same system field, now calm and stable.
+ * Warm gold for the chosen route; no confetti, no hearts.
+ */
+.ending__card {
+  background: rgb(11 22 38 / 0.45);
+}
+
+.ending__card > * {
+  justify-self: center;
+  padding: calc(var(--px) * 3) calc(var(--px) * 10);
+  background: rgb(14 26 44 / 0.88);
+}
+
+.ending__card > .ending__bar {
+  padding: 0;
+}
+
+.ending__bar {
+  justify-self: center;
+  width: calc(var(--px) * 120);
+  height: calc(var(--px) * 4);
+  border: var(--px) solid var(--color-system);
+}
+
+.ending__bar i {
+  display: block;
+  height: 100%;
+  background: var(--color-system);
+  animation: ending-fill 1.6s steps(8) forwards;
+}
+
+@keyframes ending-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ending__bar i {
+    animation: none;
+    width: 100%;
+  }
+}
+
+.ending__checksum {
+  font-size: var(--text-xs) !important;
+  color: var(--color-text-dim) !important;
+}
+
+.ending__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.ending__route {
+  position: absolute;
+  top: 8%;
+  left: 0;
+  right: 0;
+  display: grid;
+  justify-items: center;
+  gap: calc(var(--px) * 4);
+  text-align: center;
+}
+
+.ending__route p {
+  margin: 0;
+}
+
+/* The payoff: the seawall photo from the master pack, kept as a keepsake. */
+.ending__polaroid {
+  margin: 0 0 calc(var(--px) * 4);
+  padding: calc(var(--px) * 5) calc(var(--px) * 5) calc(var(--px) * 16);
+  background: #f6efe0;
+  box-shadow: calc(var(--px) * 3) calc(var(--px) * 4) 0 rgb(0 0 0 / 0.45);
+  transform: rotate(-3deg);
+  animation: polaroid-in 0.5s steps(5) both;
+}
+
+.ending__polaroid img {
+  display: block;
+  width: calc(var(--px) * 110);
+  height: auto;
+}
+
+@keyframes polaroid-in {
+  from {
+    opacity: 0;
+    transform: rotate(-3deg) translateY(calc(var(--px) * 8));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ending__polaroid {
+    animation: none;
+  }
+}
+
+.ending__route-label {
+  padding: var(--px) calc(var(--px) * 6);
+  background: rgb(14 26 44 / 0.88);
+}
+
+.ending__route-label {
+  font-size: var(--text-sm);
+  color: var(--color-system);
+}
+
+.ending__route-date {
+  padding: calc(var(--px) * 3) calc(var(--px) * 10);
+  background: rgb(14 26 44 / 0.88);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-select);
+  border-top: var(--px) solid var(--color-select);
+  border-bottom: var(--px) solid var(--color-select);
+}
+
+.ending__party {
+  bottom: calc(var(--px) * 24);
+}
+
+/* ---- Save slot ---- */
+.save-slot__card {
+  position: absolute;
+  top: calc(var(--px) * 24);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(var(--px) * 300);
+  display: grid;
+  gap: calc(var(--px) * 6);
+  padding: calc(var(--px) * 8);
+  background: var(--color-surface);
+  border: var(--px) solid var(--color-border);
+  box-shadow: var(--px) var(--px) 0 var(--color-shadow);
+}
+
+.save-slot__head {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.save-slot__ok {
+  color: var(--color-system);
+}
+
+.save-slot__body {
+  display: grid;
+  grid-template-columns: calc(var(--px) * 64) 1fr;
+  gap: calc(var(--px) * 8);
+  align-items: center;
+}
+
+.save-slot__photo {
+  display: block;
+  width: 100%;
+  border: calc(var(--px) * 3) solid #f6efe0;
+  box-shadow: calc(var(--px) * 2) calc(var(--px) * 2) 0 rgb(0 0 0 / 0.45);
+}
+
+.save-slot__rows {
+  display: grid;
+  gap: calc(var(--px) * 2);
+  margin: 0;
+}
+
+.save-slot__row {
+  display: grid;
+  grid-template-columns: calc(var(--px) * 76) 1fr;
+  font-size: var(--text-xs);
+}
+
+.save-slot__row dt {
+  color: var(--color-text-dim);
+}
+
+.save-slot__row dd {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.save-slot__row[data-row='RUTA'] dd {
+  color: var(--color-select);
+}
+
+.save-slot__menu {
+  position: absolute;
+  top: calc(var(--px) * 150);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(var(--px) * 140);
+  padding: calc(var(--px) * 4);
+  background: rgb(14 26 44 / 0.9);
+  border: var(--px) solid var(--color-border-dim);
+}
+
+.save-slot .ending__party,
+.save-slot .date-gate__party {
+  bottom: calc(var(--px) * 10);
+  left: auto;
+  right: calc(var(--px) * 24);
+  transform: none;
+}
+
+/* GAME-10 (small): route status row and Randy's cameo. */
+.save-slot__row--status {
+  margin-top: calc(var(--px) * 2);
+  padding-top: calc(var(--px) * 2);
+  border-top: var(--px) dashed var(--color-border-dim);
+}
+
+.save-slot__row--status dt,
+.save-slot__row--status dd {
+  color: #bfeef2;
+}
+
+.save-slot__randy {
+  position: absolute;
+  right: calc(var(--px) * 128);
+  bottom: calc(var(--px) * 12);
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.save-slot__randy img {
+  display: block;
+  width: calc(var(--px) * 28);
+  height: calc(var(--px) * 40);
+  image-rendering: pixelated;
+  filter: drop-shadow(0 calc(var(--px) * 2) 0 rgb(20 10 24 / 0.45));
+}
+
+.save-slot__randy-line {
+  position: absolute;
+  bottom: calc(100% + var(--px) * 26);
+  left: 0;
+  width: max-content;
+  max-width: calc(var(--px) * 120);
+  text-align: left;
+  padding: calc(var(--px) * 2) calc(var(--px) * 4);
+  font: inherit;
+  font-size: var(--text-xs);
+  color: #f4ecda;
+  background: rgb(14 26 44 / 0.94);
+  border: var(--px) solid var(--color-border-dim);
+}

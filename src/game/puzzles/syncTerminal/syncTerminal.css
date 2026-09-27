@@ -1,0 +1,171 @@
+/* SYNC TERMINAL: world UI grammar with the pale cyan SYSTEM accent. */
+.sync-terminal {
+  --sys: #bfeef2;
+  --bad: #e8735a;
+  position: relative;
+  display: grid;
+  gap: calc(var(--px) * 6);
+  width: min(calc(var(--px) * 400), 92%);
+}
+
+.sync-terminal__title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 700;
+  letter-spacing: var(--px);
+  color: var(--sys);
+}
+
+.sync-terminal__channels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--px) * 10);
+}
+
+.sync-channel {
+  display: grid;
+  gap: calc(var(--px) * 4);
+  justify-items: center;
+  padding: calc(var(--px) * 5);
+  border: var(--px) solid var(--color-border-dim);
+}
+
+.sync-channel[data-offline] {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+.sync-channel__label {
+  margin: 0;
+  font-size: var(--text-xs);
+  letter-spacing: var(--px);
+  color: var(--color-text);
+}
+
+.sync-channel__label [data-ok] {
+  color: var(--color-system);
+}
+
+[data-bad] {
+  color: var(--bad);
+}
+
+.sync-grid {
+  display: grid;
+  grid-template-columns: calc(var(--px) * 12) repeat(2, calc(var(--px) * 34)) calc(var(--px) * 12);
+  grid-template-rows: repeat(2, calc(var(--px) * 34)) calc(var(--px) * 12);
+  gap: var(--px);
+  align-items: center;
+  justify-items: center;
+}
+
+.sync-grid__source {
+  grid-column: 1;
+  grid-row: 1;
+  color: var(--sys);
+}
+
+.sync-grid__output {
+  grid-column: 3;
+  grid-row: 3;
+  color: var(--sys);
+}
+
+.sync-tile {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg);
+  border: var(--px) solid var(--color-border-dim);
+  cursor: pointer;
+}
+
+.sync-channel[data-offline] .sync-tile {
+  border-style: dashed;
+  cursor: default;
+}
+
+.sync-tile[data-selected] {
+  outline: var(--px) solid var(--color-select);
+  outline-offset: var(--px);
+}
+
+.sync-tile:disabled {
+  cursor: default;
+}
+
+.sync-tile__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Unpowered = thin dashed line; powered = thick solid cyan (shape + colour). */
+.sync-tile__pipe {
+  fill: none;
+  stroke: var(--color-text-dim);
+  stroke-width: 3;
+  stroke-dasharray: 4 3;
+}
+
+.sync-tile__pipe[data-powered] {
+  stroke: var(--sys);
+  stroke-width: 7;
+  stroke-dasharray: none;
+}
+
+.sync-tile__hub {
+  fill: var(--color-text);
+}
+
+.sync-terminal__log {
+  display: grid;
+  gap: calc(var(--px) * 2);
+  min-height: calc(var(--px) * 44);
+  font-size: var(--text-sm);
+  letter-spacing: calc(var(--px) * 0.5);
+  color: var(--sys);
+}
+
+.sync-terminal__log p {
+  margin: 0;
+}
+
+.sync-terminal__narrator {
+  color: var(--color-text);
+  letter-spacing: 0;
+}
+
+.sync-terminal__fallback {
+  all: unset;
+  justify-self: start;
+  padding: var(--px) calc(var(--px) * 3);
+  color: var(--color-bg);
+  background: var(--color-select);
+  cursor: pointer;
+}
+
+.sync-terminal__fallback kbd {
+  font: inherit;
+  font-weight: 700;
+}
+
+/* Subtle glitch only after the PLAYER 2 check fails (reduced motion: off). */
+.sync-terminal[data-glitch] .sync-terminal__title {
+  animation: sync-glitch 2.4s steps(1) infinite;
+}
+
+@keyframes sync-glitch {
+  0%,
+  92%,
+  100% {
+    transform: none;
+  }
+  94% {
+    transform: translateX(calc(var(--px) * 2));
+  }
+  96% {
+    transform: translateX(calc(var(--px) * -1));
+  }
+}

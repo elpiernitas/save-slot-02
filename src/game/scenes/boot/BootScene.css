@@ -1,0 +1,15 @@
+.boot__bar {
+  position: absolute;
+  left: calc(var(--space-5) * 2);
+  bottom: var(--space-5);
+  width: calc(var(--px) * 160);
+  height: calc(var(--px) * 6);
+  border: var(--px) solid var(--color-border-dim);
+  padding: var(--px);
+}
+
+.boot__bar-fill {
+  height: 100%;
+  background: var(--color-system);
+  transition: width var(--duration-base) steps(4, end);
+}

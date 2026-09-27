@@ -1,0 +1,51 @@
+{
+  "tile": 16,
+  "widthTiles": 60,
+  "heightTiles": 25,
+  "facadeBottom": 152,
+  "sidewalkBottom": 182,
+  "curbTop": 392,
+  "buildings": [
+    { "id": "west", "x": 0, "w": 300, "style": "ochre" },
+    { "id": "bar", "x": 300, "w": 400, "style": "cream" },
+    { "id": "east", "x": 700, "w": 260, "style": "coral" }
+  ],
+  "westDoor": { "x": 118, "w": 38 },
+  "westWindow": { "x": 196, "w": 64 },
+  "eastDoor": { "x": 806, "w": 38 },
+  "eastWindow": { "x": 874, "w": 60 },
+  "barWindowLeft": { "x": 322, "w": 156 },
+  "barDoor": { "x": 490, "w": 40 },
+  "barWindowRight": { "x": 542, "w": 138 },
+  "terrace": { "x": 330, "y": 186, "w": 360, "h": 112, "gapX": 484, "gapW": 52 },
+  "tables": [
+    { "id": "tableBackWest", "x": 396, "y": 232, "sprite": "tableOccupiedA", "umbrella": true },
+    { "id": "tableBackEast", "x": 626, "y": 232, "sprite": "tableOccupiedB", "umbrella": true },
+    { "id": "tableEmpty", "x": 404, "y": 284, "sprite": "tableEmpty", "umbrella": false },
+    { "id": "tableFrontEast", "x": 616, "y": 284, "sprite": "tableOccupiedC", "umbrella": false }
+  ],
+  "trees": [
+    { "id": "treeWest", "x": 170, "y": 350 },
+    { "id": "treeEast", "x": 896, "y": 336 }
+  ],
+  "board": { "x": 460, "y": 326 },
+  "planters": [
+    { "x": 470, "y": 176 },
+    { "x": 550, "y": 176 }
+  ],
+  "bollards": [
+    { "x": 40, "y": 388 },
+    { "x": 262, "y": 386, "marked": true },
+    { "x": 744, "y": 388 },
+    { "x": 940, "y": 388 }
+  ],
+  "bench": { "x": 800, "y": 330 },
+  "bike": { "x": 712, "y": 214 },
+  "gull": { "x": 318, "y": 356 },
+  "waitress": { "x": 556, "y": 250, "facing": "down" },
+  "walkers": [
+    { "sprite": "walkerA", "y": 376, "x0": -30, "x1": 990, "speed": 26, "phase": 0 },
+    { "sprite": "walkerB", "y": 170, "x0": 700, "x1": 990, "speed": 20, "phase": 180 },
+    { "sprite": "walkerC", "y": 366, "x0": -30, "x1": 990, "speed": 18, "phase": 640 }
+  ]
+}

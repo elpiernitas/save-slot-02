@@ -1,0 +1,32 @@
+[
+  {
+    "id": "worldTerrace",
+    "x": 220,
+    "y": 297
+  },
+  {
+    "id": "worldPlanters",
+    "x": 147,
+    "y": 252
+  },
+  {
+    "id": "worldTree",
+    "x": 24,
+    "y": 250
+  },
+  {
+    "id": "worldBench",
+    "x": 727,
+    "y": 332
+  },
+  {
+    "id": "worldWalkerWest",
+    "x": 8,
+    "y": 239
+  },
+  {
+    "id": "worldWalkersEast",
+    "x": 843,
+    "y": 240
+  }
+]

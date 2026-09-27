@@ -1,0 +1,145 @@
+/* Shared RPG UI primitives. All sizes in logical px (--px). */
+
+.scene {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---- Box: the classic RPG window ---- */
+.rpg-box {
+  background: var(--color-surface);
+  border: var(--border) solid var(--color-border);
+  box-shadow:
+    inset 0 0 0 var(--px) var(--color-surface),
+    inset 0 0 0 calc(var(--px) * 2) var(--color-border-dim),
+    var(--shadow-hard-lg) var(--color-shadow);
+  padding: var(--space-3) var(--space-4);
+}
+
+/* ---- Menu ---- */
+.rpg-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.rpg-menu__item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-1) var(--space-2) var(--space-1) calc(var(--space-2) + var(--px) * 8);
+  text-align: left;
+  font-size: var(--text-md);
+  color: var(--color-text-dim);
+  position: relative;
+  cursor: pointer;
+}
+
+.rpg-menu__item[aria-disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.rpg-menu__item[data-selected] {
+  color: var(--color-bg);
+  background: var(--color-select);
+}
+
+.rpg-menu__item[data-selected]::before {
+  content: '>';
+  position: absolute;
+  left: var(--space-2);
+  animation: rpg-nudge 0.8s steps(1) infinite;
+}
+
+.rpg-menu__value {
+  min-width: calc(var(--px) * 24);
+  text-align: right;
+}
+
+@keyframes rpg-nudge {
+  50% {
+    transform: translateX(var(--px));
+  }
+}
+
+/* ---- Leader line: LABEL ...... VALUE ---- */
+.leader-line {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
+  gap: var(--space-2);
+}
+
+.leader-line__dots {
+  height: var(--px);
+  margin-bottom: calc(var(--px) * 2);
+  background: linear-gradient(to right, var(--color-text-dim) 50%, transparent 50%) 0 0 /
+    calc(var(--px) * 4) var(--px) repeat-x;
+}
+
+.tone-system {
+  color: var(--color-system);
+}
+.tone-dim {
+  color: var(--color-text-dim);
+}
+.tone-select {
+  color: var(--color-select);
+}
+.tone-danger {
+  color: var(--color-danger);
+}
+
+/* ---- ▼ "more" indicator, drawn in pixels (no font glyph needed) ---- */
+.more-indicator {
+  display: inline-block;
+  width: calc(var(--px) * 7);
+  height: calc(var(--px) * 4);
+  background: var(--color-select);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  animation: rpg-bob 0.9s steps(1) infinite;
+}
+
+@keyframes rpg-bob {
+  50% {
+    transform: translateY(var(--px));
+  }
+}
+
+.blink {
+  animation: rpg-blink 1s steps(1) infinite;
+}
+
+@keyframes rpg-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---- Keyboard hint footer ---- */
+.key-hints {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}
+
+.key-hints kbd {
+  font: inherit;
+  color: var(--color-text);
+  padding: 0 var(--px);
+  border: var(--px) solid var(--color-border-dim);
+  margin-right: var(--space-1);
+}
+
+/* ---- Reduced motion: the player setting or the OS preference ---- */
+.game-root[data-reduced-motion='true'] *,
+.game-root[data-reduced-motion='true'] *::before,
+.game-root[data-reduced-motion='true'] *::after {
+  animation: none !important;
+  transition: none !important;
+}

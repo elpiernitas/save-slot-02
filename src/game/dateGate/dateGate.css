@@ -1,0 +1,214 @@
+/*
+ * GAME-08 date gate: four route gates on a quiet coastal-night system field.
+ * Selected = gold edge + cursor; Friday = an occupied, glowing quest (not an
+ * error); elapsed = dim with written status. Nothing is colour-only.
+ */
+/* The world behind the gates: sunset seafront (master pack), dimmed for UI. */
+.date-gate__sky {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgb(11 22 38 / 0.55), rgb(11 22 38 / 0.15) 45%, rgb(11 22 38 / 0.6)),
+    url('../../assets/pack/seafront.png') center bottom / cover no-repeat;
+}
+
+.date-gate__title {
+  position: absolute;
+  top: calc(var(--px) * 10);
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: calc(var(--px) * 2);
+  color: var(--color-select);
+  text-shadow:
+    calc(var(--px) * 2) calc(var(--px) * 2) 0 #0b1626,
+    0 0 calc(var(--px) * 10) rgb(242 193 78 / 0.5);
+}
+
+.date-gate__row {
+  position: absolute;
+  top: calc(var(--px) * 40);
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: repeat(4, calc(var(--px) * 96));
+  gap: calc(var(--px) * 10);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* DATE PORTALS (master pack collage): a navy card with the place's art. */
+.date-gate__gate {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: calc(var(--px) * 2);
+  padding: calc(var(--px) * 4) calc(var(--px) * 3) calc(var(--px) * 5);
+  text-align: center;
+  cursor: pointer;
+  background: rgb(14 26 44 / 0.9);
+  border: var(--px) solid var(--color-border-dim);
+  box-shadow: calc(var(--px) * 3) calc(var(--px) * 3) 0 rgb(0 0 0 / 0.45);
+  transition: transform var(--duration-fast) steps(2);
+}
+
+.date-gate__art {
+  width: 100%;
+  aspect-ratio: 1;
+  background-size: cover;
+  background-position: center;
+  border: var(--px) solid var(--color-border-dim);
+  image-rendering: auto;
+}
+
+/*
+ * Route cards show only the sunset sky of the seafront (RC-FIX-03): mood,
+ * not a place. No card claims where a date happens.
+ */
+.date-gate__art[data-art='wed-30-sep'],
+.date-gate__art[data-art='thu-01-oct'],
+.date-gate__art[data-art='sun-04-oct'] {
+  background-image: url('../../assets/pack/seafront.png');
+  background-size: 647% auto;
+}
+.date-gate__art[data-art='wed-30-sep'] {
+  background-position: 0% 0%;
+}
+.date-gate__art[data-art='thu-01-oct'] {
+  background-position: 21.6% 0%;
+}
+.date-gate__art[data-art='sun-04-oct'] {
+  background-position: 48.2% 3%;
+}
+.date-gate__art[data-art='friday'] {
+  background-image: url('../../assets/pack/date-fri.png');
+  background-size: 100% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #10182a;
+}
+
+.date-gate__label {
+  font-size: var(--text-md);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.date-gate__sub,
+.date-gate__time {
+  max-width: calc(var(--px) * 90);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}
+
+.date-gate__gate[data-selected] {
+  border-color: var(--color-select);
+  box-shadow:
+    inset 0 0 0 var(--px) #0b1626,
+    inset 0 0 0 calc(var(--px) * 2) var(--color-select),
+    0 0 calc(var(--px) * 12) rgb(242 193 78 / 0.45),
+    calc(var(--px) * 3) calc(var(--px) * 4) 0 rgb(0 0 0 / 0.45);
+  transform: translateY(calc(var(--px) * -4));
+}
+
+.date-gate__gate[data-selected] .date-gate__art {
+  border-color: var(--color-select);
+}
+
+.date-gate__gate[data-selected] .date-gate__label {
+  color: var(--color-select);
+}
+
+.date-gate__gate[data-selected]::before {
+  content: '▼';
+  position: absolute;
+  top: calc(var(--px) * -12);
+  font-size: var(--text-xs);
+  color: var(--color-select);
+}
+
+.date-gate__gate:not([data-selected]) .date-gate__art {
+  filter: saturate(0.8) brightness(0.85);
+}
+
+/* Friday: the quest that already exists, lit and occupied. */
+.date-gate__gate[data-kind='mainQuest'] {
+  cursor: default;
+  border-color: var(--color-system);
+}
+
+.date-gate__gate[data-kind='mainQuest'] .date-gate__art {
+  border-color: var(--color-system);
+}
+
+.date-gate__gate[data-kind='mainQuest'] .date-gate__sub {
+  color: var(--color-system);
+}
+
+.date-gate__gate[data-kind='mainQuest'] .date-gate__time {
+  color: var(--color-text);
+}
+
+.date-gate__gate[data-status='elapsed'] {
+  cursor: default;
+  border-style: dashed;
+}
+
+.date-gate__gate[data-status='elapsed'] .date-gate__art {
+  filter: grayscale(1) brightness(0.5);
+}
+
+.date-gate__gate[data-status='elapsed'] .date-gate__label {
+  color: var(--color-text-dim);
+}
+
+.date-gate__party {
+  position: absolute;
+  bottom: calc(var(--px) * 4);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.party__canvas {
+  display: block;
+  width: calc(var(--px) * 100);
+  height: calc(var(--px) * 66);
+  image-rendering: pixelated;
+}
+
+.date-gate__human {
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--color-text);
+}
+
+.date-gate__expired {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: calc(var(--px) * 4);
+  width: calc(var(--px) * 320);
+  text-align: center;
+}
+
+.date-gate__expired p {
+  margin: 0;
+  color: var(--color-system);
+}
+
+.date-gate__expired .date-gate__expired-line {
+  color: var(--color-text);
+}
+
+.date-gate__expired .date-gate__expired-hint {
+  margin-top: calc(var(--px) * 6);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}

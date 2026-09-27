@@ -1,0 +1,69 @@
+/* PZ-03 PROTOCOLO DE LA GAVIOTA: same panel grammar as the SYNC TERMINAL. */
+.seagull {
+  --sys: #bfeef2;
+  --bad: #e8735a;
+  display: grid;
+  gap: calc(var(--px) * 5);
+  justify-items: center;
+  width: min(calc(var(--px) * 330), 92%);
+}
+
+.seagull__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+}
+
+.seagull__head p {
+  margin: 0;
+}
+
+.seagull__title {
+  font-size: var(--text-md);
+  font-weight: 700;
+  letter-spacing: var(--px);
+  color: var(--sys);
+}
+
+.seagull__count {
+  font-size: var(--text-xs);
+  color: var(--color-text);
+}
+
+.seagull__assist {
+  margin-left: calc(var(--px) * 4);
+  padding: 0 calc(var(--px) * 2);
+  color: var(--color-bg);
+  background: var(--color-select);
+}
+
+.seagull__canvas {
+  width: calc(var(--px) * 280);
+  height: calc(var(--px) * 168);
+  image-rendering: pixelated;
+  border: var(--px) solid var(--color-border-dim);
+}
+
+.seagull__log {
+  min-height: calc(var(--px) * 10);
+  font-size: var(--text-xs);
+  color: var(--sys);
+  text-align: center;
+}
+
+.seagull__log p {
+  margin: 0;
+}
+
+.seagull__log [data-bad] {
+  color: var(--bad);
+}
+
+.seagull__log [data-ok] {
+  color: var(--color-select);
+}
+
+.seagull__hints {
+  justify-self: end;
+}

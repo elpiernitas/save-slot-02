@@ -1,0 +1,37 @@
+.save-detected {
+  display: grid;
+  place-items: center;
+}
+
+.save-detected__box {
+  position: relative;
+  width: calc(var(--px) * 280);
+  min-height: calc(var(--px) * 132);
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.save-detected__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-system);
+}
+
+.save-detected__rows {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.save-detected__message {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.save-detected__more {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-2);
+}

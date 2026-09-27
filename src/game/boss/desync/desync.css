@@ -1,0 +1,219 @@
+/*
+ * DESYNC PROCESS (GAME-07). System space: navy field, cyan/cream lines,
+ * coral danger, gold for the recoverable core. No horror, no glitch overload.
+ * Same panel grammar as the world UI (docs/UI_SYSTEM_V2.md).
+ */
+.desync,
+.reveal {
+  --color-bg: #0e1a2c;
+  --color-surface: #16243d;
+  --color-surface-raised: #1f3354;
+  --color-border: #f1e6cf;
+  --color-border-dim: #3c5a82;
+  --color-text: #f4ecda;
+  --color-text-dim: #a9b4c6;
+  --color-select: #f2c14e;
+  --color-system: #bfeef2;
+  --color-shadow: #081020;
+  --world-accent: #e8735a;
+
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0b1626;
+  color: var(--color-text);
+  letter-spacing: var(--px);
+}
+
+.reveal {
+  background:
+    linear-gradient(rgb(11 22 38 / 0.25), rgb(11 22 38 / 0.6)),
+    url('../../../assets/pack/seafront.png') center bottom / cover no-repeat,
+    #0b1626;
+}
+
+.desync__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.desync__hud {
+  position: absolute;
+  top: calc(var(--px) * 6);
+  left: calc(var(--px) * 8);
+  right: calc(var(--px) * 8);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--px) * 8);
+  font-size: var(--text-xs);
+}
+
+.desync__signal {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--px) * 3);
+  padding: var(--px) calc(var(--px) * 4);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: var(--px) solid var(--color-border-dim);
+}
+
+.desync__pips {
+  display: inline-flex;
+  gap: var(--px);
+}
+
+.desync__pips i {
+  width: calc(var(--px) * 5);
+  height: calc(var(--px) * 3);
+  border: var(--px) solid var(--color-system);
+}
+
+.desync__pips i[data-on] {
+  background: var(--color-system);
+}
+
+.desync__phase {
+  color: var(--color-system);
+}
+
+.desync__progress {
+  color: var(--color-text-dim);
+}
+
+.desync__assist {
+  margin-left: auto;
+  color: var(--color-select);
+}
+
+.desync__players {
+  position: absolute;
+  top: calc(var(--px) * 20);
+  left: calc(var(--px) * 8);
+  display: grid;
+  gap: var(--px);
+  font-size: var(--text-xs);
+  color: var(--color-system);
+}
+
+.desync__players [data-missing] {
+  color: var(--color-text-dim);
+}
+
+.desync__banner,
+.desync__notice {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.desync__banner {
+  top: 22%;
+  padding: calc(var(--px) * 3) calc(var(--px) * 10);
+  background: rgb(14 26 44 / 0.9);
+  border-top: var(--px) solid var(--color-system);
+  border-bottom: var(--px) solid var(--color-system);
+}
+
+.desync__banner p {
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--color-system);
+}
+
+.desync__banner .desync__microline {
+  margin-top: calc(var(--px) * 2);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}
+
+.desync__notice {
+  bottom: calc(var(--px) * 10);
+  font-size: var(--text-xs);
+  color: var(--color-select);
+}
+
+.desync__prompt {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  padding: 0 calc(var(--px) * 3);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  color: var(--color-bg);
+  background: var(--color-text);
+  pointer-events: none;
+}
+
+.desync__prompt[hidden] {
+  display: none;
+}
+
+.desync__card {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: calc(var(--px) * 4);
+  text-align: center;
+  background: rgb(8 14 30 / 0.72);
+  cursor: pointer;
+}
+
+.desync__card p {
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--color-system);
+}
+
+.desync__card .desync__title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.desync__layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.55);
+}
+
+.desync__panel {
+  position: relative;
+  display: grid;
+  gap: calc(var(--px) * 4);
+  min-width: calc(var(--px) * 150);
+}
+
+.desync__panel::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--px) * 2);
+  right: calc(var(--px) * 2);
+  top: calc(var(--px) * 2);
+  height: var(--px);
+  background: var(--world-accent);
+}
+
+.desync__panel-title {
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--world-accent);
+}
+
+.desync__panel-sub {
+  margin: 0;
+  color: var(--color-system);
+}
+
+.desync__panel-note {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}

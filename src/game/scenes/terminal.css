@@ -1,0 +1,32 @@
+/* Shared look of the start-up "system" screens. */
+.terminal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5) calc(var(--space-5) * 2);
+  font-size: var(--text-md);
+  color: var(--color-text);
+}
+
+.terminal__heading {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--color-system);
+}
+
+.terminal__log {
+  display: grid;
+  gap: var(--space-1);
+  width: calc(var(--px) * 240);
+}
+
+.terminal__line {
+  margin: 0;
+}
+
+.terminal__footer {
+  position: absolute;
+  left: calc(var(--space-5) * 2);
+  bottom: var(--space-4);
+}

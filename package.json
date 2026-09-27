@@ -1,0 +1,48 @@
+{
+  "name": "save-slot-02",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Private, short retro web RPG. Desktop-first (keyboard, 16:9, fullscreen).",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "art": "npm run art:generate",
+    "art:check": "node tools/art/png.selftest.mjs && node tools/art/check.mjs",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm run art:check && npm run test && npm run build",
+    "art:generate": "node tools/art/build.mjs",
+    "art:check-generated": "node tools/art/build.mjs --check",
+    "art:import": "node tools/art/import.mjs"
+  },
+  "dependencies": {
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.9",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.1",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.2"
+  }
+}

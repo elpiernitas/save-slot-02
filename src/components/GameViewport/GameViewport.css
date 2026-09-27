@@ -1,0 +1,31 @@
+/*
+ * Letterbox + 16:9 stage. Safe-area padding is kept because it is free on
+ * desktop (env() = 0) and harmless elsewhere; it no longer drives the design.
+ * Inside the stage, size with `--px` (1 logical pixel of the 480×270 screen).
+ */
+.game-viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  background: var(--color-letterbox);
+  overflow: hidden;
+}
+
+.game-stage {
+  --stage-available-height: calc(var(--app-height) - var(--safe-top) - var(--safe-bottom));
+
+  position: relative;
+  aspect-ratio: var(--stage-aspect);
+  width: min(100%, calc(var(--stage-available-height) * var(--stage-aspect)));
+  max-height: 100%;
+  overflow: hidden;
+  container-type: size;
+  container-name: stage;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-pixel);
+  font-size: var(--text-md);
+  line-height: 1.25;
+}

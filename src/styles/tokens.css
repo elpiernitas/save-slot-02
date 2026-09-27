@@ -1,0 +1,89 @@
+/*
+ * SAVE SLOT 02 — visual tokens.
+ * Palette: dark and mysterious, small accents. Still provisional past GAME-01.
+ * Rules: hard edges, hard shadows, no blur, no decorative gradients, no
+ * rounded corners, fast transitions.
+ *
+ * Inside the 16:9 stage, size everything in LOGICAL PIXELS with `--px`:
+ * the stage is 480×270 logical px, so `calc(var(--px) * 8)` is 8 logical px
+ * whatever the real window size is.
+ */
+:root {
+  /* ---- Palette ---- */
+  --color-letterbox: #000000;
+  --color-bg: #07060b;
+  --color-surface: #110f19;
+  --color-surface-raised: #1c1929;
+  --color-border: #e9e4d6;
+  --color-border-dim: #4a4560;
+  --color-text: #e9e4d6;
+  --color-text-dim: #857f99;
+  --color-system: #7ee2a8; /* terminal / system messages */
+  --color-select: #f2c14e; /* selection, focus */
+  --color-mystic: #8f6bff; /* title accent */
+  --color-mystic-dark: #3b2a78;
+  --color-danger: #ef6f6c;
+  --color-shadow: #000000;
+
+  /* ---- World palette (WORLD_BIBLE §6). Base values; per time-of-day
+   * variants arrive with the first backgrounds in GAME-04. ---- */
+  --world-navy: #1d3557;
+  --world-coast: #4f9d7e;
+  --world-cream: #f1e6cf;
+  --world-stone: #8e959c;
+  --world-coral: #e8735a;
+  --world-warm: #f2c14e;
+
+  /* Class accents: lighter variants of the world palette, legible on dark UI. */
+  --accent-coral: #ef7a5f;
+  --accent-stone: #a9b4bf;
+  --accent-coast: #7fd6a0;
+
+  /* ---- Typography ---- */
+  --font-pixel: 'Pixelify Sans', ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;
+  --font-mono: ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;
+
+  /* ---- Stage ---- */
+  --stage-aspect: 16 / 9;
+  --stage-logical-width: 480;
+  --stage-logical-height: 270;
+  /* One logical pixel. Only valid inside the stage (a size container). */
+  --px: calc(100cqh / 270);
+
+  /* Type scale, in logical px */
+  --text-xs: calc(var(--px) * 7);
+  --text-sm: calc(var(--px) * 9);
+  --text-md: calc(var(--px) * 11);
+  --text-lg: calc(var(--px) * 14);
+  --text-xl: calc(var(--px) * 22);
+  --text-logo: calc(var(--px) * 36);
+
+  /* Spacing, in logical px */
+  --space-1: calc(var(--px) * 2);
+  --space-2: calc(var(--px) * 4);
+  --space-3: calc(var(--px) * 8);
+  --space-4: calc(var(--px) * 12);
+  --space-5: calc(var(--px) * 20);
+
+  /* Borders & shadows: crisp, never blurred */
+  --border: var(--px);
+  --shadow-hard: var(--px) var(--px) 0;
+  --shadow-hard-lg: calc(var(--px) * 2) calc(var(--px) * 2) 0;
+
+  /* ---- Motion ---- */
+  --duration-fast: 90ms;
+  --duration-base: 160ms;
+
+  /* ---- Viewport ---- */
+  --app-height: 100vh;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --app-height: 100dvh;
+  }
+}
