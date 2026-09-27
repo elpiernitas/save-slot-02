@@ -23,6 +23,7 @@ const ALLOWED = [
   'CITY CARD',
   'LA MURALLA',
   'MANU',
+  'DESYNC PROCESS',
   'LUIS',
   'DESYNC',
   'CHECKSUM',
@@ -30,6 +31,8 @@ const ALLOWED = [
   'ENTER',
   'ESC',
   'WASD',
+  'FIRST SYNC',
+  'PLAYER 2 ONLINE',
 ];
 /** Exact strings that are code, not copy (DOM tag names). */
 const CODE_TOKENS = new Set(['INPUT', 'TEXTAREA', 'SELECT']);

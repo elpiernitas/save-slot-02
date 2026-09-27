@@ -10,6 +10,7 @@ import { useReducedMotion } from '../../ui/useReducedMotion';
 import { loadImage, MANU_SPRITE, PACK_ART } from '../../art/pack';
 import { loadSpriteImages, type SpriteImages } from '../../world/art/assets';
 import { clearFreshDefeat, isFreshDefeat, revealBeats, STORY_FLAGS } from '../story';
+import { ACHIEVEMENT_IDS } from '../../achievements/registry';
 import '../desync/desync.css';
 import { REVEAL_COPY, skippable } from './beats';
 import { advanceGate, createGate, gateLines, switch1InReach, type GateState } from './gate';
@@ -83,6 +84,7 @@ export function Player2Reveal(_: SceneProps) {
       clearFreshDefeat();
     }
     if (beat.id === 'end') {
+      dispatch({ type: 'achievement/unlock', achievement: ACHIEVEMENT_IDS.playerTwoOnline });
       dispatch({ type: 'flag/set', flag: STORY_FLAGS.player2GateComplete, value: true });
     }
   }, [beat, dispatch, services.audio]);

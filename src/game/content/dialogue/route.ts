@@ -66,6 +66,27 @@ export const ROUTE_SOLVED: DialogueScript = {
   },
 };
 
+export const SEAGULL_INTERFERENCE: DialogueScript = {
+  id: 'route.seagullInterference',
+  start: 'a',
+  nodes: {
+    a: sys('a', ['ACCESO BLOQUEADO — INTERFERENCIA EN LA RUTA'], { next: 'b' }),
+    b: say('b', ['La gaviota ha vuelto a mirar hacia la puerta.[pause] Esto parece una pista.']),
+  },
+};
+
+export const SEAGULL_REWARD: DialogueScript = {
+  id: 'route.seagullReward',
+  start: 'a',
+  nodes: {
+    a: sys('a', ['PROTOCOLO DE LA GAVIOTA — RESUELTO'], {
+      effects: [{ kind: 'giveCard', card: 'city.003.seagull_intentions' }],
+      next: 'b',
+    }),
+    b: say('b', ['La puerta del 12 deja de zumbar.[pause] La gaviota también.']),
+  },
+};
+
 /** The route node (door of nº 12) while calibrating: replays the pattern. */
 export const ROUTE_NODE: DialogueScript = {
   id: 'route.node',

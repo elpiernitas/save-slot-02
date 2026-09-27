@@ -8,6 +8,7 @@ import {
   chapterInteraction,
   chapterStep,
   routeUpdateDue,
+  SEAGULL_ID,
   TERMINAL_ID,
 } from './chapter';
 
@@ -26,8 +27,13 @@ describe('GAME-06 chapter flow in La Muralla', () => {
     const updated = flag(met, ROUTE_FLAGS.updated);
     expect([chapterStep(updated), routeUpdateDue(updated)]).toEqual(['calibrating', false]);
     const beacons = done(updated, BEACONS_ID);
-    expect(chapterStep(beacons)).toBe('serviceAccess');
-    expect(chapterStep(done(beacons, TERMINAL_ID))).toBe('done');
+    expect(chapterStep(beacons)).toBe('seagull');
+    expect(chapterInteraction('gull', beacons)).toEqual({ kind: 'seagull' });
+    expect(chapterInteraction('barDoor', beacons)).toEqual({ kind: 'interference' });
+    const seagull = done(beacons, SEAGULL_ID);
+    expect(chapterStep(seagull)).toBe('serviceAccess');
+    expect(chapterInteraction('barDoor', seagull).kind).toBe('serviceAccess');
+    expect(chapterStep(done(seagull, TERMINAL_ID))).toBe('done');
   });
 
   it('beacons answer only while calibrating; other times objects keep their lines', () => {
@@ -43,10 +49,12 @@ describe('GAME-06 chapter flow in La Muralla', () => {
   it('the door is the route node, then SERVICE ACCESS, then inert', () => {
     const updated = flag(base, ROUTE_FLAGS.updated);
     const beacons = done(updated, BEACONS_ID);
+    const seagull = done(beacons, SEAGULL_ID);
     expect(chapterInteraction('barDoor', base).kind).toBe('default');
     expect(chapterInteraction('barDoor', updated).kind).toBe('routeNode');
-    expect(chapterInteraction('barDoor', beacons).kind).toBe('serviceAccess');
-    expect(chapterInteraction('barDoor', done(beacons, TERMINAL_ID)).kind).toBe('serviceDone');
+    expect(chapterInteraction('barDoor', beacons).kind).toBe('interference');
+    expect(chapterInteraction('barDoor', seagull).kind).toBe('serviceAccess');
+    expect(chapterInteraction('barDoor', done(seagull, TERMINAL_ID)).kind).toBe('serviceDone');
   });
 
   it('prototype keys are not beacons', () => {

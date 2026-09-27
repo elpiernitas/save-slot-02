@@ -7,6 +7,8 @@ import {
   ROUTE_NODE,
   ROUTE_SOLVED,
   ROUTE_UPDATE,
+  SEAGULL_INTERFERENCE,
+  SEAGULL_REWARD,
   SERVICE_ACCESS,
   SERVICE_ACCESS_DONE,
 } from '../../content/dialogue/route';
@@ -24,6 +26,7 @@ import {
   chapterInteraction,
   chapterStep,
   routeUpdateDue,
+  SEAGULL_ID,
   TERMINAL_ID,
 } from '../../puzzles/chapter';
 import { BeaconIcon } from '../../puzzles/routeBeacons/BeaconIcon';
@@ -35,6 +38,8 @@ import {
 import { RouteHud } from '../../puzzles/routeBeacons/RouteHud';
 import { RoutePulse } from '../../puzzles/routeBeacons/RoutePulse';
 import { SyncTerminal } from '../../puzzles/syncTerminal/SyncTerminal';
+import { SeagullProtocol } from '../../puzzles/seagullProtocol/SeagullProtocol';
+import { ACHIEVEMENT_IDS } from '../../achievements/registry';
 import { useGame } from '../../state/useGame';
 import { Menu } from '../../ui/Menu';
 import { useMenu } from '../../ui/useMenu';
@@ -112,7 +117,7 @@ export function OverworldScene(_: SceneProps) {
   const [rewardPending, setRewardPending] = useState(false);
   const [rewards, setRewards] = useState<Acquisition[]>([]);
   /** GAME-06 overlays: calibration pattern and SYNC TERMINAL (world paused). */
-  const [overlay, setOverlay] = useState<'pulse' | 'terminal' | null>(null);
+  const [overlay, setOverlay] = useState<'pulse' | 'seagull' | 'terminal' | null>(null);
   /** Route beacons: runtime only; a refresh restarts calibration (completion persists). */
   const [beacons, setBeacons] = useState(initialBeacons);
   const beaconsRef = useRef(beacons);
@@ -182,6 +187,12 @@ export function OverworldScene(_: SceneProps) {
     // RECOVERY PROCESS ERROR flows straight into DESYNC PROCESS (GAME-07).
     dispatch({ type: 'scene/goTo', scene: 'boss' });
   };
+  const finishSeagull = (attempts: number) => {
+    dispatch({ type: 'puzzle/complete', puzzle: SEAGULL_ID, attempts });
+    dispatch({ type: 'achievement/unlock', achievement: ACHIEVEMENT_IDS.signalFound });
+    setOverlay(null);
+    openDialogue(SEAGULL_REWARD);
+  };
   /** World object faced + confirm: chapter logic first, plain dialogue otherwise. */
   const interact = (found: Interactable) => {
     const step = chapterInteraction(found.id, live.current.save);
@@ -201,6 +212,7 @@ export function OverworldScene(_: SceneProps) {
         }
         if (outcome === 'solved') {
           dispatch({ type: 'puzzle/complete', puzzle: BEACONS_ID, attempts: state.attempts });
+          dispatch({ type: 'achievement/unlock', achievement: ACHIEVEMENT_IDS.firstSync });
           openDialogue(ROUTE_SOLVED);
         } else if (outcome === 'rejected') openDialogue(BEACON_REJECTED);
         else if (outcome === 'synced')
@@ -209,6 +221,12 @@ export function OverworldScene(_: SceneProps) {
       }
       case 'routeNode':
         openDialogue(ROUTE_NODE, () => setOverlay('pulse'));
+        return;
+      case 'seagull':
+        setOverlay('seagull');
+        return;
+      case 'interference':
+        openDialogue(SEAGULL_INTERFERENCE);
         return;
       case 'serviceAccess':
         openDialogue(SERVICE_ACCESS, () => setOverlay('terminal'));
@@ -362,6 +380,9 @@ export function OverworldScene(_: SceneProps) {
       )}
       {rewards.length > 0 && <AcquisitionOverlay entries={rewards} onDone={closeRewards} />}
       {overlay === 'pulse' && <RoutePulse sequence={beacons.sequence} onDone={closeOverlay} />}
+      {overlay === 'seagull' && (
+        <SeagullProtocol onComplete={finishSeagull} onLeave={closeOverlay} />
+      )}
       {overlay === 'terminal' && (
         <SyncTerminal onComplete={finishTerminal} onLeave={closeOverlay} />
       )}

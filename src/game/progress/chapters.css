@@ -1,0 +1,81 @@
+.chapter-card-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--px) * 16);
+  background: rgb(7 15 29 / 0.28);
+  pointer-events: auto;
+}
+
+.chapter-card {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: calc(var(--px) * 4);
+  width: min(calc(var(--px) * 320), 90%);
+  padding: calc(var(--px) * 12) calc(var(--px) * 16);
+  text-align: center;
+  color: #f4ecda;
+  background: rgb(14 26 44 / 0.94);
+  border: var(--px) solid #f1e6cf;
+  box-shadow:
+    inset 0 0 0 calc(var(--px) * 2) #3c5a82,
+    calc(var(--px) * 3) calc(var(--px) * 3) 0 #081020;
+}
+
+.chapter-card::before,
+.chapter-card::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--px) * 4);
+  bottom: calc(var(--px) * 4);
+  width: calc(var(--px) * 2);
+  background: #f2c14e;
+}
+
+.chapter-card::before {
+  left: calc(var(--px) * 8);
+}
+
+.chapter-card::after {
+  right: calc(var(--px) * 8);
+}
+
+.chapter-card__eyebrow,
+.chapter-card__hint {
+  color: #bfeef2;
+  font-size: var(--text-xs);
+  letter-spacing: var(--px);
+}
+
+.chapter-card__level {
+  color: #f2c14e;
+  font-size: var(--text-xl);
+}
+
+.chapter-card h2,
+.chapter-card p {
+  margin: 0;
+}
+
+.chapter-card h2 {
+  color: #f4ecda;
+  font-size: var(--text-md);
+}
+
+.chapter-card p {
+  color: #a9b4c6;
+  font-size: var(--text-sm);
+}
+
+.chapter-card__hint {
+  margin-top: calc(var(--px) * 6);
+}
+
+.chapter-card__hint kbd {
+  color: #f4ecda;
+  border: var(--px) solid #3c5a82;
+  padding: 0 var(--px);
+}

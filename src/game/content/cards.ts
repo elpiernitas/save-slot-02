@@ -34,6 +34,15 @@ export const CARDS = {
     flavorText: 'La ciudad no está haciendo absolutamente nada dramático.',
     art: { sprite: 'murallaFull', x: 200, y: 40, w: 480, h: 360 },
   },
+  'city.003.seagull_intentions': {
+    id: 'city.003.seagull_intentions',
+    number: '003',
+    name: 'GAVIOTA CON INTENCIONES',
+    kind: 'npc',
+    rarity: 'rare',
+    flavorText: 'Ha visto tu ruta. No piensa explicarla.',
+    art: { sprite: 'murallaFull', x: 120, y: 240, w: 160, h: 120 },
+  },
 } as const satisfies Record<CardId, CardDefinition>;
 
 export type KnownCardId = keyof typeof CARDS;

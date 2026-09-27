@@ -9,6 +9,13 @@ export const PUZZLES = {
     optional: false,
     estimatedSeconds: 90,
   },
+  'route.seagull_protocol': {
+    id: 'route.seagull_protocol',
+    title: 'PROTOCOLO DE LA GAVIOTA',
+    kind: 'microgame',
+    optional: false,
+    estimatedSeconds: 120,
+  },
   'system.player_sync': {
     id: 'system.player_sync',
     title: 'TERMINAL DE SINCRONIZACIÓN',

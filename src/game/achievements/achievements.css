@@ -1,0 +1,32 @@
+.achievement-toast {
+  position: absolute;
+  z-index: 30;
+  top: calc(var(--px) * 10);
+  right: calc(var(--px) * 10);
+  display: grid;
+  gap: calc(var(--px) * 1);
+  min-width: calc(var(--px) * 150);
+  max-width: calc(var(--px) * 220);
+  padding: calc(var(--px) * 5) calc(var(--px) * 7);
+  color: var(--color-text);
+  background: rgb(14 26 44 / 0.94);
+  border: var(--px) solid var(--color-select);
+  box-shadow: calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--color-shadow);
+  pointer-events: none;
+}
+
+.achievement-toast__eyebrow {
+  color: var(--color-select);
+  font-size: var(--text-xs);
+  letter-spacing: var(--px);
+}
+
+.achievement-toast strong {
+  color: var(--color-system);
+  font-size: var(--text-sm);
+}
+
+.achievement-toast > span:last-child {
+  color: var(--color-text-dim);
+  font-size: var(--text-xs);
+}

@@ -97,6 +97,7 @@ describe('content registries', () => {
     expect([...Object.values(CARDS)].sort(cardOrder).map((c) => c.number)).toEqual([
       '001',
       '002',
+      '003',
       '005',
     ]);
   });

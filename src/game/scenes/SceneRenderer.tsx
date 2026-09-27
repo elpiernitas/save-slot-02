@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { musicForScene } from '../audio/music';
 import { InputBlocker } from '../input/useInput';
+import { ChapterCard } from '../progress/ChapterCard';
+import { AchievementToast } from '../achievements/AchievementToast';
 import { useGame } from '../state/useGame';
 import { useReducedMotion } from '../ui/useReducedMotion';
 import { PlaceholderScene } from './PlaceholderScene';
@@ -55,6 +57,8 @@ export function SceneRenderer() {
   return (
     <div className="game-root" data-reduced-motion={reduced} data-scene={displayed}>
       <Scene key={displayed} sceneId={displayed} />
+      <ChapterCard sceneId={displayed} />
+      <AchievementToast />
       {phase !== 'idle' && (
         <>
           <div className="scene-transition" data-phase={phase} aria-hidden="true" />
