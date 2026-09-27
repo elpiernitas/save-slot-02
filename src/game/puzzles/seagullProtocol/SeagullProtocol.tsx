@@ -103,7 +103,7 @@ export function SeagullProtocol({ onComplete, onLeave }: SeagullProtocolProps) {
   useEffect(() => {
     if (!import.meta.env.DEV) return;
     const w = window as unknown as { __seagull?: unknown };
-    w.__seagull = { state: () => stateRef.current };
+    w.__seagull = { state: () => stateRef.current, marked: () => markedTiles(stateRef.current) };
     return () => {
       delete w.__seagull;
     };

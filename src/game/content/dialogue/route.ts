@@ -51,6 +51,17 @@ export const BEACON_REJECTED: DialogueScript = {
   },
 };
 
+/** First calibration round done (pacing pass): a second, longer order follows. */
+export const ROUTE_ROUND_DONE: DialogueScript = {
+  id: 'route.roundDone',
+  start: 'a',
+  nodes: {
+    a: sys('a', ['RUTA 1/2 — SINCRONIZADA\nSEÑAL INCOMPLETA: SEGUNDA SECUENCIA'], { next: 'b' }),
+    b: say('b', ['Una ruta no era suficiente.[pause] Claro que no.'], { next: 'c' }),
+    c: sys('c', ['NUEVO PATRÓN DE CALIBRACIÓN']),
+  },
+};
+
 export const ROUTE_SOLVED: DialogueScript = {
   id: 'route.solved',
   start: 'a',

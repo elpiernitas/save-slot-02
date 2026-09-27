@@ -24,7 +24,10 @@ export function RouteHud({ state }: { state: BeaconState }) {
           </li>
         ))}
       </ol>
-      <span className="route-hud__text">{HINT[hintLevel(state)]}</span>
+      <span className="route-hud__text">
+        {state.rounds.length > 1 && `RUTA ${state.round + 1}/${state.rounds.length} · `}
+        {HINT[hintLevel(state)]}
+      </span>
     </div>
   );
 }

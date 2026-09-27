@@ -5,6 +5,7 @@ import {
   beaconSynced,
   ROUTE_FLAGS,
   ROUTE_NODE,
+  ROUTE_ROUND_DONE,
   ROUTE_SOLVED,
   ROUTE_UPDATE,
   SEAGULL_ALERT,
@@ -226,15 +227,20 @@ export function OverworldScene(_: SceneProps) {
           services.audio.playSfx(
             outcome === 'solved'
               ? 'puzzleComplete'
-              : outcome === 'rejected'
-                ? 'puzzleWrong'
-                : 'interact',
+              : outcome === 'round'
+                ? 'signalFound'
+                : outcome === 'rejected'
+                  ? 'puzzleWrong'
+                  : 'interact',
           );
         }
         if (outcome === 'solved') {
           dispatch({ type: 'puzzle/complete', puzzle: BEACONS_ID, attempts: state.attempts });
           dispatch({ type: 'achievement/unlock', achievement: 'first_sync' });
           openDialogue(ROUTE_SOLVED, () => openDialogue(SEAGULL_ALERT));
+        } else if (outcome === 'round') {
+          // Round 1 synced: show the new, longer order right away.
+          openDialogue(ROUTE_ROUND_DONE, () => setOverlay('pulse'));
         } else if (outcome === 'rejected') openDialogue(BEACON_REJECTED);
         else if (outcome === 'synced')
           openDialogue(beaconSynced(step.symbol, state.progress, state.sequence.length));
@@ -360,7 +366,11 @@ export function OverworldScene(_: SceneProps) {
     overlay !== null ||
     card !== null;
   const calibrating = chapterStep(save) === 'calibrating';
-  const syncedSymbols = beacons.sequence.slice(0, beacons.progress);
+  // A mark reads as synced only if it is not needed again in this round.
+  const remaining = beacons.sequence.slice(beacons.progress);
+  const syncedSymbols = beacons.sequence
+    .slice(0, beacons.progress)
+    .filter((sym) => !remaining.includes(sym));
   const showPrompt = target && !busy;
 
   return (
