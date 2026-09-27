@@ -200,6 +200,20 @@
   border: var(--px) solid var(--color-border-dim);
 }
 
+.save-slot__postgame {
+  margin: 0;
+  padding: calc(var(--px) * 4) calc(var(--px) * 6);
+  color: var(--color-system);
+  background: rgb(7 15 29 / 0.72);
+  border-left: calc(var(--px) * 2) solid var(--color-select);
+  font-size: var(--text-xs);
+  letter-spacing: calc(var(--px) * 0.35);
+}
+
+.save-slot__postgame[data-phase='today'] {
+  color: var(--color-select);
+}
+
 .save-slot .ending__party,
 .save-slot .date-gate__party {
   bottom: calc(var(--px) * 10);

@@ -43,6 +43,12 @@ describe('gameReducer', () => {
     expect(save.achievements).toEqual({ hello: { unlockedAt: T1 } });
   });
 
+  it('keeps the first grant time of a post-game unlock', () => {
+    let save = gameReducer(initial, { type: 'unlock/grant', unlock: 'postgame.randy', at: T1 });
+    save = gameReducer(save, { type: 'unlock/grant', unlock: 'postgame.randy', at: T2 });
+    expect(save.unlocks).toEqual({ 'postgame.randy': { unlockedAt: T1 } });
+  });
+
   it('updates settings partially', () => {
     const save = gameReducer(initial, {
       type: 'settings/update',

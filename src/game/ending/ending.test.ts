@@ -5,6 +5,7 @@ import { gameReducer } from '../state/gameReducer';
 import { createInitialSave } from '../state/newGame';
 import type { GameSave } from '../state/types';
 import { ENDING_BEATS, ENDING_COPY, saveSlotRows } from './ending';
+import { postgameStatus } from './postgame';
 
 const at = (m: number) => `2026-09-28T10:${String(m).padStart(2, '0')}:00.000Z`;
 
@@ -76,5 +77,19 @@ describe('GAME-09 ending', () => {
     for (const bad of ['forever', 'soulmate', 'destiny', 'destino', 'you saved me', 'siempre']) {
       expect(text).not.toContain(bad);
     }
+  });
+});
+
+describe('GAME-10 postgame status', () => {
+  it.each([
+    ['2026-09-28T12:00:00Z', 'future', 'PRÓXIMA MISIÓN — EN 2 DÍAS'],
+    ['2026-09-29T12:00:00Z', 'tomorrow', 'PRÓXIMA MISIÓN — MAÑANA'],
+    ['2026-09-30T12:00:00Z', 'today', 'RUTA ELEGIDA — HOY'],
+    ['2026-10-01T12:00:00Z', 'after', 'RUTA FIJADA — EL GUARDADO CONTINÚA'],
+  ] as const)('Madrid date %s → %s', (iso, phase, label) => {
+    const save = chosen('wed-30-sep');
+    const status = postgameStatus(complete(save), new Date(iso));
+    expect(status.phase).toBe(phase);
+    expect(status.label).toBe(label);
   });
 });

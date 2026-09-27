@@ -67,6 +67,64 @@
   color: var(--color-select);
 }
 
+.chapter-hud {
+  position: absolute;
+  top: calc(var(--px) * 6);
+  right: calc(var(--px) * 8);
+  display: grid;
+  gap: calc(var(--px) * 2);
+  width: calc(var(--px) * 154);
+  padding: calc(var(--px) * 3) calc(var(--px) * 5);
+  color: var(--color-text);
+  background: rgb(14 26 44 / 0.86);
+  border: var(--px) solid var(--color-border-dim);
+  border-right: calc(var(--px) * 2) solid var(--color-select);
+  box-shadow: var(--px) var(--px) 0 var(--color-shadow);
+  pointer-events: none;
+}
+
+.chapter-hud__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: calc(var(--px) * 3);
+  white-space: nowrap;
+}
+
+.chapter-hud__head strong {
+  color: var(--color-select);
+  font-size: var(--text-sm);
+}
+
+.chapter-hud__head span {
+  overflow: hidden;
+  color: var(--color-text-dim);
+  font-size: var(--text-xs);
+  text-overflow: ellipsis;
+}
+
+.chapter-hud__pips {
+  display: flex;
+  gap: calc(var(--px) * 2);
+}
+
+.chapter-hud__pips i {
+  display: block;
+  width: calc(var(--px) * 11);
+  height: calc(var(--px) * 2);
+  background: var(--color-border-dim);
+}
+
+.chapter-hud__pips i[data-active] {
+  background: var(--color-select);
+}
+
+.chapter-hud p {
+  margin: 0;
+  color: var(--color-text-dim);
+  font-size: var(--text-xs);
+}
+
 .overworld__hints {
   position: absolute;
   right: calc(var(--px) * 8);

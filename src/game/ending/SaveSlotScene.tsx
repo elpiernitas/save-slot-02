@@ -10,6 +10,7 @@ import { useMenu, type MenuItem } from '../ui/useMenu';
 import '../boss/desync/desync.css';
 import '../dateGate/dateGate.css';
 import { saveSlotRows } from './ending';
+import { POSTGAME_UNLOCKS, postgameStatus } from './postgame';
 import { PACK_ART } from '../art/pack';
 import { Party } from './Party';
 import './ending.css';
@@ -25,14 +26,21 @@ const ITEMS: readonly MenuItem[] = [
  * only reads the save; nothing here can reset it or change the date.
  */
 export function SaveSlotScene(_: SceneProps) {
-  const { save, dispatch } = useGame();
+  const { save, dispatch, services } = useGame();
   const rows = saveSlotRows(save);
+  const postgame = postgameStatus(save, services.clock.now());
   const [panel, setPanel] = useState<'cards' | 'settings' | null>(null);
 
   // Not complete (should not happen through normal flow): back to the story.
   useEffect(() => {
     if (!rows) dispatch({ type: 'scene/goTo', scene: 'title' });
   }, [rows, dispatch]);
+
+  useEffect(() => {
+    if (rows && !Object.hasOwn(save.unlocks, POSTGAME_UNLOCKS.randy)) {
+      dispatch({ type: 'unlock/grant', unlock: POSTGAME_UNLOCKS.randy });
+    }
+  }, [dispatch, rows, save.unlocks]);
 
   const menu = useMenu({
     items: ITEMS,
@@ -63,6 +71,9 @@ export function SaveSlotScene(_: SceneProps) {
             ))}
           </dl>
         </div>
+        <p className="save-slot__postgame" data-phase={postgame.phase}>
+          {postgame.label}
+        </p>
       </section>
       <nav className="save-slot__menu">
         <Menu

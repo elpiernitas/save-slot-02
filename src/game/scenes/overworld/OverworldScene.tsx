@@ -40,6 +40,7 @@ import { RoutePulse } from '../../puzzles/routeBeacons/RoutePulse';
 import { SyncTerminal } from '../../puzzles/syncTerminal/SyncTerminal';
 import { SeagullProtocol } from '../../puzzles/seagullProtocol/SeagullProtocol';
 import { ACHIEVEMENT_IDS } from '../../achievements/registry';
+import { ChapterHud } from '../../progress/ChapterHud';
 import { useGame } from '../../state/useGame';
 import { Menu } from '../../ui/Menu';
 import { useMenu } from '../../ui/useMenu';
@@ -235,7 +236,7 @@ export function OverworldScene(_: SceneProps) {
         openDialogue(SERVICE_ACCESS_DONE);
         return;
       case 'default': {
-        const script = scriptForInteractable(found);
+        const script = scriptForInteractable(found, undefined, live.current.save);
         if (script) openDialogue(script);
       }
     }
@@ -341,6 +342,7 @@ export function OverworldScene(_: SceneProps) {
         <span>{map.displayName}</span>
         <span className="overworld__hud-time">{TIME_LABEL[map.timeOfDay]}</span>
       </div>
+      <ChapterHud />
       {!busy && (
         <footer className="overworld__hints key-hints" data-faded={hasMoved || undefined}>
           <span>

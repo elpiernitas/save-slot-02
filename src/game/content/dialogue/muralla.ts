@@ -11,6 +11,8 @@ export const MURALLA_FLAGS = {
   tableSeen: 'muralla.tableSeen',
   metWaitress: 'muralla.metWaitress',
   arrived: 'muralla.arrived',
+  leftWindowLooks: 'muralla.leftWindowLooks',
+  rightWindowLooks: 'muralla.rightWindowLooks',
 } as const;
 
 const line = (id: string, pages: string[], extra: Partial<DialogueScript['nodes'][string]> = {}) =>
@@ -71,6 +73,81 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
     start: 'a',
     nodes: {
       a: line('a', ['Dentro, alguien discute con la cafetera.[pause] Va ganando la cafetera.']),
+    },
+  },
+
+  // The two shop windows are deliberately separate in the interaction bridge
+  // even though they share one painted façade. These are optional repeat-look
+  // easter eggs, not a new quest or a narrative dependency.
+  'muralla.window.left.first': {
+    id: 'muralla.window.left.first',
+    start: 'a',
+    nodes: {
+      a: line('a', ['Dentro, alguien discute con la cafetera.[pause] Va ganando la cafetera.'], {
+        effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.leftWindowLooks, value: 1 }],
+      }),
+    },
+  },
+  'muralla.window.left.second': {
+    id: 'muralla.window.left.second',
+    start: 'a',
+    nodes: {
+      a: line(
+        'a',
+        [
+          'La biblioteca de Luis tiene unas mil cuatrocientas partidas en Steam.[pause] La cafetera parece impresionada.',
+        ],
+        { effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.leftWindowLooks, value: 2 }] },
+      ),
+    },
+  },
+  'muralla.window.left.again': {
+    id: 'muralla.window.left.again',
+    start: 'a',
+    nodes: {
+      a: line('a', ['La cafetera sigue ganando.[pause] La biblioteca también.']),
+    },
+  },
+  'muralla.window.right.first': {
+    id: 'muralla.window.right.first',
+    start: 'a',
+    nodes: {
+      a: line('a', ['Dentro, alguien discute con la cafetera.[pause] Va ganando la cafetera.'], {
+        effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.rightWindowLooks, value: 1 }],
+      }),
+    },
+  },
+  'muralla.window.right.second': {
+    id: 'muralla.window.right.second',
+    start: 'a',
+    nodes: {
+      a: line(
+        'a',
+        ['El escaparate refleja el cielo.[pause] La cafetera sigue en su arco narrativo.'],
+        {
+          effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.rightWindowLooks, value: 2 }],
+        },
+      ),
+    },
+  },
+  'muralla.window.right.third': {
+    id: 'muralla.window.right.third',
+    start: 'a',
+    nodes: {
+      a: line(
+        'a',
+        [
+          'En el cristal hay una carta boca abajo: el Tres de Espadas, invertido.[pause] Solo es una carta.',
+        ],
+        { effects: [{ kind: 'setFlag', flag: MURALLA_FLAGS.rightWindowLooks, value: 3 }] },
+      ),
+    },
+  },
+  'muralla.window.right.again': {
+    id: 'muralla.window.right.again',
+    start: 'a',
+    nodes: {
+      a: line('a', ['El cristal devuelve la calle.[pause] La carta sigue donde estaba.']),
     },
   },
 

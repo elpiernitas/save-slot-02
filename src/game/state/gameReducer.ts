@@ -32,6 +32,8 @@ export type GameAction =
   | { type: 'flag/set'; flag: FlagId; value: FlagValue; at: string }
   | { type: 'choice/record'; choice: ChoiceId; option: string; at: string }
   | { type: 'achievement/unlock'; achievement: AchievementId; at: string }
+  /** Post-game and other one-time content unlocks; first grant wins. */
+  | { type: 'unlock/grant'; unlock: string; at: string }
   | { type: 'settings/update'; settings: SettingsPatch; at: string }
   /**
    * Assigns the player's class and marks classSelect as completed. A class
@@ -131,6 +133,18 @@ export function gameReducer(save: GameSave, action: GameAction): GameSave {
         {
           ...save,
           achievements: { ...save.achievements, [action.achievement]: { unlockedAt: action.at } },
+        },
+        action.at,
+      );
+
+    case 'unlock/grant':
+      // Unlocks are deliberately generic: the content layer decides what an
+      // unlock means, while the save only records its first grant timestamp.
+      if (Object.hasOwn(save.unlocks, action.unlock)) return save;
+      return touch(
+        {
+          ...save,
+          unlocks: { ...save.unlocks, [action.unlock]: { unlockedAt: action.at } },
         },
         action.at,
       );

@@ -26,6 +26,8 @@ import './desync.css';
 
 /** Locked intro copy (GAME_07_COPY). Shown once per visit, never on retry. */
 const INTRO = [
+  'ALERTA — PROCESO HOSTIL DETECTADO',
+  'NIVEL 05 — JEFE FINAL: DESYNC PROCESS',
   'ERROR EN EL PROCESO DE RECUPERACIÓN',
   'ENTRADA SIN RESOLVER DETECTADA',
   'INICIANDO RECUPERACIÓN DE LA DESINCRONIZACIÓN...',

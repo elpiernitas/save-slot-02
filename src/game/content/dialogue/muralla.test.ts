@@ -87,6 +87,32 @@ describe('La Muralla dialogues', () => {
     expect(read(MURALLA_SCRIPTS['muralla.waitress']!, first.save).text[0]).toMatch(/Otra vez/);
   });
 
+  it('keeps the optional window easter eggs on repeat looks', () => {
+    const left = MURALLA_MAP.interactables.find((item) => item.id === 'barWindowLeft')!;
+    const right = MURALLA_MAP.interactables.find((item) => item.id === 'barWindowRight')!;
+    let save = fresh();
+    const leftTexts: string[] = [];
+    for (let i = 0; i < 3; i++) {
+      const script = scriptForInteractable(left, MURALLA_SCRIPTS, save)!;
+      const result = read(script, save);
+      leftTexts.push(result.text.join(' '));
+      save = result.save;
+    }
+    expect(leftTexts[1]).toContain('Steam');
+    expect(leftTexts[2]).not.toContain('Steam');
+
+    save = fresh();
+    const rightTexts: string[] = [];
+    for (let i = 0; i < 4; i++) {
+      const script = scriptForInteractable(right, MURALLA_SCRIPTS, save)!;
+      const result = read(script, save);
+      rightTexts.push(result.text.join(' '));
+      save = result.save;
+    }
+    expect(rightTexts[2]).toContain('Tres de Espadas');
+    expect(rightTexts[3]).not.toContain('Tres de Espadas');
+  });
+
   it('awards sparse CITY CARDS: 001 from the waitress, 002 from the bollard, once', () => {
     const waitress = read(MURALLA_SCRIPTS['muralla.waitress']!, fresh(), 'looking').save;
     expect(Object.keys(waitress.cards.owned)).toEqual(['city.001.la_muralla']);
@@ -124,7 +150,7 @@ describe('La Muralla dialogues', () => {
       )
       .join(' ')
       .toLowerCase();
-    for (const word of ['manu', 'randy', 'tarot', 'cita', 'hoyo', 'makro', 'ikea', 'player 2']) {
+    for (const word of ['manu', 'randy', 'cita', 'hoyo', 'makro', 'ikea', 'player 2']) {
       expect(all).not.toContain(word);
     }
   });
