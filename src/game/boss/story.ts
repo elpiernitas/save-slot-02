@@ -1,4 +1,4 @@
-import { TERMINAL_ID } from '../puzzles/chapter';
+import { recalibrationDone, TERMINAL_ID } from '../puzzles/chapter';
 import type { SceneId } from '../scenes/sceneIds';
 import type { GameSave } from '../state/types';
 import { COMPRESSED_BEATS, FULL_BEATS, GATE_BEATS, type Beat } from './reveal/beats';
@@ -21,7 +21,7 @@ export function storyScene(save: GameSave): SceneId | null {
   if (save.dateQuest.chosenOptionId) return 'ending';
   if (save.flags[STORY_FLAGS.player2GateComplete]) return 'dateGate';
   if (save.boss.defeated) return 'player2Reveal';
-  if (Object.hasOwn(save.puzzles, TERMINAL_ID)) return 'boss';
+  if (Object.hasOwn(save.puzzles, TERMINAL_ID) && recalibrationDone(save)) return 'boss';
   return null;
 }
 

@@ -63,10 +63,8 @@
 }
 
 .route-hud {
-  position: absolute;
-  top: calc(var(--px) * 50);
-  left: calc(var(--px) * 8);
   display: flex;
+  max-width: 100%;
   align-items: center;
   gap: calc(var(--px) * 4);
   padding: var(--px) calc(var(--px) * 4);

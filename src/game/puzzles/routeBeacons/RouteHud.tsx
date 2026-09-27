@@ -8,8 +8,10 @@ const HINT = [
   'PISTA · SIGUE LAS CASILLAS DE IZQUIERDA A DERECHA',
 ];
 
+const RECAL_HINT = 'RECALIBRACIÓN DE RUTA · SINCRONIZA LAS BALIZAS EN ORDEN';
+
 /** Sequence progress under the location tag: filled = synced, ? = unknown. */
-export function RouteHud({ state }: { state: BeaconState }) {
+export function RouteHud({ state, recal = false }: { state: BeaconState; recal?: boolean }) {
   const slots = hudSlots(state);
   return (
     <div className="route-hud" aria-live="polite">
@@ -26,7 +28,7 @@ export function RouteHud({ state }: { state: BeaconState }) {
       </ol>
       <span className="route-hud__text">
         {state.rounds.length > 1 && `RUTA ${state.round + 1}/${state.rounds.length} · `}
-        {HINT[hintLevel(state)]}
+        {recal && hintLevel(state) === 0 ? RECAL_HINT : HINT[hintLevel(state)]}
       </span>
     </div>
   );

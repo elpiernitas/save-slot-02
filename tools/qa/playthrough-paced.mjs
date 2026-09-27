@@ -503,6 +503,61 @@ await p.waitForSelector('.sync-terminal__fallback', { timeout: 15000 });
 await shot('terminal-fallback');
 mark('MANU visible at terminal?', await p.evaluate(() => /MANU/.test(document.body.innerText)));
 await readEnter();
+// ---------- D-085: route recalibration (terminal → beacons → boss) ----------
+await p.waitForSelector('.dlg-box', { timeout: 15000 });
+await shot('recal-start');
+await drain();
+await shot('recal-hud');
+mark(
+  'recal HUD',
+  await p.evaluate(() => [
+    document.querySelector('.route-hud__text')?.textContent,
+    document.querySelector('.chapter-hud')?.innerText.replace(/\n/g, ' | '),
+  ]),
+);
+await reopen();
+mark(
+  'refresh@recal →',
+  await scene(),
+  await p.evaluate(() => document.querySelector('.route-hud__text')?.textContent),
+);
+await drain();
+await use('lamp', [
+  ['h', 688],
+  ['v', 316],
+  ['h', 225],
+  ['v', 332],
+  ['h', 200],
+]);
+await drain();
+await use('gull', [
+  ['v', 332],
+  ['h', 167],
+]);
+await drain();
+await use('board', [
+  ['v', 332],
+  ['h', 128],
+]);
+await drain();
+await use('gull', [
+  ['v', 332],
+  ['h', 167],
+]);
+await drain();
+await use('lamp', [
+  ['v', 332],
+  ['h', 200],
+]);
+await drain();
+await use('board', [
+  ['v', 332],
+  ['h', 128],
+]);
+await p.waitForSelector('.dlg-box', { timeout: 15000 });
+await shot('recal-done');
+mark('recal puzzle saved', Object.hasOwn((await save()).puzzles, 'route.recalibration'));
+for (let i = 0; i < 60 && !(await p.$('.desync')); i++) await readEnter();
 await p.waitForSelector('.desync', { timeout: 20000 });
 mark('terminal → boss', await scene());
 

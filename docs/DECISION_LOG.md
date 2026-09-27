@@ -1171,3 +1171,25 @@ Director (PR #2, 5856358926 / 5856612756 / 5856774952). Sin merge.
   (historia congelada); queda propuesto en el PR para decisión del director.
 - Matriz de 6 recorridos (1366/1440/1920 × reducido/normal) documentada en
   `docs/art/review/audit/README.md`.
+
+### D-085 · 2026-09-27 · Tramo de duración: recalibración de ruta antes del jefe
+
+Director (PR #2, 5858152968): implementar el tramo propuesto en D-084.
+
+- Tras el terminal (`system.player_sync`), el error de recuperación desordena
+  la ruta: antes de DESYNC PROCESS hay una **recalibración obligatoria** en La
+  Muralla con el sistema `routeBeacons` existente (mismos tres objetos, mismas
+  reglas, pulso, HUD y marcas), con su propia secuencia de 6 pasos
+  (`RECAL_SEQUENCE`). Al completarla se registra `route.recalibration` y se
+  entra al jefe.
+- Sigue siendo el **NIVEL 04** con otro objetivo («Recalibra la ruta…»): no se
+  renumeran los niveles ni cambian las tarjetas del jefe o de PLAYER 2.
+- No bloquea: pistas tras fallos (primer símbolo, luego la secuencia entera) y
+  la puerta del nº 12 repite el patrón. Una recarga vuelve a La Muralla con la
+  recalibración pendiente (progreso de ronda en memoria, como las balizas).
+- Guardados anteriores: si ya habían entrado al jefe (`boss.attempts > 0` o
+  derrotado), no deben la recalibración (`recalibrationDone`).
+- Nuevo: 2 diálogos (`RECAL_START`, `RECAL_DONE`); ningún diálogo existente
+  cambia. `SAVE_VERSION` 2 sin cambios (una entrada más en `puzzles`).
+- HUD: la tarjeta de nivel y el HUD de ruta se apilan en
+  `.overworld__objectives` (antes podían solaparse en el NIVEL 02).

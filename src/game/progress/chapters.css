@@ -85,10 +85,6 @@
 }
 
 .chapter-hud {
-  /* Top-left, under the location tag: never over the café's sign. */
-  position: absolute;
-  top: calc(var(--px) * 20);
-  left: calc(var(--px) * 8);
   display: grid;
   gap: var(--px);
   max-width: calc(var(--px) * 168);

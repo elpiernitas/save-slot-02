@@ -4,6 +4,8 @@ import {
   hintLevel,
   hudSlots,
   initialBeacons,
+  RECAL_ROUNDS,
+  RECAL_SEQUENCE,
   ROUTE_ROUNDS,
   ROUTE_SEQUENCE,
   ROUTE_SEQUENCE_2,
@@ -92,5 +94,28 @@ describe('ROUTE BEACONS (pure)', () => {
     s = activateBeacon(s, 'bird').state;
     s = activateBeacon(s, 'lamp').state; // wrong: expected cup
     expect(s).toMatchObject({ round: 1, progress: 0, attempts: 2, solved: false });
+  });
+});
+
+describe('recalibration round (D-085)', () => {
+  it('is one mandatory six-step round over the same three objects', () => {
+    expect(RECAL_SEQUENCE).toHaveLength(6);
+    expect(new Set(RECAL_SEQUENCE)).toEqual(new Set(['cup', 'lamp', 'bird']));
+    expect(RECAL_SEQUENCE).not.toEqual(ROUTE_SEQUENCE_2);
+    let s = initialBeacons(RECAL_ROUNDS);
+    for (const [i, symbol] of RECAL_SEQUENCE.entries()) {
+      const r = activateBeacon(s, symbol);
+      s = r.state;
+      expect(r.outcome).toBe(i === RECAL_SEQUENCE.length - 1 ? 'solved' : 'synced');
+    }
+  });
+
+  it('keeps the non-blocking help: a miss resets, two misses show the whole order', () => {
+    let s = initialBeacons(RECAL_ROUNDS);
+    s = activateBeacon(s, 'cup').state;
+    expect([s.progress, hintLevel(s)]).toEqual([0, 1]);
+    s = activateBeacon(s, 'cup').state;
+    expect(hintLevel(s)).toBe(2);
+    expect(hudSlots(s).map((slot) => slot.symbol)).toEqual([...RECAL_SEQUENCE]);
   });
 });

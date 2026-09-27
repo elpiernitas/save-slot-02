@@ -40,6 +40,20 @@ export const ROUTE_ROUNDS: readonly (readonly BeaconSymbol[])[] = [
   ROUTE_SEQUENCE_2,
 ];
 
+/**
+ * Recalibration (D-085): one mandatory round after the terminal, before the
+ * boss. Same three objects, its own six-step order.
+ */
+export const RECAL_SEQUENCE: readonly BeaconSymbol[] = [
+  'lamp',
+  'bird',
+  'cup',
+  'bird',
+  'lamp',
+  'cup',
+];
+export const RECAL_ROUNDS: readonly (readonly BeaconSymbol[])[] = [RECAL_SEQUENCE];
+
 export function initialBeacons(
   rounds: readonly (readonly BeaconSymbol[])[] = ROUTE_ROUNDS,
 ): BeaconState {

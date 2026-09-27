@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { STORY_FLAGS } from '../boss/story';
 import { ROUTE_FLAGS } from '../content/dialogue/route';
-import { BEACONS_ID, SEAGULL_ID, TERMINAL_ID } from '../puzzles/chapter';
+import { BEACONS_ID, RECAL_ID, SEAGULL_ID, TERMINAL_ID } from '../puzzles/chapter';
 import { gameReducer } from '../state/gameReducer';
 import { createInitialSave } from '../state/newGame';
 import { chapterCardDue, chapterLevel, chapterSeenFlag, LEVELS, levelLabel } from './chapters';
@@ -23,6 +23,9 @@ describe('visible chapters', () => {
     s = done(s, SEAGULL_ID);
     seen.push(chapterLevel(s).n);
     s = done(s, TERMINAL_ID);
+    // D-085: still NIVEL 04, with the recalibration as its objective.
+    expect(chapterLevel(s)).toMatchObject({ n: 4, objective: expect.stringMatching(/Recalibra/) });
+    s = done(s, RECAL_ID);
     seen.push(chapterLevel(s).n);
     s = gameReducer(s, { type: 'boss/defeat', at });
     seen.push(chapterLevel(s).n);

@@ -1,4 +1,4 @@
-import { BEACONS_ID, SEAGULL_ID, TERMINAL_ID } from '../puzzles/chapter';
+import { BEACONS_ID, recalibrationDone, SEAGULL_ID, TERMINAL_ID } from '../puzzles/chapter';
 import { ROUTE_FLAGS } from '../content/dialogue/route';
 import { STORY_FLAGS } from '../boss/story';
 import type { GameSave } from '../state/types';
@@ -37,6 +37,12 @@ export const LEVELS: readonly Level[] = [
   { n: 7, title: 'RUTA ELEGIDA', objective: 'Elige la ruta.' },
 ];
 
+/** NIVEL 04 after the terminal: the route must be recalibrated (D-085). */
+const RECALIBRATION: Level = {
+  ...LEVELS[3]!,
+  objective: 'Recalibra la ruta: sigue el nuevo patrón de balizas.',
+};
+
 export const levelLabel = (n: number) => `NIVEL ${String(n).padStart(2, '0')}`;
 
 /** Where the adventure stands (pure). */
@@ -45,8 +51,10 @@ export function chapterLevel(save: GameSave): Level {
   let n = 1;
   if (save.dateQuest.chosenOptionId || save.flags[STORY_FLAGS.player2GateComplete]) n = 7;
   else if (save.boss.defeated) n = 6;
-  else if (has(TERMINAL_ID)) n = 5;
-  else if (has(SEAGULL_ID)) n = 4;
+  else if (has(TERMINAL_ID)) {
+    if (!recalibrationDone(save)) return RECALIBRATION;
+    n = 5;
+  } else if (has(SEAGULL_ID)) n = 4;
   else if (has(BEACONS_ID)) n = 3;
   else if (save.flags[ROUTE_FLAGS.updated]) n = 2;
   return LEVELS[n - 1]!;
