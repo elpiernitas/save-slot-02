@@ -1154,3 +1154,20 @@ existentes y guardado sin cambios. PR #2 (sin merge).
   `← → CAMBIAR`; HUD de nivel arriba a la izquierda (no tapa el rótulo);
   gaviota visible posada y en picado.
 
+
+### D-084 · 2026-09-27 · Revisión independiente del PR #2: menú de derrota, evidencia y duración
+
+Director (PR #2, 5856358926 / 5856612756 / 5856774952). Sin merge.
+
+- Menú de derrota y de asistencia del jefe: `useMenu({ ignoreHeldKeys })`
+  ignora las auto-repeticiones de una tecla mantenida desde antes de abrirse
+  (`createFreshInputGate`), así que abren siempre en `REINTENTAR` / `ACTIVAR`.
+  Test unitario + `tools/qa/boss-held-key.mjs`. Mecánica del jefe sin cambios.
+- Zoom del retrato de Manu: recortado del mismo fotograma que la captura
+  completa (antes se capturaba después y salía el siguiente beat).
+- Duración: partida a ritmo de lectura (`tools/qa/playthrough-paced.mjs`)
+  = 840 s netos (14,0 min), con ventajas del bot que acortan el tiempo. No
+  se considera «claramente por debajo» de 15 min: no se añade tramo nuevo
+  (historia congelada); queda propuesto en el PR para decisión del director.
+- Matriz de 6 recorridos (1366/1440/1920 × reducido/normal) documentada en
+  `docs/art/review/audit/README.md`.
