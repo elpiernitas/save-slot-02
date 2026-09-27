@@ -1209,6 +1209,9 @@ Director (PR #2, 5858152968): implementar el tramo propuesto en D-084.
   descontando ≈ 3 s de una recarga de QA). El jefe necesitó un tercer intento
   en esa partida: 128 s → 174 s (≈ +46 s). El resto, ≈ −33 s de variación
   entre partidas.
+- Segunda medición sobre el código final (`fbc01a6`, tras D-086): 1007,0 s
+  netos; terminal → jefe 149 s (≈ +132 s de recalibración); jefe 149 s con 3
+  intentos.
 
 ### D-086 · 2026-09-27 · Menú de derrota: guarda breve tras abrirse
 

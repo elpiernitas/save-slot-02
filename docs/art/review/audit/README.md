@@ -149,10 +149,19 @@ esquiva por los hooks de desarrollo.
 | --- | --- | --- | --- | --- | --- |
 | Anterior | `0cfa6ab` (sin recalibración) | **840 s** (14,0 min) | 14 s | 128 s | 2 |
 | Con recalibración | `c0c264a` | **987,5 s** (16,5 min) | 151 s | 174 s | 3 |
+| Con recalibración (final) | `fbc01a6` | **1007,0 s** (16,8 min) | 149 s | 149 s | 3 |
 
 Desglose de los +147 s netos: ≈ **+134 s** atribuibles a la recalibración
 (tramo terminal → jefe, descontando ≈ 3 s de una recarga de QA); ≈ **+46 s**
 por el tercer intento del jefe en esa partida; ≈ −33 s de variación en el
 resto (p. ej. gaviota 36 → 25 s).
 
-Segunda medición sobre `fbc01a6`: en curso (PACED3).
+Segunda medición, sobre el código final `fbc01a6`: 1007,0 s netos (1025,1 s
+totales − 18,1 s de recargas de QA; 541 s de lectura, 78 páginas). Terminal →
+jefe 149 s (≈ **+132 s** de recalibración frente a los 14 s sin ella,
+descontando ≈ 3 s de recarga); jefe 149 s con 3 intentos (≈ +21 s frente a los
+128 s con 2). 0 errores, 0 líneas en inglés, viernes bloqueado.
+
+**Resumen:** la recalibración añade ≈ 130 s a una partida a ritmo de lectura.
+Las dos mediciones con recalibración dan 16,5 y 16,8 min netos. No es una
+duración humana medida.
