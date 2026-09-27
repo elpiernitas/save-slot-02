@@ -1185,11 +1185,27 @@ Director (PR #2, 5858152968): implementar el tramo propuesto en D-084.
 - Sigue siendo el **NIVEL 04** con otro objetivo («Recalibra la ruta…»): no se
   renumeran los niveles ni cambian las tarjetas del jefe o de PLAYER 2.
 - No bloquea: pistas tras fallos (primer símbolo, luego la secuencia entera) y
-  la puerta del nº 12 repite el patrón. Una recarga vuelve a La Muralla con la
-  recalibración pendiente (progreso de ronda en memoria, como las balizas).
+  la puerta del nº 12 repite el patrón.
+- **Recarga a mitad:** vuelve a La Muralla con la recalibración pendiente, pero
+  el progreso parcial dentro de la secuencia **no se guarda**: la ronda empieza
+  desde cero, igual que las balizas originales. Solo se guarda la ronda
+  completada (`puzzles['route.recalibration']`).
 - Guardados anteriores: si ya habían entrado al jefe (`boss.attempts > 0` o
-  derrotado), no deben la recalibración (`recalibrationDone`).
+  derrotado), no deben la recalibración (`recalibrationDone`). Caso límite: un
+  guardado de antes de esta versión con el terminal hecho y la última escena
+  en el jefe (sin ningún intento) también continúa al jefe; con el flujo nuevo
+  ese estado no se puede producir, porque solo se entra al jefe tras recalibrar.
+- Una recalibración completada no se repite.
 - Nuevo: 2 diálogos (`RECAL_START`, `RECAL_DONE`); ningún diálogo existente
   cambia. `SAVE_VERSION` 2 sin cambios (una entrada más en `puzzles`).
 - HUD: la tarjeta de nivel y el HUD de ruta se apilan en
-  `.overworld__objectives` (antes podían solaparse en el NIVEL 02).
+  `.overworld__objectives` (antes podían solaparse en el NIVEL 02). La pila
+  empieza bajo la línea del rótulo `LA MURALLA` (con la cámara desplazada a la
+  derecha, junto al nº 12, lo tapaba) y, mientras se calibra, la tarjeta de
+  nivel ocupa una sola línea sin el objetivo (lo indica el HUD de ruta), para
+  no tocar las marcas de las balizas.
+- Duración a ritmo de lectura (1920, normal): 840 s → 987,5 s netos. Tramo
+  terminal → jefe: 14 s → 151 s (≈ +134 s atribuibles a la recalibración,
+  descontando ≈ 3 s de una recarga de QA). El jefe necesitó un tercer intento
+  en esa partida: 128 s → 174 s (≈ +46 s). El resto, ≈ −33 s de variación
+  entre partidas.
