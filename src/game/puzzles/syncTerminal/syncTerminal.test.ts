@@ -13,8 +13,8 @@ const rotate = (s: TerminalState, tile: number, times = 1) => {
   return s;
 };
 
-/** A: straight west–east (rot 0/2) · B: corner west–south (rot 2) · C: straight north–south (rot 1/3). */
-const solve = (s: TerminalState) => rotate(rotate(rotate(s, 0, 1), 1, 2), 2, 1);
+/** A: straight west–east · B: corner west–south (rot 2) · C: corner north–east (rot 0) · D: corner west–south (rot 2). */
+const solve = (s: TerminalState) => rotate(rotate(rotate(rotate(s, 0, 1), 1, 2), 2, 2), 3, 1);
 
 describe('SYNC TERMINAL (pure)', () => {
   it('starts unsolved, on tile A, leavable', () => {
@@ -35,10 +35,14 @@ describe('SYNC TERMINAL (pure)', () => {
     s = terminalReducer(s, { type: 'move', dir: 'e' });
     s = terminalReducer(s, { type: 'move', dir: 's' });
     expect(s.cursor).toBe(2);
+    s = terminalReducer(s, { type: 'move', dir: 'e' });
+    expect(s.cursor).toBe(3);
+    s = terminalReducer(s, { type: 'move', dir: 'n' });
+    expect(s.cursor).toBe(3); // (2,0) is empty
   });
 
   it('a partial path does not complete early', () => {
-    const s = rotate(rotate(initialTerminal(), 0, 1), 1, 2);
+    const s = rotate(rotate(rotate(initialTerminal(), 0, 1), 1, 2), 2, 2);
     expect(s.phase).toBe('solving');
     expect(isChannelSynced(s.tiles)).toBe(false);
   });

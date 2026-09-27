@@ -1,7 +1,7 @@
 /**
  * PZ-02 SYNC TERMINAL — pure state (GAME_06_SPEC §11).
  *
- * PLAYER 1's channel is three pipe tiles on a small grid. Each tile rotates
+ * PLAYER 1's channel is four pipe tiles on a 3×2 grid (pacing pass: was three). Each tile rotates
  * in 90° steps; the channel is synced when a path runs from the source (left
  * of tile A) to the output (below tile C). PLAYER 2's channel is never
  * playable. After the sync the terminal walks through a fixed sequence that
@@ -44,7 +44,7 @@ const BASE: Record<TileKind, readonly Side[]> = { straight: ['w', 'e'], corner: 
 
 /** Where the current flows in and out (fixed hardware). */
 export const SOURCE = { tile: 0, side: 'w' as Side };
-export const OUTPUT = { tile: 2, side: 's' as Side };
+export const OUTPUT = { tile: 3, side: 's' as Side };
 
 export function openings(tile: Tile): Side[] {
   return BASE[tile.kind].map((side) => SIDES[(SIDES.indexOf(side) + tile.rot) % 4]!);
@@ -52,11 +52,13 @@ export function openings(tile: Tile): Side[] {
 
 export function initialTerminal(): TerminalState {
   return {
-    // A (straight) and C (straight) start crossed, B (corner) points away.
+    // Path: A (0,0) → B (1,0) → C (1,1) → D (2,1) → output below D.
+    // Every piece starts turned away from it.
     tiles: [
       { kind: 'straight', rot: 1, col: 0, row: 0 },
       { kind: 'corner', rot: 0, col: 1, row: 0 },
-      { kind: 'straight', rot: 0, col: 1, row: 1 },
+      { kind: 'corner', rot: 2, col: 1, row: 1 },
+      { kind: 'corner', rot: 1, col: 2, row: 1 },
     ],
     cursor: 0,
     phase: 'solving',
