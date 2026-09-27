@@ -113,6 +113,11 @@
   color: var(--color-system);
 }
 
+.title-settings__hints {
+  justify-self: end;
+  margin-top: calc(var(--px) * 2);
+}
+
 .title-settings__notice {
   margin: 0;
   font-size: var(--text-xs);

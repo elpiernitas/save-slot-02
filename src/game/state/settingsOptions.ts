@@ -17,9 +17,10 @@ export const TEXT_SPEED_OPTIONS: readonly SettingOption<TextSpeed>[] = [
  * `reducedMotion` (is motion reduced?). So MOTION ON = reducedMotion 'off'.
  */
 export const MOTION_OPTIONS: readonly SettingOption<GameSettings['reducedMotion']>[] = [
+  // Shown as MOVIMIENTO REDUCIDO: SÍ = reduced motion on.
   { value: 'system', label: 'SISTEMA' },
-  { value: 'off', label: 'SÍ' },
-  { value: 'on', label: 'NO' },
+  { value: 'off', label: 'NO' },
+  { value: 'on', label: 'SÍ' },
 ];
 
 /** Next/previous option, wrapping. Unknown current values start at the first option. */

@@ -222,6 +222,24 @@ function draw(
 
   const marked = markedTiles(s);
   const k = s.phase === 'telegraph' ? Math.min(1, s.t / telegraphMs(s)) : 1;
+  // The seagull itself: perched and watching between dives, circling over
+  // the grid while its shadow warns, then down on the marked tiles.
+  const gull = (x: number, y: number, scale = 1, flip = false) => {
+    if (!full) return;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(flip ? -scale : scale, scale);
+    ctx.drawImage(full, GULL.x, GULL.y, GULL.w, GULL.h, -GULL.w / 2, -GULL.h / 2, GULL.w, GULL.h);
+    ctx.restore();
+  };
+  if (s.phase === 'ready' || s.phase === 'gap' || s.phase === 'hit') gull(W - 26, 20, 0.9, true);
+  if (s.phase === 'telegraph' && marked.length) {
+    const cx = (marked.reduce((a, [c]) => a + c, 0) / marked.length) * TILE + TILE / 2;
+    const cy = (marked.reduce((a, [, r]) => a + r, 0) / marked.length) * TILE + TILE / 2;
+    // Circles high above, drops towards the target as the warning fills.
+    const sway = reduced ? 0 : Math.sin(s.t / 160) * 18;
+    gull(cx + sway * (1 - k), 14 + (cy - 30) * k * k, 0.8 + 0.4 * k, sway < 0);
+  }
   for (const [c, r] of marked) {
     const x = c * TILE;
     const y = r * TILE;

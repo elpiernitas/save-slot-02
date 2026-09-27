@@ -12,6 +12,7 @@
  */
 import { createLitCache, drawLitCharacter, LAMPLIT_NIGHT } from '../../render/compositing';
 import { CHARACTER_ROWS, SPRITES, type SpriteImages } from '../../world/art/assets';
+import { createEntity } from './entity';
 import {
   ARENA,
   COMMITS_PER_NODE,
@@ -93,6 +94,7 @@ function nightBackdrop(bg: CanvasImageSource & { width: number; height: number }
 export function createDesyncRenderer(canvas: HTMLCanvasElement, images: SpriteImages | null) {
   const ctx = canvas.getContext('2d')!;
   const light = createLitCache(LAMPLIT_NIGHT);
+  const drawEntity = createEntity();
   const bg = images?.get('murallaFull');
   const backdrop = bg ? nightBackdrop(bg) : null;
   let scale = 1;
@@ -280,7 +282,7 @@ export function createDesyncRenderer(canvas: HTMLCanvasElement, images: SpriteIm
 
   return {
     resize,
-    draw(s: DesyncState, walked: number, reduced: boolean) {
+    draw(s: DesyncState, walked: number, reduced: boolean, collapse = 0) {
       ctx.setTransform(scale, 0, 0, scale, 0, 0);
       ctx.imageSmoothingEnabled = false;
       // The page's letter-spacing would otherwise leak into canvas text.
@@ -313,6 +315,8 @@ export function createDesyncRenderer(canvas: HTMLCanvasElement, images: SpriteIm
       const view = currentHazard(s);
       // Danger under the actors; the ring is drawn the same way.
       if (view) hazard(view, s, reduced);
+      // DESYNC PROCESS itself, around the core, under nodes and PLAYER 1.
+      drawEntity(ctx, s, view, reduced, collapse);
       core(s, reduced);
       (Object.keys(NODES) as NodeId[]).forEach((id) => node(id, s));
       player(s, walked, reduced);

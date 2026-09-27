@@ -76,6 +76,32 @@
   background: var(--color-system);
 }
 
+.desync__boss {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--px) * 3);
+  padding: var(--px) calc(var(--px) * 4);
+  font-weight: 700;
+  color: #0b1626;
+  background: #e8735a;
+}
+
+/* Remaining desync: coral cells go dark as nodes are stabilised. */
+.desync__boss-bar {
+  display: inline-flex;
+  gap: 1px;
+}
+
+.desync__boss-bar i {
+  width: calc(var(--px) * 3);
+  height: calc(var(--px) * 4);
+  background: rgb(11 22 38 / 0.35);
+}
+
+.desync__boss-bar i[data-on] {
+  background: #0b1626;
+}
+
 .desync__phase {
   color: var(--color-system);
 }
@@ -216,4 +242,12 @@
   margin: 0;
   font-size: var(--text-xs);
   color: var(--color-text-dim);
+}
+
+/* The end card sits high so the process can be seen collapsing below it. */
+.desync__card.desync__card--end {
+  align-content: start;
+  padding-top: calc(var(--px) * 26);
+  background: linear-gradient(rgb(8 14 30 / 0.8), rgb(8 14 30 / 0) 40%);
+  pointer-events: none;
 }
