@@ -409,7 +409,9 @@ export function OverworldScene(_: SceneProps) {
       {/* Top-left, under the location tag, never over the café's sign; the
           route HUD stacks under the level so the two never overlap. */}
       <div className="overworld__objectives">
-        {!card && overlay === null && <ChapterHud level={chapterLevel(save)} />}
+        {!card && overlay === null && (
+          <ChapterHud level={chapterLevel(save)} compact={calibrating} />
+        )}
         {calibrating && <RouteHud state={beacons} recal={step === 'recalibrating'} />}
       </div>
       {calibrating &&
