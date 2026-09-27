@@ -385,6 +385,7 @@ function FailedPanel({ onRetry, onTitle }: { onRetry: () => void; onTitle: () =>
   const menu = useMenu({
     items: FAILED_ITEMS,
     priority: INPUT_PRIORITY.panel,
+    ignoreHeldKeys: true,
     onConfirm: (item) => (item.id === 'title' ? onTitle() : onRetry()),
   });
   return (
@@ -412,6 +413,7 @@ function AssistPanel({ onEnable, onDecline }: { onEnable: () => void; onDecline:
   const menu = useMenu({
     items: ASSIST_ITEMS,
     priority: INPUT_PRIORITY.panel,
+    ignoreHeldKeys: true,
     onConfirm: (item) => (item.id === 'enable' ? onEnable() : onDecline()),
     onCancel: onDecline,
   });

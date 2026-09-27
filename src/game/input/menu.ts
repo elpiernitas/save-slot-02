@@ -29,3 +29,17 @@ export function moveSelection(
   }
   return current;
 }
+
+/**
+ * Gate for menus that open mid-action (boss defeat, assist offer): a key
+ * held since before the menu appeared only sends auto-repeats, and those
+ * must not move or confirm anything. The gate opens on the first fresh
+ * (non-repeat) press; after that, holding a key scrolls as usual.
+ */
+export function createFreshInputGate() {
+  let open = false;
+  return (repeat: boolean): boolean => {
+    if (!repeat) open = true;
+    return open;
+  };
+}
