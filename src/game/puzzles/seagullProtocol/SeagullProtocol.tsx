@@ -28,8 +28,8 @@ import './seagullProtocol.css';
 const TILE = 56;
 const W = COLS * TILE;
 const H = ROWS * TILE;
-/** A patch of La Muralla's own paving (ENV-001) under the grid. */
-const PAVING = { x: 250, y: 300, w: 300, h: 90 };
+/** La Muralla's own sidewalk and curb (ENV-001), between two bollards: no furniture. */
+const PAVING = { x: 397, y: 292, w: 133, h: 80 };
 /** The seagull, cut from ENV-001 (east gull occluder art). */
 const GULL = { x: 746, y: 321, w: 37, h: 30 };
 
@@ -98,6 +98,16 @@ export function SeagullProtocol({ onComplete, onLeave }: SeagullProtocolProps) {
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
   }, [images, reduced, services.audio]);
+
+  // Development-only handle for automated QA (stripped from production builds).
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    const w = window as unknown as { __seagull?: unknown };
+    w.__seagull = { state: () => stateRef.current };
+    return () => {
+      delete w.__seagull;
+    };
+  }, []);
 
   // Completion: a short beat on the result line, then back to the world.
   useEffect(() => {

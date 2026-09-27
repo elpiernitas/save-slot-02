@@ -248,9 +248,15 @@ Evidencia en `docs/art/review/rc-fix-03/`.
 La Muralla separada en ENV / WORLD / FG-001 con máscaras de ENV-001 y
 verificada por `art:check`. Evidencia en `docs/art/review/rc-fix-04/`.
 
+## Expansión de contenido (D-082)
+
+Niveles 01–07 visibles, Protocolo de la Gaviota, entrada anunciada del boss,
+logros ligeros, postgame con Randy y dos easter eggs opcionales. Evidencia en
+`docs/art/review/expansion/`.
+
 ## Próximo paso exacto
 
-1. Revisión del director sobre RC-FIX-03 + RC-FIX-04 (PR #1).
+1. Revisión del director sobre la expansión (PR #1).
 2. Solo con su decisión: merge y deploy.
 3. Arte no bloqueante: un CHAR-001 nativo a la escala de `playerLarge` (hoy
    ×2 exacto).

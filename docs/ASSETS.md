@@ -28,6 +28,7 @@ reducida) generados por `python3 tools/art/pack_crops.py <carpeta del pack>`:
 | `date-fri.png` | 02_GAME_FLOW_COLLAGE panel 3 (DATE PORTALS, viernes) | Carta del viernes (candado); las demás fechas usan solo el cielo de `seafront.png` (D-080) |
 | `class-player1/warrior/tank/healer/sky.png` | 03_UI_FLOW/04_CLASS_SELECT_TARGET | Selección de clase |
 | `manu.png` | 04_CHARACTERS/04_MANU_SPRITE_SHEET_ART_TARGET → 120×240 (40×60) | CHAR-003, sprite de Manu |
+| `randy.png` | 04_CHARACTERS/06_RANDY_SPRITE_TARGET, frame sentado, sin halo, 28×40 | Cameo postgame en el SAVE SLOT (D-082) |
 | `manu-portrait.png` | 01_PRIMARY_CANON/09_MASTER_CONCEPT_SHEET | CHAR-004, retrato del reveal |
 
 ENV-001 plano (con el parche de la M del rótulo, D-080) vive en

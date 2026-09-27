@@ -240,11 +240,11 @@
 
 .save-slot__randy-line {
   position: absolute;
-  bottom: calc(100% + var(--px) * 4);
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: calc(100% + var(--px) * 26);
+  left: 0;
   width: max-content;
-  max-width: calc(var(--px) * 160);
+  max-width: calc(var(--px) * 120);
+  text-align: left;
   padding: calc(var(--px) * 2) calc(var(--px) * 4);
   font: inherit;
   font-size: var(--text-xs);

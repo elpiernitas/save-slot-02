@@ -1099,3 +1099,34 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
 - Fuente plana: `tools/art/source/env-001-full.png`. Orden de regeneración:
   `patch_env_sign.py` → `node tools/art/occluders.mjs` → `layers.py`.
 
+### D-082 · 2026-09-27 · Expansión de contenido: niveles visibles, gaviota, boss anunciado, extras y postgame
+
+Dirección del director (PR #1, 5851457761): aventura corta pero completa, con
+capítulos visibles y un boss final claramente presentado. Sin cambio de
+esquema (`SAVE_VERSION` 2), sin tocar la RC visual ni las fechas.
+
+- Niveles 01–07 derivados del guardado (`progress/chapters.ts`): cada uno es
+  un objetivo real (camarera, balizas, gaviota, terminal, boss, puerta,
+  ruta). Tarjeta de título una vez por nivel (flags `chapter.seen.NN`) y
+  línea de estado con el objetivo en La Muralla. Sin XP ni estadísticas.
+- PZ-03 `route.seagull_protocol` (MG-01 corto) entre balizas y terminal:
+  rejilla 5×3 sobre la acera de ENV-001, seis picados deterministas,
+  asistencia tras 2 fallos y fallback automático tras 4 (nunca bloquea).
+  La puerta del 12 queda bloqueada hasta resolverlo; la pizarra da la pista.
+  Recompensa: CITY CARD 003 `GAVIOTA CON INTENCIONES` (recorte de la gaviota
+  de ENV-001).
+- Boss: fase `chapter` antes de la intro, con `ALERTA — PROCESO HOSTIL
+  DETECTADO` y `NIVEL 05 — JEFE FINAL: DESYNC PROCESS`. Pelea sin cambios.
+- Logros `FIRST SYNC`, `SEÑAL ENCONTRADA`, `PLAYER 2 ONLINE`: toast, sin
+  pantalla. Los nombres en inglés son los del director y están en la lista
+  permitida del test de idioma.
+- Postgame (GAME-10 pequeño): estado de ruta en el SAVE SLOT según el día de
+  Madrid (EN N DÍAS / MAÑANA / HOY / EL GUARDADO CONTINÚA; nunca afirma el
+  resultado). Único desbloqueo: `unlocks['postgame.randy']` (acción nueva
+  `unlock/grant`, la primera gana). Randy: frame sentado del pack.
+- Extras opcionales: chiste de la biblioteca (2º vistazo al escaparate
+  izquierdo) y el tres de espadas del revés (2º vistazo al derecho), solo
+  texto y sin la palabra «tarot»; no hay arte nuevo de la carta.
+- La rama paralela `codex/expansion-prep` cubre lo mismo; no se mezcla
+  (solapamiento total), esta implementación es la que va en el PR.
+

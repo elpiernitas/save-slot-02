@@ -90,7 +90,7 @@
   right: calc(var(--px) * 8);
   display: grid;
   gap: var(--px);
-  max-width: calc(var(--px) * 210);
+  max-width: calc(var(--px) * 280);
   padding: calc(var(--px) * 2) calc(var(--px) * 5);
   text-align: right;
   background: rgb(14 26 44 / 0.86);
@@ -104,6 +104,7 @@
 
 .chapter-hud__head {
   display: flex;
+  white-space: nowrap;
   justify-content: flex-end;
   align-items: center;
   gap: calc(var(--px) * 4);
