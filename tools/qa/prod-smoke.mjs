@@ -52,7 +52,16 @@ const found = {
 };
 const CASES = {
   overworld: seed({}),
-  boss: seed({ ...done, flags: { 'muralla.arrived': true, 'system.player2SignalMissing': true } }),
+  // D-085: terminal done, recalibration pending → La Muralla (overworld).
+  recalibration: seed({
+    ...done,
+    flags: { 'muralla.arrived': true, 'system.player2SignalMissing': true },
+  }),
+  boss: seed({
+    ...done,
+    puzzles: { ...done.puzzles, 'route.recalibration': { completedAt: now, attempts: 1 } },
+    flags: { 'muralla.arrived': true, 'system.player2SignalMissing': true },
+  }),
   reveal: seed({ ...done, boss: { defeated: true, attempts: 1, defeatedAt: now } }),
   dateGate: seed({
     ...done,
