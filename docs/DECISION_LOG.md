@@ -1130,3 +1130,27 @@ esquema (`SAVE_VERSION` 2), sin tocar la RC visual ni las fechas.
 - La rama paralela `codex/expansion-prep` cubre lo mismo; no se mezcla
   (solapamiento total), esta implementación es la que va en el PR.
 
+### D-083 · 2026-09-27 · Auditoría de producción: boss visible, portal, ritmo y UX
+
+Director (PR #1, 5855781053 / 5855838037), sobre la versión publicada.
+Presentación y ritmo; mecánica del boss, lógica del gate, fechas, diálogos
+existentes y guardado sin cambios. PR #2 (sin merge).
+
+- Boss: `boss/desync/entity.ts` dibuja DESYNC PROCESS como entidad de
+  sistema en el núcleo (marcos desalineados y duplicados, fragmentos de
+  ventana, cables a los nodos que se enderezan al estabilizarlos, ataques
+  atados al cuerpo, destello por estabilización, colapso al terminar). HUD:
+  placa `DESYNC PROCESS` con 9 celdas de desincronía restante. Sin cara ni
+  criatura.
+- Portal cooperativo: arco sobre el horizonte, dos mitades de cristal P1
+  (cian) / P2 (dorado) con el atardecer visible, columna de luz al abrirse,
+  suelo opaco (sin objetos de la foto flotando), texto final abajo.
+- Reveal de Manu: verificado; el retrato con gafas aparece en el beat del
+  nombre (`RANURA DE JUGADOR 02`). Sin cambios.
+- Ritmo: balizas en dos rondas (3 + 5 pasos sobre los mismos objetos), gaviota
+  con segunda oleada (10 picados), terminal con 4 piezas en 3×2. Sin esperas
+  automáticas ni campaña nueva.
+- UX: `MOVIMIENTO REDUCIDO` (SÍ = reducido, mismos valores y orden) con
+  `← → CAMBIAR`; HUD de nivel arriba a la izquierda (no tapa el rótulo);
+  gaviota visible posada y en picado.
+
