@@ -31,6 +31,7 @@ const save = {
     'route.muralla_beacons': { completedAt: now, attempts: 1 },
     'route.seagull_protocol': { completedAt: now, attempts: 1 },
     'system.player_sync': { completedAt: now, attempts: 1 },
+    'route.recalibration': { completedAt: now, attempts: 1 },
   },
   boss: { defeated: false, attempts: 0, defeatedAt: null },
   quests: {},
@@ -119,6 +120,30 @@ for (let round = 0; round < 2; round++) {
   }
   // Keep holding the fight's last (vertical) direction: only auto-repeats from here on.
   const heldKey = key || 'ArrowDown';
+  if (round === 1) {
+    // Round 2: a *fresh* arrow pressed at the moment of the hit (a dodge), then a
+    // deliberate press half a second later.
+    await p.keyboard.up(heldKey);
+    await p.keyboard.press('ArrowDown');
+    const atOpen = await p.evaluate(
+      () => document.querySelector('.desync__panel [aria-current="true"]')?.textContent,
+    );
+    await p.waitForTimeout(500);
+    await p.keyboard.press('ArrowDown');
+    const later = await p.evaluate(
+      () => document.querySelector('.desync__panel [aria-current="true"]')?.textContent,
+    );
+    await p.keyboard.press('ArrowUp');
+    const back = await p.evaluate(
+      () => document.querySelector('.desync__panel [aria-current="true"]')?.textContent,
+    );
+    await p.screenshot({ path: `${OUT}/boss-menu-fresh-arrow.png` });
+    console.error('fresh-at-open', JSON.stringify({ atOpen, later, back }));
+    out.push({ stage: st, freshAtOpen: atOpen, afterGuard: later, back });
+    await p.keyboard.press('ArrowDown');
+    await p.keyboard.press('Enter'); // AHORA NO
+    break;
+  }
   // Keep holding for a second after the panel opens.
   const mark = await p.evaluate(() => window.__reps.length);
   const trace = [];

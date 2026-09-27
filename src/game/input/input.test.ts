@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { INPUT_PRIORITY, InputRouter } from './inputRouter';
 import { inputFromKey, type KeyLike } from './keymap';
-import { createFreshInputGate, firstEnabledIndex, moveSelection } from './menu';
+import { createFreshInputGate, firstEnabledIndex, MENU_GUARD_MS, moveSelection } from './menu';
 
 const key = (code: string, extra: Partial<KeyLike> = {}): KeyLike => ({
   code,
@@ -186,6 +186,25 @@ describe('fresh input gate (boss defeat menu regression)', () => {
 
   it('ignores a held confirm too', () => {
     expect(replay([{ input: 'confirm', repeat: true }]).confirmed).toBeNull();
+  });
+
+  it('ignores even a fresh press right after opening (a dodge at the moment of the hit)', () => {
+    let t = 1000;
+    const fresh = createFreshInputGate(MENU_GUARD_MS, () => t);
+    t += 16; // same frame as the defeat: a new arrow
+    expect(fresh(false)).toBe(false);
+    t += MENU_GUARD_MS - 50;
+    expect(fresh(false)).toBe(false);
+    t += 60; // guard over: a deliberate press works
+    expect(fresh(false)).toBe(true);
+  });
+
+  it('after the guard, a key still held from the fight keeps being ignored', () => {
+    let t = 0;
+    const fresh = createFreshInputGate(MENU_GUARD_MS, () => t);
+    t = MENU_GUARD_MS + 500;
+    expect(fresh(true)).toBe(false);
+    expect(fresh(false)).toBe(true);
   });
 
   it('navigates normally after a fresh press, including held repeats', () => {

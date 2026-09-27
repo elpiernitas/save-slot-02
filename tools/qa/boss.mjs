@@ -30,6 +30,7 @@ const save = {
     'route.muralla_beacons': { completedAt: now, attempts: 1 },
     'route.seagull_protocol': { completedAt: now, attempts: 1 },
     'system.player_sync': { completedAt: now, attempts: 1 },
+    'route.recalibration': { completedAt: now, attempts: 1 },
   },
   boss: { defeated: false, attempts: 0, defeatedAt: null },
   quests: {},
@@ -167,6 +168,7 @@ const results = [res];
 while (res === 'failed') {
   await hk(null);
   await shot('boss-2b-signal-lost');
+  await p.waitForTimeout(400); /* defeat menu input guard */
   await p.keyboard.press('ArrowUp');
   await p.keyboard.press('ArrowUp');
   await p.keyboard.press('Enter');

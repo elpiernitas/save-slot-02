@@ -1209,3 +1209,20 @@ Director (PR #2, 5858152968): implementar el tramo propuesto en D-084.
   descontando ≈ 3 s de una recarga de QA). El jefe necesitó un tercer intento
   en esa partida: 128 s → 174 s (≈ +46 s). El resto, ≈ −33 s de variación
   entre partidas.
+
+### D-086 · 2026-09-27 · Menú de derrota: guarda breve tras abrirse
+
+La matriz final de D-085 encontró una variante del fallo de D-084: el bot
+pulsó una flecha **nueva** (no mantenida) justo en el instante de la derrota,
+mientras esquivaba, y el menú abrió en `VOLVER AL TÍTULO`. Un jugador que
+esquiva al recibir el golpe puede hacer lo mismo.
+
+- `createFreshInputGate(MENU_GUARD_MS)`: los menús de derrota y de asistencia
+  ignoran toda entrada durante 350 ms tras abrirse; después, las repeticiones
+  de una tecla mantenida siguen ignoradas hasta la primera pulsación nueva.
+  Es protección de interfaz: no cambia el combate, su dificultad ni sus
+  tiempos.
+- Reproducido sin la guarda (`MENU_GUARD_MS = 0`: la flecha al perder mueve el
+  cursor) y corregido con ella; tests unitarios con reloj inyectado y
+  `tools/qa/boss-held-key.mjs` (flecha mantenida + flecha nueva al perder +
+  pulsación deliberada 0,5 s después, que sí navega).

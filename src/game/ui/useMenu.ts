@@ -1,5 +1,10 @@
 import { useCallback, useState } from 'react';
-import { createFreshInputGate, firstEnabledIndex, moveSelection } from '../input/menu';
+import {
+  createFreshInputGate,
+  firstEnabledIndex,
+  MENU_GUARD_MS,
+  moveSelection,
+} from '../input/menu';
 import { INPUT_PRIORITY } from '../input/inputRouter';
 import { useInput } from '../input/useInput';
 import { useGame } from '../state/useGame';
@@ -41,7 +46,7 @@ export function useMenu({
   ignoreHeldKeys = false,
 }: UseMenuOptions) {
   const { services } = useGame();
-  const [fresh] = useState(createFreshInputGate);
+  const [fresh] = useState(() => createFreshInputGate(MENU_GUARD_MS));
   const [selected, setSelectedState] = useState(() => firstEnabledIndex(items));
   const current = Math.min(selected, Math.max(0, items.length - 1));
 

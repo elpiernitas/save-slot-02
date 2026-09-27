@@ -665,7 +665,8 @@ let res = await fight();
 mark('boss attempt', res);
 while (res === 'failed') {
   await shot('signal-lost');
-  await read();
+  await p.waitForTimeout(400);
+  /* defeat menu input guard */ await read();
   await p.keyboard.press('Enter');
   res = await fight();
   mark('boss attempt', res);
