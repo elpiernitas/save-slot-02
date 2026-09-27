@@ -95,6 +95,15 @@
   border-left: calc(var(--px) * 2) solid var(--color-select);
 }
 
+.chapter-hud[data-compact] {
+  max-width: none;
+}
+
+.chapter-hud[data-compact] .chapter-hud__head {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
 .chapter-hud p {
   margin: 0;
 }

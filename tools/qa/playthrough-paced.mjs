@@ -449,7 +449,8 @@ for (let t = Date.now(); Date.now() - t < 90000;) {
   await p.waitForTimeout(40);
 }
 mark('seagull seconds', Math.round((Date.now() - tSeagull) / 1000));
-await p.waitForTimeout(1800);
+await p.waitForSelector('.seagull', { state: 'detached', timeout: 15000 });
+await p.waitForTimeout(300);
 await shot('seagull-done');
 await drain();
 const s2 = await save();

@@ -230,10 +230,26 @@ async function seed(save) {
 await seed(mk(PRE));
 mark('pending → scene', [await scene(), await hud()]);
 await drain();
+await shot('recal-hud-terrace');
+// Camera scrolled right (where the recalibration starts, by door 12): the stack must stay under the sign.
+await path([
+  ['v', 332],
+  ['h', 355],
+  ['v', 316],
+  ['h', 688],
+  ['v', 338],
+  ['h', 725],
+]);
+await p.waitForTimeout(400);
+await shot('recal-hud-door12');
+await path([
+  ['h', 688],
+  ['v', 316],
+  ['h', 225],
+  ['v', 332],
+]);
 // Two beacons synced: lamp, gull (RECAL_SEQUENCE starts lamp, bird).
 await use('lamp', [
-  ['v', 318],
-  ['h', 225],
   ['v', 332],
   ['h', 200],
 ]);

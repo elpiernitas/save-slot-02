@@ -138,7 +138,9 @@
 
 .overworld__objectives {
   position: absolute;
-  top: calc(var(--px) * 20);
+  /* Below the location tag and below the café's sign line, whichever way the
+     camera has scrolled, so the stack never covers LA MURALLA. */
+  top: calc(var(--px) * 30);
   left: calc(var(--px) * 8);
   right: calc(var(--px) * 8);
   display: flex;

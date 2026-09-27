@@ -85,6 +85,7 @@ export function ChapterHud({ level, compact = false }: { level: Level; compact?:
   return (
     <div
       className="chapter-hud"
+      data-compact={compact || undefined}
       aria-label={`${levelLabel(level.n)}: ${level.title}${compact ? `. ${level.objective}` : ''}`}
     >
       <p className="chapter-hud__head">
