@@ -19,10 +19,24 @@ const PLACEMENTS = 'src/game/world/maps/muralla.occluders.json';
 /**
  * Outline of each piece of sidewalk furniture PLAYER 1 can walk behind,
  * traced on ENV-001 in world px (polygon, clockwise). `baseY` = where it
- * touches the ground (depth-sort anchor). The flower pot by the bench is not
- * here: the terrace edge keeps PLAYER 1 from ever standing behind it.
+ * touches the ground (depth-sort anchor). The flower pot by the bench is
+ * included since RC-FIX-03: an audit of reachable positions showed PLAYER 1
+ * can stand just behind its foliage (feet x ≤ 690, y 304–322).
  */
 export const OCCLUDERS = [
+  {
+    id: 'occPot',
+    baseY: 322,
+    outline: [
+      [702, 284],
+      [724, 284],
+      [724, 324],
+      [705, 324],
+      [705, 306],
+      [699, 306],
+      [699, 289],
+    ],
+  },
   {
     id: 'occLamp',
     baseY: 318,

@@ -8,10 +8,6 @@ import classPlayer1 from '../../assets/pack/class-player1.png';
 import classSky from '../../assets/pack/class-sky.png';
 import classTank from '../../assets/pack/class-tank.png';
 import classWarrior from '../../assets/pack/class-warrior.png';
-import dateFri from '../../assets/pack/date-fri.png';
-import dateSun from '../../assets/pack/date-sun.png';
-import dateThu from '../../assets/pack/date-thu.png';
-import dateWed from '../../assets/pack/date-wed.png';
 import manuPortrait from '../../assets/pack/manu-portrait.png';
 import manu from '../../assets/pack/manu.png';
 import polaroid from '../../assets/pack/polaroid.png';
@@ -23,12 +19,6 @@ export const PACK_ART = {
   classArt: { warrior: classWarrior, tank: classTank, healer: classHealer } as Readonly<
     Record<string, string>
   >,
-  dateArt: {
-    'wed-30-sep': dateWed,
-    'thu-01-oct': dateThu,
-    'sun-04-oct': dateSun,
-    friday: dateFri,
-  } as Readonly<Record<string, string>>,
   seafront,
   polaroid,
   manuPortrait,

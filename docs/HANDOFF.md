@@ -237,9 +237,15 @@ de personajes, selección de clase según el target, DESYNC en La Muralla de
 noche, paseo marítimo al atardecer en reveal/fecha/final, sprite y retrato de
 Manu, foto final. Evidencia BEFORE/AFTER en `docs/art/review/visual-master/`.
 
+## RC-FIX-03 (D-080)
+
+Puerta cooperativa rehecha (solo presentación), rótulo de ENV-001 parcheado,
+oclusor de la maceta, fechas sin lugares y evidencia de La Muralla corregida.
+Evidencia en `docs/art/review/rc-fix-03/`.
+
 ## Próximo paso exacto
 
-1. Revisión de Manu/ChatGPT de la pasada visual (PR #1).
+1. Revisión del director sobre RC-FIX-03 (PR #1).
 2. Solo con su decisión: merge y deploy.
-3. Pendiente de arte, no bloqueante: FG-001 (foreground de La Muralla) y un
-   CHAR-001 nativo a la escala de `playerLarge` (hoy ×2 exacto).
+3. Arte no bloqueante: un CHAR-001 nativo a la escala de `playerLarge` (hoy
+   ×2 exacto). FG-001 no es necesario para esta RC.

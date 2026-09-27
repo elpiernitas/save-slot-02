@@ -417,6 +417,19 @@
       "rows": 1,
       "anchorX": 0,
       "anchorY": 28
+    },
+    "occPot": {
+      "file": "occPot.png",
+      "status": "final",
+      "transparent": true,
+      "width": 25,
+      "height": 40,
+      "frameWidth": 25,
+      "frameHeight": 40,
+      "frames": 1,
+      "rows": 1,
+      "anchorX": 0,
+      "anchorY": 38
     }
   }
 }

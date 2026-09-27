@@ -21,11 +21,9 @@ CROPS = [
     ('02_ATMOSPHERE_STYLE/03_TITLE_ATMOSPHERE.png', (0, 500, 712, 941), 'seafront.png'),
     # Luis + Manu on the seawall (FINAL SAVE CONFIRMATION panel): ending polaroid.
     ('03_UI_FLOW/02_GAME_FLOW_COLLAGE.png', (1210, 600, 1466, 900), 'polaroid.png'),
-    # DATE PORTALS card art.
-    ('03_UI_FLOW/02_GAME_FLOW_COLLAGE.png', (27, 606, 208, 782), 'date-wed.png'),
-    ('03_UI_FLOW/02_GAME_FLOW_COLLAGE.png', (232, 606, 405, 782), 'date-thu.png'),
+    # DATE PORTALS: only Friday's locked-street art. The route cards use the
+    # seafront's sky (dateGate.css) so no date is tied to a place (RC-FIX-03).
     ('03_UI_FLOW/02_GAME_FLOW_COLLAGE.png', (430, 606, 608, 690), 'date-fri.png'),
-    ('03_UI_FLOW/02_GAME_FLOW_COLLAGE.png', (632, 606, 810, 782), 'date-sun.png'),
     # Manu's canon portrait (MASTER CONCEPT SHEET): PLAYER 2 recognition card.
     ('01_PRIMARY_CANON/09_MASTER_CONCEPT_SHEET.png', (543, 41, 773, 324), 'manu-portrait.png'),
     # CLASS SELECT TARGET: PLAYER 1 portrait, class art, header skyline.

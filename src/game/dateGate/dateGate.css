@@ -66,14 +66,24 @@
   image-rendering: auto;
 }
 
+/*
+ * Route cards show only the sunset sky of the seafront (RC-FIX-03): mood,
+ * not a place. No card claims where a date happens.
+ */
+.date-gate__art[data-art='wed-30-sep'],
+.date-gate__art[data-art='thu-01-oct'],
+.date-gate__art[data-art='sun-04-oct'] {
+  background-image: url('../../assets/pack/seafront.png');
+  background-size: 647% auto;
+}
 .date-gate__art[data-art='wed-30-sep'] {
-  background-image: url('../../assets/pack/date-wed.png');
+  background-position: 0% 0%;
 }
 .date-gate__art[data-art='thu-01-oct'] {
-  background-image: url('../../assets/pack/date-thu.png');
+  background-position: 21.6% 0%;
 }
 .date-gate__art[data-art='sun-04-oct'] {
-  background-image: url('../../assets/pack/date-sun.png');
+  background-position: 48.2% 3%;
 }
 .date-gate__art[data-art='friday'] {
   background-image: url('../../assets/pack/date-fri.png');

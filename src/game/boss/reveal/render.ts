@@ -47,16 +47,111 @@ export function createGateRenderer(canvas: HTMLCanvasElement, images: SpriteImag
   };
   resize(GATE_ARENA.h);
 
-  const pad = (p: { x: number; y: number }, on: boolean, label: string) => {
-    ctx.fillStyle = on ? C.cyan : C.field;
-    ctx.strokeStyle = on ? C.cyan : C.cream;
-    ctx.lineWidth = 1;
-    ctx.fillRect(p.x - 12, p.y - 6, 24, 12);
-    ctx.strokeRect(p.x - 11.5, p.y - 5.5, 23, 11);
-    ctx.fillStyle = on ? C.cyan : C.dim;
-    ctx.font = '8px monospace';
+  /** Ground switch: a ring on the promenade that fills with signal light. */
+  const pad = (p: { x: number; y: number }, on: boolean, reduced: boolean, t: number) => {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.scale(1, 0.4);
+    if (on) {
+      const pulse = reduced ? 1 : 0.85 + 0.15 * Math.sin(t / 220);
+      const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 26);
+      glow.addColorStop(0, `rgb(191 238 242 / ${0.75 * pulse})`);
+      glow.addColorStop(1, 'rgb(191 238 242 / 0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(0, 0, 26, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = on ? C.cyan : 'rgb(244 236 218 / 0.7)';
+    ctx.setLineDash(on ? [] : [4, 3]);
+    ctx.beginPath();
+    ctx.arc(0, 0, 15, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  };
+
+  /** P1 / P2 tags, drawn over the actors so a player never hides them. */
+  const padLabel = (p: { x: number; y: number }, on: boolean, label: string) => {
+    ctx.font = 'bold 8px monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(label, p.x, p.y + 18);
+    ctx.fillStyle = 'rgb(11 22 38 / 0.85)';
+    ctx.fillRect(p.x - 9, p.y + 9, 18, 11);
+    ctx.fillStyle = on ? C.cyan : C.cream;
+    ctx.fillText(label, p.x, p.y + 17);
+  };
+
+  /** Signal line from a switch up to its half of the portal. */
+  const link = (from: { x: number; y: number }, toX: number, on: boolean) => {
+    ctx.strokeStyle = on ? 'rgb(191 238 242 / 0.8)' : 'rgb(244 236 218 / 0.22)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 4]);
+    ctx.beginPath();
+    ctx.moveTo(from.x, from.y - 6);
+    ctx.lineTo(toX, DOOR.y + DOOR.h + 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  };
+
+  /**
+   * The portal: a lit frame whose two halves light up with each player's
+   * signal and open into warm light. Same states as before, clearer reading.
+   */
+  const portal = (s: GateState, reduced: boolean) => {
+    const p1On = s.stage !== 'await1';
+    const p2On = s.stage === 'p2ready' || s.stage === 'opening' || s.stage === 'open';
+    const k = s.stage === 'open' ? 1 : s.stage === 'opening' && !reduced ? 0.5 : 0;
+    const { x, y, w, h } = DOOR;
+    const half = w / 2;
+    const cx = x + half;
+    // Halo: cool while waiting, warm once it opens.
+    const glow = ctx.createRadialGradient(cx, y + h / 2, 6, cx, y + h / 2, 80);
+    glow.addColorStop(0, k > 0 ? 'rgb(255 205 120 / 0.6)' : 'rgb(191 238 242 / 0.28)');
+    glow.addColorStop(1, 'rgb(0 0 0 / 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(x - 80, y - 80, w + 160, h + 160);
+    // Reflection on the floor below the threshold.
+    const refl = ctx.createLinearGradient(0, y + h, 0, y + h + 60);
+    refl.addColorStop(0, k > 0 ? 'rgb(255 205 120 / 0.45)' : 'rgb(191 238 242 / 0.16)');
+    refl.addColorStop(1, 'rgb(0 0 0 / 0)');
+    ctx.fillStyle = refl;
+    ctx.fillRect(x + 4, y + h + 2, w - 8, 60);
+    // Opening: a column of warm light between the halves.
+    if (k > 0) {
+      ctx.fillStyle = 'rgb(255 226 160 / 0.95)';
+      ctx.fillRect(cx - half * k, y, w * k, h);
+    }
+    // Two glass halves: the sunset shows through; each lights with its signal.
+    const panel = (px: number, on: boolean) => {
+      const pw = half * (1 - k);
+      if (pw <= 0) return;
+      ctx.fillStyle = on ? 'rgb(40 96 120 / 0.72)' : 'rgb(14 26 44 / 0.55)';
+      ctx.fillRect(px, y, pw, h);
+      ctx.fillStyle = on ? 'rgb(191 238 242 / 0.55)' : 'rgb(191 238 242 / 0.12)';
+      for (let ly = y + 3; ly < y + h - 1; ly += 4) ctx.fillRect(px + 2, ly, pw - 4, 1);
+    };
+    panel(x, p1On);
+    panel(x + w - half * (1 - k), p2On);
+    if (k === 0) {
+      ctx.fillStyle = 'rgb(244 236 218 / 0.5)';
+      ctx.fillRect(cx, y + 2, 1, h - 4);
+    }
+    // Frame with gold corners.
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = k > 0 ? C.gold : C.cream;
+    ctx.strokeRect(x - 1, y - 1, w + 2, h + 2);
+    ctx.fillStyle = C.gold;
+    for (const [qx, qy] of [
+      [x - 3, y - 3],
+      [x + w - 3, y - 3],
+      [x - 3, y + h - 3],
+      [x + w - 3, y + h - 3],
+    ] as const)
+      ctx.fillRect(qx, qy, 6, 6);
+    // Threshold on the ground.
+    ctx.fillStyle = k > 0 ? C.gold : 'rgb(244 236 218 / 0.7)';
+    ctx.fillRect(x - 8, y + h + 2, w + 16, 2);
   };
 
   return {
@@ -70,22 +165,13 @@ export function createGateRenderer(canvas: HTMLCanvasElement, images: SpriteImag
       ctx.drawImage(base, 0, 0);
       ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
-      // Door: two panels that slide apart when open.
-      const open = s.stage === 'open' || s.stage === 'opening';
-      const k = s.stage === 'open' ? 1 : s.stage === 'opening' && !reduced ? 0.5 : 0;
-      const half = DOOR.w / 2;
-      ctx.fillStyle = open ? C.gold : C.grid;
-      ctx.fillRect(DOOR.x, DOOR.y, DOOR.w, DOOR.h);
-      ctx.fillStyle = C.edge;
-      ctx.fillRect(DOOR.x, DOOR.y, half * (1 - k), DOOR.h);
-      ctx.fillRect(DOOR.x + DOOR.w - half * (1 - k), DOOR.y, half * (1 - k), DOOR.h);
-      ctx.strokeStyle = open ? C.gold : C.cream;
-      ctx.strokeRect(DOOR.x - 0.5, DOOR.y - 0.5, DOOR.w + 1, DOOR.h + 1);
-
       const p1On = s.stage !== 'await1';
-      const p2On = s.stage === 'p2ready' || open;
-      pad(SWITCH_1, p1On, 'P1');
-      pad(SWITCH_2, p2On, 'P2');
+      const p2On = s.stage === 'p2ready' || s.stage === 'opening' || s.stage === 'open';
+      link(SWITCH_1, DOOR.x + DOOR.w / 4, p1On);
+      link(SWITCH_2, DOOR.x + (DOOR.w * 3) / 4, p2On);
+      portal(s, reduced);
+      pad(SWITCH_1, p1On, reduced, s.t);
+      pad(SWITCH_2, p2On, reduced, s.t);
 
       // Depth: whoever is lower on screen is drawn last.
       const actors = [
@@ -93,6 +179,8 @@ export function createGateRenderer(canvas: HTMLCanvasElement, images: SpriteImag
         { y: s.p2.y, draw: () => manu(s) },
       ].sort((a, b) => a.y - b.y);
       actors.forEach((a) => a.draw());
+      padLabel(SWITCH_1, p1On, 'P1');
+      padLabel(SWITCH_2, p2On, 'P2');
       gradeFrame(ctx, GATE_ARENA.w, GATE_ARENA.h, {
         wash: 'rgb(255 170 120)',
         washAlpha: 0.14,
@@ -108,39 +196,58 @@ export function createGateRenderer(canvas: HTMLCanvasElement, images: SpriteImag
     c.height = canvas.height;
     const g = c.getContext('2d')!;
     g.setTransform(scale, 0, 0, scale, 0, 0);
+    // World: the sunset seafront, top-aligned so sky, bay and Cimavilla sit
+    // above the horizon line of the play area.
     if (seafront) {
-      const k = Math.max(GATE_ARENA.w / seafront.width, GATE_ARENA.h / seafront.height);
+      const k = GATE_ARENA.w / seafront.width;
       g.imageSmoothingEnabled = true;
-      g.drawImage(
-        seafront,
-        (GATE_ARENA.w - seafront.width * k) / 2,
-        GATE_ARENA.h - seafront.height * k,
-        seafront.width * k,
-        seafront.height * k,
-      );
+      g.drawImage(seafront, 0, -8, seafront.width * k, seafront.height * k);
       g.imageSmoothingEnabled = false;
     } else {
       g.fillStyle = C.bg;
       g.fillRect(0, 0, GATE_ARENA.w, GATE_ARENA.h);
     }
-    // Near foreground falls into shade so the system floor reads first.
-    const shade = g.createLinearGradient(0, FLOOR.y - 40, 0, GATE_ARENA.h);
-    shade.addColorStop(0, 'rgb(11 22 38 / 0)');
-    shade.addColorStop(1, 'rgb(11 22 38 / 0.6)');
-    g.fillStyle = shade;
-    g.fillRect(0, 0, GATE_ARENA.w, GATE_ARENA.h);
-    // The system floor: navy glass over the promenade.
-    g.fillStyle = 'rgb(14 26 44 / 0.84)';
-    g.fillRect(FLOOR.x - 20, FLOOR.y - 10, FLOOR.w + 40, FLOOR.h + 30);
-    g.strokeStyle = C.grid;
+    // Ground plane: from the horizon down, the photo's blurred foreground
+    // fades into night-blue glass so the players stand on a floor.
+    const top = FLOOR.y - 14;
+    const ground = g.createLinearGradient(0, top - 16, 0, GATE_ARENA.h);
+    ground.addColorStop(0, 'rgb(12 22 40 / 0)');
+    ground.addColorStop(0.1, 'rgb(12 22 40 / 0.82)');
+    ground.addColorStop(0.35, 'rgb(10 18 34 / 0.92)');
+    ground.addColorStop(1, 'rgb(8 14 28 / 0.96)');
+    g.fillStyle = ground;
+    g.fillRect(0, top - 16, GATE_ARENA.w, GATE_ARENA.h - top + 16);
+    // Warm spill of the sunset on the floor, under the portal.
+    const spill = g.createRadialGradient(320, top + 10, 0, 320, top + 10, 260);
+    spill.addColorStop(0, 'rgb(255 170 110 / 0.22)');
+    spill.addColorStop(1, 'rgb(255 170 110 / 0)');
+    g.fillStyle = spill;
+    g.fillRect(0, top, GATE_ARENA.w, GATE_ARENA.h - top);
+    // Perspective grid: reads as ground, not as a dev panel.
+    g.save();
     g.beginPath();
-    for (let x = FLOOR.x; x <= FLOOR.x + FLOOR.w; x += 40) {
-      g.moveTo(x + 0.5, FLOOR.y - 10);
-      g.lineTo(x + 0.5, FLOOR.y + FLOOR.h + 20);
+    g.rect(0, top, GATE_ARENA.w, GATE_ARENA.h - top);
+    g.clip();
+    g.strokeStyle = 'rgb(191 238 242 / 0.1)';
+    g.lineWidth = 1;
+    g.beginPath();
+    const vx = 320;
+    const vy = top - 60;
+    for (let i = -10; i <= 10; i++) {
+      const bx = vx + i * 70;
+      g.moveTo(vx + (bx - vx) * ((top - vy) / (GATE_ARENA.h - vy)), top);
+      g.lineTo(bx, GATE_ARENA.h);
+    }
+    for (let d = 1; d < 9; d++) {
+      const y = top + (GATE_ARENA.h - top) * ((d * d) / 81);
+      g.moveTo(0, Math.round(y) + 0.5);
+      g.lineTo(GATE_ARENA.w, Math.round(y) + 0.5);
     }
     g.stroke();
-    g.strokeStyle = C.edge;
-    g.strokeRect(FLOOR.x - 19.5, FLOOR.y - 9.5, FLOOR.w + 39, FLOOR.h + 29);
+    g.restore();
+    // Horizon edge of the play area.
+    g.fillStyle = 'rgb(191 238 242 / 0.4)';
+    g.fillRect(0, top, GATE_ARENA.w, 1);
     return c;
   }
 

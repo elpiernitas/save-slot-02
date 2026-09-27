@@ -11,8 +11,9 @@ import OCCLUDERS from './muralla.occluders.json';
  * are painted in. Colliders keep PLAYER 1 on the sidewalk, so he is always
  * in front of the terrace and the bench and never walks behind them.
  *
- * Sidewalk furniture he CAN walk behind (lamp, board, bollards, bin, gulls)
- * is re-drawn as occluder sprites cut from the same ENV-001 pixels
+ * Sidewalk furniture he CAN walk behind (lamp, board, bollards, bin, gulls,
+ * the flower pot by the bench) is re-drawn as occluder sprites cut from the
+ * same ENV-001 pixels
  * (tools/art/occluders.mjs), placed where they were cut and depth-sorted.
  * PLAYER 1 uses `playerLarge` (CHAR-001 at exact ×2) to match the adults
  * painted in the reference (~100–110 px).
@@ -83,8 +84,10 @@ export const MURALLA_MAP: WorldMap = {
   timeOfDay: 'afternoon',
   background: 'background',
   playerSprite: 'playerLarge',
-  // FG-001 is pending; the old placeholder foreground would duplicate the
-  // painted foliage, so no foreground layer is drawn until it arrives.
+  // No separate foreground layer (RC-FIX-03 audit): the out-of-focus bushes
+  // painted into ENV-001 already give depth, and their colliders keep PLAYER 1
+  // from ever standing behind them, so nothing needs to cover him. FG-001 is
+  // not needed for this release candidate.
   widthTiles: MURALLA_W,
   heightTiles: MURALLA_H,
   tiles: TILES,

@@ -1039,3 +1039,34 @@ Implementado según `docs/GAME_05_SPEC.md` y `docs/CITY_CARDS_BIBLE.md`:
 - Randy (perro) no entra: fue recortado del alcance y se excluye de todos los
   recortes. Sin GAME nuevo, sin cambios de jugabilidad, sin merge.
 
+### D-080 · 2026-09-27 · RC-FIX-03: QA visual de la RC (director, 5851103987)
+
+- Congelado: selección de clase, título, La Muralla (fondo + integración de
+  CHAR-001), DESYNC, retrato/sprite de Manu, final, SAVE SLOT y CITY CARDS.
+- Puerta cooperativa: solo presentación. El fondo del paseo queda arriba
+  (cielo, bahía, Cimavilla); desde el horizonte, un plano de suelo navy con
+  rejilla en perspectiva sustituye al panel opaco. La puerta gris pasa a ser
+  un portal con dos mitades que se iluminan con cada señal y una columna de
+  luz al abrirse; los interruptores son anillos en el suelo unidos al portal
+  por líneas de señal; las etiquetas P1/P2 ya no quedan tapadas. Estados,
+  controles y textos sin cambios.
+- La Muralla: el defecto "LA M_URALLA" estaba horneado en ENV-001. Parche
+  mínimo (`tools/art/patch_env_sign.py`): la caja de 40×25 px de la M se
+  sustituye por los píxeles del canon `01_LA_MURALLA_MASTER_CINEMATIC`
+  (mismo encuadre a escala 0,487), igualados en color. 1239 px cambiados,
+  todos dentro de esa caja.
+- Contrato de capas auditado recorriendo todas las posiciones alcanzables:
+  la maceta junto al banco era un obstáculo accesible horneado sin oclusor
+  (PLAYER 1 podía quedar detrás de su follaje). Se añade `occPot`, recortado
+  de ENV-001 como los demás. Terraza, banco con lector, bici y arbustos
+  desenfocados siguen en ENV porque los colliders impiden quedar detrás.
+  FG-001: no necesario para esta RC.
+- Fechas: las tarjetas de miércoles, jueves y domingo ya no muestran lugares
+  (La Muralla, San Lorenzo, Santa Catalina); usan encuadres solo de cielo del
+  atardecer aprobado. Se eliminan `date-wed/thu/sun.png`. El viernes conserva
+  su candado y el texto `MISIÓN PRINCIPAL YA ACTIVA · 18:30 · TEATRO`
+  (castellano, D-077). Lógica de selección intacta.
+- Evidencia de La Muralla corregida: en el paquete anterior, `1920-muralla-a`
+  y los AFTER de La Muralla eran capturas del título (el script capturaba
+  antes de cambiar de escena). Los scripts de QA ahora esperan a la escena.
+

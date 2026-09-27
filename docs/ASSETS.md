@@ -25,10 +25,14 @@ reducida) generados por `python3 tools/art/pack_crops.py <carpeta del pack>`:
 | --- | --- | --- |
 | `seafront.png` | 02_ATMOSPHERE_STYLE/03_TITLE_ATMOSPHERE (0,500)-(712,941) | Fondo de reveal, puerta, fecha, final, SAVE SLOT |
 | `polaroid.png` | 03_UI_FLOW/02_GAME_FLOW_COLLAGE panel 4, sin Randy | Foto del final y del SAVE SLOT |
-| `date-wed/thu/fri/sun.png` | 02_GAME_FLOW_COLLAGE panel 3 (DATE PORTALS) | Arte de cada carta de fecha |
+| `date-fri.png` | 02_GAME_FLOW_COLLAGE panel 3 (DATE PORTALS, viernes) | Carta del viernes (candado); las demás fechas usan solo el cielo de `seafront.png` (D-080) |
 | `class-player1/warrior/tank/healer/sky.png` | 03_UI_FLOW/04_CLASS_SELECT_TARGET | Selección de clase |
 | `manu.png` | 04_CHARACTERS/04_MANU_SPRITE_SHEET_ART_TARGET → 120×240 (40×60) | CHAR-003, sprite de Manu |
 | `manu-portrait.png` | 01_PRIMARY_CANON/09_MASTER_CONCEPT_SHEET | CHAR-004, retrato del reveal |
+
+ENV-001 (`background.png`) lleva un parche mínimo en la M del rótulo con
+píxeles del canon (`tools/art/patch_env_sign.py`, D-080). `occPot.png` es un
+oclusor más recortado de ENV-001 (`tools/art/occluders.mjs`).
 
 Iluminación de sprites en runtime: `src/game/render/compositing.ts` (no genera
 arte, solo luz/sombra/grade sobre los sprites aprobados).
