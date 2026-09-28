@@ -1229,3 +1229,27 @@ esquiva al recibir el golpe puede hacer lo mismo.
   cursor) y corregido con ella; tests unitarios con reloj inyectado y
   `tools/qa/boss-held-key.mjs` (flecha mantenida + flecha nueva al perder +
   pulsación deliberada 0,5 s después, que sí navega).
+
+### D-087 · 2026-09-28 · Tarjeta de nivel: cierre automático idempotente
+
+La QA pública (partida a ritmo humano, sin pulsar ENTER en las tarjetas)
+encontró un bloqueo: la tarjeta «NIVEL 02 — LA RUTA PERDIDA» se quedaba en
+pantalla para siempre, con el mundo en pausa; ENTER y el clic no respondían y
+solo recargar la página devolvía el control. Se reprodujo en 4 de 10 partidas
+limpias en la URL pública (2 de 6 ensayos dedicados + 2 de 4 partidas a ritmo
+humano); nunca si se pulsaba ENTER antes de los 2,6 s.
+
+- Causa: al cerrarse sola (temporizador, actualización no discreta),
+  `closeCard()` retiraba la tarjeta, guardaba la marca de vista y reanudaba en
+  el siguiente `requestAnimationFrame`. Ese fotograma podía llegar antes de que
+  React confirmara el render: `resume()` leía un guardado sin la marca, volvía
+  a pedir la misma tarjeta y React reutilizaba la instancia (ya «disparada» y
+  sin temporizador), que no se cerraba nunca más.
+- Corrección: `chapterCardToShow(save, justClosed)` nunca devuelve el nivel que
+  se acaba de cerrar; `closeCard()` es idempotente (ENTER, clic y temporizador
+  pueden coincidir); la reanudación se hace en un efecto tras confirmarse el
+  cierre, no en un fotograma suelto; y cada tarjeta monta con `key` por nivel.
+  Sin cambios de historia, niveles, tiempos ni arte: la tarjeta sigue
+  cerrándose sola a los 2,6 s.
+- Regresión: tests unitarios del guardado «viejo» tras cerrar (NIVEL 01–04) y
+  QA pública del tramo de tarjetas sin pulsar ENTER.

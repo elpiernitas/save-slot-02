@@ -19,7 +19,13 @@ import {
   SERVICE_BLOCKED,
 } from '../../content/dialogue/route';
 import { ChapterCard, ChapterHud } from '../../progress/ChapterCard';
-import { chapterCardDue, chapterLevel, chapterSeenFlag, type Level } from '../../progress/chapters';
+import {
+  chapterCardDue,
+  chapterCardToShow,
+  chapterLevel,
+  chapterSeenFlag,
+  type Level,
+} from '../../progress/chapters';
 import { SeagullProtocol } from '../../puzzles/seagullProtocol/SeagullProtocol';
 import type { DialogueScript } from '../../dialogue/types';
 import { newAcquisitions, type Acquisition } from '../../inventory/cards';
@@ -116,9 +122,11 @@ export function OverworldScene(_: SceneProps) {
   const engineRef = useRef<WorldEngine | null>(null);
   const [target, setTarget] = useState<Interactable | null>(null);
   /** Chapter title card (NIVEL 0N) the first time a level is reached. */
-  const [card, setCard] = useState<Level | null>(() =>
-    chapterCardDue(save) ? chapterLevel(save) : null,
-  );
+  const [card, setCard] = useState<Level | null>(() => chapterCardToShow(save));
+  /** Level whose card was last dismissed: never shown again in this visit (D-087). */
+  const closedCardRef = useRef<number | null>(null);
+  /** Bumped when a card closes: resume once that close has been committed. */
+  const [cardClosed, setCardClosed] = useState(0);
   const [dialogue, setDialogue] = useState<{ script: DialogueScript; key: number } | null>(() =>
     save.flags[MURALLA_FLAGS.arrived] || chapterCardDue(save)
       ? null
@@ -189,22 +197,36 @@ export function OverworldScene(_: SceneProps) {
   const resume = () => {
     const next = nextStepRef.current;
     nextStepRef.current = null;
+    const due = chapterCardToShow(live.current.save, closedCardRef.current);
     if (next) next();
-    else if (chapterCardDue(live.current.save)) {
+    else if (due) {
       engineRef.current?.setPaused(true);
-      setCard(chapterLevel(live.current.save));
+      setCard(due);
     } else if (routeUpdateDue(live.current.save))
       openDialogue(ROUTE_UPDATE, () => setOverlay('pulse'));
     else engineRef.current?.setPaused(false, performance.now(), RESUME_COOLDOWN_MS);
   };
   const closeCard = () => {
-    const shown = card;
+    const shown = live.current.card;
+    // Idempotent: ENTER, a click and the card's own timer may all land.
+    if (!shown || closedCardRef.current === shown.n) return;
+    closedCardRef.current = shown.n;
     setCard(null);
-    if (shown) dispatch({ type: 'flag/set', flag: chapterSeenFlag(shown.n), value: true });
+    dispatch({ type: 'flag/set', flag: chapterSeenFlag(shown.n), value: true });
     // First visit: the arrival line follows the NIVEL 01 card.
     if (!live.current.save.flags[MURALLA_FLAGS.arrived]) openDialogue(MURALLA_ARRIVAL);
-    else requestAnimationFrame(resume);
+    // Resume after this close is committed, not on the next animation frame:
+    // a timer-driven close may render after that frame, and resume() would
+    // then read a save without the seen flag and show the same card again.
+    else setCardClosed((n) => n + 1);
   };
+  const resumeRef = useRef(resume);
+  useLayoutEffect(() => {
+    resumeRef.current = resume;
+  });
+  useEffect(() => {
+    if (cardClosed) resumeRef.current();
+  }, [cardClosed]);
   const finishSeagull = (outcome: 'cleared' | 'bored', attempts: number) => {
     setOverlay(null);
     dispatch({ type: 'puzzle/complete', puzzle: SEAGULL_ID, attempts });
@@ -444,7 +466,7 @@ export function OverworldScene(_: SceneProps) {
       {overlay === 'seagull' && (
         <SeagullProtocol onComplete={finishSeagull} onLeave={closeOverlay} />
       )}
-      {card && <ChapterCard level={card} onDone={closeCard} />}
+      {card && <ChapterCard key={card.n} level={card} onDone={closeCard} />}
       {overlay === 'terminal' && (
         <SyncTerminal onComplete={finishTerminal} onLeave={closeOverlay} />
       )}

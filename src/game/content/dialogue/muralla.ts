@@ -221,16 +221,14 @@ export const MURALLA_SCRIPTS: Readonly<Record<string, DialogueScript>> = {
           { kind: 'giveCard', card: 'city.001.la_muralla' },
         ],
         options: [
-          { id: 'coffee', label: 'Un café.', next: 'coffee' },
+          { id: 'coffee', label: 'Un tinto de verano.', next: 'coffee' },
           { id: 'table', label: '¿Hay mesa?', next: 'table' },
           { id: 'looking', label: 'Solo estoy mirando.', next: 'looking' },
         ],
       },
-      coffee: line(
-        'coffee',
-        ['Marchando.[pause] Bueno, cuando la cafetera vuelva de su descanso, que va por libre.'],
-        { speaker: 'waitress' },
-      ),
+      coffee: line('coffee', ['Marchando.[pause] Con hielo y limón, que la tarde pide terraza.'], {
+        speaker: 'waitress',
+      }),
       table: line(
         'table',
         ['Ahora mismo, todo lleno.[pause] Si alguien se levanta, eres el primero.'],
