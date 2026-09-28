@@ -12,6 +12,7 @@ import { ChapterCard } from '../../progress/ChapterCard';
 import { chapterSeenFlag, LEVELS } from '../../progress/chapters';
 import { loadSpriteImages, type SpriteImages } from '../../world/art/assets';
 import { markFreshDefeat } from '../story';
+import { stability } from './entity';
 import { createDesyncRenderer } from './render';
 import {
   advanceBoss,
@@ -69,6 +70,8 @@ interface Hud {
   prompt: string | null;
   progress: string;
   phase3: boolean;
+  /** Stabilised node commits (0–9): how much of the process is fixed. */
+  commits: number;
 }
 
 function hudOf(s: DesyncState): Hud {
@@ -85,6 +88,7 @@ function hudOf(s: DesyncState): Hud {
     prompt,
     progress,
     phase3: s.phase === 'missing' && !s.banner,
+    commits: Math.round(stability(s) * 9),
   };
 }
 
@@ -159,11 +163,14 @@ export function DesyncBoss(_: SceneProps) {
     dispatch({ type: 'boss/attempt' });
   }, [stage, attemptKey, dispatch]);
 
+  /** When the process started collapsing (defeat), for the end animation. */
+  const collapseFrom = useRef<number | null>(null);
   const onComplete = useCallback(() => {
     // Persist the defeat before anything else: a refresh from here on
     // routes to the reveal and never replays the boss.
     dispatch({ type: 'boss/defeat' });
     markFreshDefeat();
+    collapseFrom.current = performance.now();
     services.audio.playSfx('bossDefeat');
     setStage({ kind: 'terminated' });
   }, [dispatch, services.audio]);
@@ -222,7 +229,10 @@ export function DesyncBoss(_: SceneProps) {
         promptRef.current.style.left = `${(s.player.x / ARENA.w) * 100}%`;
         promptRef.current.style.top = `${((s.player.y - 66) / ARENA.h) * 100}%`;
       }
-      renderer.draw(s, walkedRef.current, live.current.reduced);
+      const from = collapseFrom.current;
+      const collapse =
+        from === null ? 0 : live.current.reduced ? 1 : Math.min(1, (now - from) / 1400);
+      renderer.draw(s, walkedRef.current, live.current.reduced, collapse);
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
@@ -285,6 +295,14 @@ export function DesyncBoss(_: SceneProps) {
                 ))}
               </span>
             </span>
+            <span className="desync__boss">
+              DESYNC PROCESS
+              <span className="desync__boss-bar" aria-label={`Estabilizado ${hud.commits} de 9`}>
+                {Array.from({ length: 9 }, (_, i) => (
+                  <i key={i} data-on={i >= hud.commits ? '' : undefined} />
+                ))}
+              </span>
+            </span>
             <span className="desync__phase">{PHASE_LABEL[hud.phase]}</span>
             {hud.progress && <span className="desync__progress">{hud.progress}</span>}
             {assist && <span className="desync__assist">ASISTIDO</span>}
@@ -334,7 +352,7 @@ export function DesyncBoss(_: SceneProps) {
       )}
 
       {stage.kind === 'terminated' && (
-        <div className="desync__card">
+        <div className="desync__card desync__card--end">
           <p className="desync__title">PROCESO DESYNC — TERMINADO</p>
         </div>
       )}
@@ -367,6 +385,7 @@ function FailedPanel({ onRetry, onTitle }: { onRetry: () => void; onTitle: () =>
   const menu = useMenu({
     items: FAILED_ITEMS,
     priority: INPUT_PRIORITY.panel,
+    ignoreHeldKeys: true,
     onConfirm: (item) => (item.id === 'title' ? onTitle() : onRetry()),
   });
   return (
@@ -394,6 +413,7 @@ function AssistPanel({ onEnable, onDecline }: { onEnable: () => void; onDecline:
   const menu = useMenu({
     items: ASSIST_ITEMS,
     priority: INPUT_PRIORITY.panel,
+    ignoreHeldKeys: true,
     onConfirm: (item) => (item.id === 'enable' ? onEnable() : onDecline()),
     onCancel: onDecline,
   });

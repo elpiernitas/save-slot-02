@@ -6,11 +6,19 @@
  * player walks to each beacon and syncs it. A wrong beacon resets progress
  * and counts an attempt (runtime only). Hints never shame and only appear
  * after failures.
+ *
+ * Pacing pass (production audit): the route is calibrated in two rounds —
+ * the original three beacons, then a longer order over the same three
+ * objects that sends PLAYER 1 back and forth across the square.
  */
 export type BeaconSymbol = 'cup' | 'lamp' | 'bird';
 
 export interface BeaconState {
+  /** The order being calibrated now (the current round). */
   sequence: readonly BeaconSymbol[];
+  /** 0-based round and every round's order. */
+  round: number;
+  rounds: readonly (readonly BeaconSymbol[])[];
   /** How many beacons of the sequence are synced (0–3). */
   progress: number;
   /** Runtime attempts: 1 + wrong beacons so far. Stored only on completion. */
@@ -25,12 +33,35 @@ export const SYMBOL_LABEL: Readonly<Record<BeaconSymbol, string>> = {
 };
 
 export const ROUTE_SEQUENCE: readonly BeaconSymbol[] = ['cup', 'lamp', 'bird'];
+/** Second round: same objects, longer order, crossing the square. */
+export const ROUTE_SEQUENCE_2: readonly BeaconSymbol[] = ['bird', 'cup', 'lamp', 'cup', 'bird'];
+export const ROUTE_ROUNDS: readonly (readonly BeaconSymbol[])[] = [
+  ROUTE_SEQUENCE,
+  ROUTE_SEQUENCE_2,
+];
 
-export function initialBeacons(sequence: readonly BeaconSymbol[] = ROUTE_SEQUENCE): BeaconState {
-  return { sequence, progress: 0, attempts: 1, solved: false };
+/**
+ * Recalibration (D-085): one mandatory round after the terminal, before the
+ * boss. Same three objects, its own six-step order.
+ */
+export const RECAL_SEQUENCE: readonly BeaconSymbol[] = [
+  'lamp',
+  'bird',
+  'cup',
+  'bird',
+  'lamp',
+  'cup',
+];
+export const RECAL_ROUNDS: readonly (readonly BeaconSymbol[])[] = [RECAL_SEQUENCE];
+
+export function initialBeacons(
+  rounds: readonly (readonly BeaconSymbol[])[] = ROUTE_ROUNDS,
+): BeaconState {
+  return { sequence: rounds[0]!, round: 0, rounds, progress: 0, attempts: 1, solved: false };
 }
 
-export type BeaconOutcome = 'synced' | 'rejected' | 'solved' | 'ignored';
+/** `round` = a round other than the last was completed; the next order starts. */
+export type BeaconOutcome = 'synced' | 'rejected' | 'round' | 'solved' | 'ignored';
 
 export function activateBeacon(
   state: BeaconState,
@@ -41,8 +72,15 @@ export function activateBeacon(
     return { state: { ...state, progress: 0, attempts: state.attempts + 1 }, outcome: 'rejected' };
   }
   const progress = state.progress + 1;
-  const solved = progress === state.sequence.length;
-  return { state: { ...state, progress, solved }, outcome: solved ? 'solved' : 'synced' };
+  if (progress < state.sequence.length) return { state: { ...state, progress }, outcome: 'synced' };
+  const next = state.rounds[state.round + 1];
+  if (next) {
+    return {
+      state: { ...state, round: state.round + 1, sequence: next, progress: 0, attempts: 1 },
+      outcome: 'round',
+    };
+  }
+  return { state: { ...state, progress, solved: true }, outcome: 'solved' };
 }
 
 /** 0: no hint · 1: first symbol · 2: the whole order (never before two misses). */

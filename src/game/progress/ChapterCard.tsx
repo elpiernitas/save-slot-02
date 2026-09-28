@@ -76,16 +76,24 @@ export function Pips({ current }: { current: number }) {
   );
 }
 
-/** Persistent status line: NIVEL 0N · TITLE, pips, and the current goal. */
-export function ChapterHud({ level }: { level: Level }) {
+/**
+ * Persistent status line: NIVEL 0N · TITLE, pips, and the current goal.
+ * `compact` drops the goal line while the route HUD below states the task,
+ * so the stack stays short and clear of the world's beacon marks.
+ */
+export function ChapterHud({ level, compact = false }: { level: Level; compact?: boolean }) {
   return (
-    <div className="chapter-hud" aria-label={`${levelLabel(level.n)}: ${level.title}`}>
+    <div
+      className="chapter-hud"
+      data-compact={compact || undefined}
+      aria-label={`${levelLabel(level.n)}: ${level.title}${compact ? `. ${level.objective}` : ''}`}
+    >
       <p className="chapter-hud__head">
         <span className="chapter-hud__level">{levelLabel(level.n)}</span>
         <span>{level.title}</span>
         <Pips current={level.n} />
       </p>
-      <p className="chapter-hud__goal">{level.objective}</p>
+      {!compact && <p className="chapter-hud__goal">{level.objective}</p>}
     </div>
   );
 }

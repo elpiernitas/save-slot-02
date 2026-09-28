@@ -85,17 +85,23 @@
 }
 
 .chapter-hud {
-  position: absolute;
-  top: calc(var(--px) * 6);
-  right: calc(var(--px) * 8);
   display: grid;
   gap: var(--px);
-  max-width: calc(var(--px) * 280);
+  max-width: calc(var(--px) * 168);
   padding: calc(var(--px) * 2) calc(var(--px) * 5);
-  text-align: right;
-  background: rgb(14 26 44 / 0.86);
+  text-align: left;
+  background: rgb(14 26 44 / 0.78);
   border: var(--px) solid var(--color-border-dim);
-  border-right: calc(var(--px) * 2) solid var(--color-select);
+  border-left: calc(var(--px) * 2) solid var(--color-select);
+}
+
+.chapter-hud[data-compact] {
+  max-width: none;
+}
+
+.chapter-hud[data-compact] .chapter-hud__head {
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .chapter-hud p {
@@ -104,8 +110,8 @@
 
 .chapter-hud__head {
   display: flex;
-  white-space: nowrap;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   align-items: center;
   gap: calc(var(--px) * 4);
   font-size: var(--text-xs);

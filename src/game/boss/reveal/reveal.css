@@ -141,13 +141,15 @@
 }
 
 .reveal__end {
+  /* Low on screen, so the open portal stays visible above it. */
   position: absolute;
   inset: 0;
   display: grid;
-  place-content: center;
+  align-content: end;
   gap: calc(var(--px) * 4);
+  padding-bottom: calc(var(--px) * 36);
   text-align: center;
-  background: rgb(11 22 38 / 0.72);
+  background: linear-gradient(rgb(11 22 38 / 0), rgb(11 22 38 / 0) 55%, rgb(11 22 38 / 0.85));
 }
 
 .reveal__end p {

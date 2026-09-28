@@ -29,3 +29,25 @@ export function moveSelection(
   }
   return current;
 }
+
+/** Input ignored right after a mid-action menu opens (a dodge in flight). */
+export const MENU_GUARD_MS = 350;
+
+/**
+ * Gate for menus that open mid-action (boss defeat, assist offer). Nothing
+ * that belongs to the fight may move or confirm them:
+ *  - for `guardMs` after opening, every input is ignored (a new direction
+ *    pressed while dodging at the moment of the hit);
+ *  - after that, a key still held from before only sends auto-repeats, which
+ *    stay ignored until the first fresh (non-repeat) press. From then on,
+ *    holding a key scrolls as usual.
+ */
+export function createFreshInputGate(guardMs = 0, now: () => number = () => performance.now()) {
+  const openedAt = now();
+  let open = false;
+  return (repeat: boolean): boolean => {
+    if (now() - openedAt < guardMs) return false;
+    if (!repeat) open = true;
+    return open;
+  };
+}

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { INPUT_PRIORITY, InputRouter } from './inputRouter';
 import { inputFromKey, type KeyLike } from './keymap';
-import { firstEnabledIndex, moveSelection } from './menu';
+import { createFreshInputGate, firstEnabledIndex, MENU_GUARD_MS, moveSelection } from './menu';
 
 const key = (code: string, extra: Partial<KeyLike> = {}): KeyLike => ({
   code,
@@ -156,5 +156,64 @@ describe('world input layer', () => {
     expect(dialogue).toHaveBeenCalled();
     expect(world).not.toHaveBeenCalled();
     expect(router.isTop(world)).toBe(false);
+  });
+});
+
+describe('fresh input gate (boss defeat menu regression)', () => {
+  const items = [{ disabled: false }, { disabled: false }]; // REINTENTAR, VOLVER AL TÍTULO
+
+  /** Replays key events through the gate the way useMenu does. */
+  function replay(events: { input: 'up' | 'down' | 'confirm'; repeat: boolean }[]) {
+    const fresh = createFreshInputGate();
+    let selected = firstEnabledIndex(items);
+    let confirmed: number | null = null;
+    for (const { input, repeat } of events) {
+      if (!fresh(repeat)) continue;
+      if (input === 'confirm') confirmed ??= selected;
+      else selected = moveSelection(items, selected, input === 'up' ? -1 : 1);
+    }
+    return { selected, confirmed };
+  }
+
+  it('opens on REINTENTAR and ignores a direction held from the fight', () => {
+    const held = Array.from({ length: 12 }, () => ({ input: 'down' as const, repeat: true }));
+    expect(replay(held)).toEqual({ selected: 0, confirmed: null });
+    expect(replay([...held, { input: 'confirm', repeat: false }])).toEqual({
+      selected: 0,
+      confirmed: 0,
+    });
+  });
+
+  it('ignores a held confirm too', () => {
+    expect(replay([{ input: 'confirm', repeat: true }]).confirmed).toBeNull();
+  });
+
+  it('ignores even a fresh press right after opening (a dodge at the moment of the hit)', () => {
+    let t = 1000;
+    const fresh = createFreshInputGate(MENU_GUARD_MS, () => t);
+    t += 16; // same frame as the defeat: a new arrow
+    expect(fresh(false)).toBe(false);
+    t += MENU_GUARD_MS - 50;
+    expect(fresh(false)).toBe(false);
+    t += 60; // guard over: a deliberate press works
+    expect(fresh(false)).toBe(true);
+  });
+
+  it('after the guard, a key still held from the fight keeps being ignored', () => {
+    let t = 0;
+    const fresh = createFreshInputGate(MENU_GUARD_MS, () => t);
+    t = MENU_GUARD_MS + 500;
+    expect(fresh(true)).toBe(false);
+    expect(fresh(false)).toBe(true);
+  });
+
+  it('navigates normally after a fresh press, including held repeats', () => {
+    expect(
+      replay([
+        { input: 'down', repeat: false },
+        { input: 'down', repeat: true },
+      ]).selected,
+    ).toBe(0); // wraps: 0 → 1 → 0
+    expect(replay([{ input: 'down', repeat: false }]).selected).toBe(1);
   });
 });

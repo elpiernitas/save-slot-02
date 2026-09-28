@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TERMINAL_ID } from '../puzzles/chapter';
+import { RECAL_ID, TERMINAL_ID } from '../puzzles/chapter';
 import { continueTarget } from '../scenes/flow';
 import { evaluateCondition } from '../state/conditions';
 import { gameReducer } from '../state/gameReducer';
@@ -43,7 +43,13 @@ describe('story routing (refresh never replays a finished stage)', () => {
     attempts: 1,
     at: T1,
   });
-  const defeated = gameReducer(terminal, { type: 'boss/defeat', at: T1 });
+  const recal = gameReducer(terminal, {
+    type: 'puzzle/complete',
+    puzzle: RECAL_ID,
+    attempts: 1,
+    at: T1,
+  });
+  const defeated = gameReducer(recal, { type: 'boss/defeat', at: T1 });
   const found = gameReducer(defeated, {
     type: 'flag/set',
     flag: STORY_FLAGS.player2Found,
@@ -59,7 +65,11 @@ describe('story routing (refresh never replays a finished stage)', () => {
 
   it('maps each stage to its scene', () => {
     expect(storyScene(base)).toBeNull();
-    expect(storyScene(terminal)).toBe('boss');
+    // D-085: terminal done → recalibrate in La Muralla first (overworld).
+    expect(storyScene(terminal)).toBeNull();
+    expect(storyScene(recal)).toBe('boss');
+    // A save that had already entered the fight keeps its boss.
+    expect(storyScene(gameReducer(terminal, { type: 'boss/attempt', at: T1 }))).toBe('boss');
     expect(storyScene(defeated)).toBe('player2Reveal');
     expect(storyScene(found)).toBe('player2Reveal');
     expect(storyScene(gate)).toBe('dateGate');

@@ -1130,3 +1130,102 @@ esquema (`SAVE_VERSION` 2), sin tocar la RC visual ni las fechas.
 - La rama paralela `codex/expansion-prep` cubre lo mismo; no se mezcla
   (solapamiento total), esta implementación es la que va en el PR.
 
+### D-083 · 2026-09-27 · Auditoría de producción: boss visible, portal, ritmo y UX
+
+Director (PR #1, 5855781053 / 5855838037), sobre la versión publicada.
+Presentación y ritmo; mecánica del boss, lógica del gate, fechas, diálogos
+existentes y guardado sin cambios. PR #2 (sin merge).
+
+- Boss: `boss/desync/entity.ts` dibuja DESYNC PROCESS como entidad de
+  sistema en el núcleo (marcos desalineados y duplicados, fragmentos de
+  ventana, cables a los nodos que se enderezan al estabilizarlos, ataques
+  atados al cuerpo, destello por estabilización, colapso al terminar). HUD:
+  placa `DESYNC PROCESS` con 9 celdas de desincronía restante. Sin cara ni
+  criatura.
+- Portal cooperativo: arco sobre el horizonte, dos mitades de cristal P1
+  (cian) / P2 (dorado) con el atardecer visible, columna de luz al abrirse,
+  suelo opaco (sin objetos de la foto flotando), texto final abajo.
+- Reveal de Manu: verificado; el retrato con gafas aparece en el beat del
+  nombre (`RANURA DE JUGADOR 02`). Sin cambios.
+- Ritmo: balizas en dos rondas (3 + 5 pasos sobre los mismos objetos), gaviota
+  con segunda oleada (10 picados), terminal con 4 piezas en 3×2. Sin esperas
+  automáticas ni campaña nueva.
+- UX: `MOVIMIENTO REDUCIDO` (SÍ = reducido, mismos valores y orden) con
+  `← → CAMBIAR`; HUD de nivel arriba a la izquierda (no tapa el rótulo);
+  gaviota visible posada y en picado.
+
+
+### D-084 · 2026-09-27 · Revisión independiente del PR #2: menú de derrota, evidencia y duración
+
+Director (PR #2, 5856358926 / 5856612756 / 5856774952). Sin merge.
+
+- Menú de derrota y de asistencia del jefe: `useMenu({ ignoreHeldKeys })`
+  ignora las auto-repeticiones de una tecla mantenida desde antes de abrirse
+  (`createFreshInputGate`), así que abren siempre en `REINTENTAR` / `ACTIVAR`.
+  Test unitario + `tools/qa/boss-held-key.mjs`. Mecánica del jefe sin cambios.
+- Zoom del retrato de Manu: recortado del mismo fotograma que la captura
+  completa (antes se capturaba después y salía el siguiente beat).
+- Duración: partida a ritmo de lectura (`tools/qa/playthrough-paced.mjs`)
+  = 840 s netos (14,0 min), con ventajas del bot que acortan el tiempo. No
+  se considera «claramente por debajo» de 15 min: no se añade tramo nuevo
+  (historia congelada); queda propuesto en el PR para decisión del director.
+- Matriz de 6 recorridos (1366/1440/1920 × reducido/normal) documentada en
+  `docs/art/review/audit/README.md`.
+
+### D-085 · 2026-09-27 · Tramo de duración: recalibración de ruta antes del jefe
+
+Director (PR #2, 5858152968): implementar el tramo propuesto en D-084.
+
+- Tras el terminal (`system.player_sync`), el error de recuperación desordena
+  la ruta: antes de DESYNC PROCESS hay una **recalibración obligatoria** en La
+  Muralla con el sistema `routeBeacons` existente (mismos tres objetos, mismas
+  reglas, pulso, HUD y marcas), con su propia secuencia de 6 pasos
+  (`RECAL_SEQUENCE`). Al completarla se registra `route.recalibration` y se
+  entra al jefe.
+- Sigue siendo el **NIVEL 04** con otro objetivo («Recalibra la ruta…»): no se
+  renumeran los niveles ni cambian las tarjetas del jefe o de PLAYER 2.
+- No bloquea: pistas tras fallos (primer símbolo, luego la secuencia entera) y
+  la puerta del nº 12 repite el patrón.
+- **Recarga a mitad:** vuelve a La Muralla con la recalibración pendiente, pero
+  el progreso parcial dentro de la secuencia **no se guarda**: la ronda empieza
+  desde cero, igual que las balizas originales. Solo se guarda la ronda
+  completada (`puzzles['route.recalibration']`).
+- Guardados anteriores: si ya habían entrado al jefe (`boss.attempts > 0` o
+  derrotado), no deben la recalibración (`recalibrationDone`). Caso límite: un
+  guardado de antes de esta versión con el terminal hecho y la última escena
+  en el jefe (sin ningún intento) también continúa al jefe; con el flujo nuevo
+  ese estado no se puede producir, porque solo se entra al jefe tras recalibrar.
+- Una recalibración completada no se repite.
+- Nuevo: 2 diálogos (`RECAL_START`, `RECAL_DONE`); ningún diálogo existente
+  cambia. `SAVE_VERSION` 2 sin cambios (una entrada más en `puzzles`).
+- HUD: la tarjeta de nivel y el HUD de ruta se apilan en
+  `.overworld__objectives` (antes podían solaparse en el NIVEL 02). La pila
+  empieza bajo la línea del rótulo `LA MURALLA` (con la cámara desplazada a la
+  derecha, junto al nº 12, lo tapaba) y, mientras se calibra, la tarjeta de
+  nivel ocupa una sola línea sin el objetivo (lo indica el HUD de ruta), para
+  no tocar las marcas de las balizas.
+- Duración a ritmo de lectura (1920, normal): 840 s → 987,5 s netos. Tramo
+  terminal → jefe: 14 s → 151 s (≈ +134 s atribuibles a la recalibración,
+  descontando ≈ 3 s de una recarga de QA). El jefe necesitó un tercer intento
+  en esa partida: 128 s → 174 s (≈ +46 s). El resto, ≈ −33 s de variación
+  entre partidas.
+- Segunda medición sobre el código final (`fbc01a6`, tras D-086): 1007,0 s
+  netos; terminal → jefe 149 s (≈ +132 s de recalibración); jefe 149 s con 3
+  intentos.
+
+### D-086 · 2026-09-27 · Menú de derrota: guarda breve tras abrirse
+
+La matriz final de D-085 encontró una variante del fallo de D-084: el bot
+pulsó una flecha **nueva** (no mantenida) justo en el instante de la derrota,
+mientras esquivaba, y el menú abrió en `VOLVER AL TÍTULO`. Un jugador que
+esquiva al recibir el golpe puede hacer lo mismo.
+
+- `createFreshInputGate(MENU_GUARD_MS)`: los menús de derrota y de asistencia
+  ignoran toda entrada durante 350 ms tras abrirse; después, las repeticiones
+  de una tecla mantenida siguen ignoradas hasta la primera pulsación nueva.
+  Es protección de interfaz: no cambia el combate, su dificultad ni sus
+  tiempos.
+- Reproducido sin la guarda (`MENU_GUARD_MS = 0`: la flecha al perder mueve el
+  cursor) y corregido con ella; tests unitarios con reloj inyectado y
+  `tools/qa/boss-held-key.mjs` (flecha mantenida + flecha nueva al perder +
+  pulsación deliberada 0,5 s después, que sí navega).

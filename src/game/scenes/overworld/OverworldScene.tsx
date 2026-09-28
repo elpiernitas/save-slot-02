@@ -5,8 +5,11 @@ import {
   beaconSynced,
   ROUTE_FLAGS,
   ROUTE_NODE,
+  ROUTE_ROUND_DONE,
   ROUTE_SOLVED,
   ROUTE_UPDATE,
+  RECAL_DONE,
+  RECAL_START,
   SEAGULL_ALERT,
   SEAGULL_HINT,
   SEAGULL_INTRO,
@@ -34,11 +37,13 @@ import {
   routeUpdateDue,
   SEAGULL_ID,
   TERMINAL_ID,
+  RECAL_ID,
 } from '../../puzzles/chapter';
 import { BeaconIcon } from '../../puzzles/routeBeacons/BeaconIcon';
 import {
   activateBeacon,
   initialBeacons,
+  RECAL_ROUNDS,
   type BeaconSymbol,
 } from '../../puzzles/routeBeacons/routeBeacons';
 import { RouteHud } from '../../puzzles/routeBeacons/RouteHud';
@@ -129,7 +134,9 @@ export function OverworldScene(_: SceneProps) {
   /** GAME-06 overlays: calibration pattern and SYNC TERMINAL (world paused). */
   const [overlay, setOverlay] = useState<'pulse' | 'terminal' | 'seagull' | null>(null);
   /** Route beacons: runtime only; a refresh restarts calibration (completion persists). */
-  const [beacons, setBeacons] = useState(initialBeacons);
+  const [beacons, setBeacons] = useState(() =>
+    initialBeacons(chapterStep(save) === 'recalibrating' ? RECAL_ROUNDS : undefined),
+  );
   const beaconsRef = useRef(beacons);
   /** What happens once the current dialogue (and its rewards) is over. */
   const nextStepRef = useRef<(() => void) | null>(null);
@@ -211,8 +218,13 @@ export function OverworldScene(_: SceneProps) {
   const finishTerminal = () => {
     dispatch({ type: 'puzzle/complete', puzzle: TERMINAL_ID, attempts: 1 });
     dispatch({ type: 'flag/set', flag: ROUTE_FLAGS.player2SignalMissing, value: true });
-    // RECOVERY PROCESS ERROR flows straight into DESYNC PROCESS (GAME-07).
-    dispatch({ type: 'scene/goTo', scene: 'boss' });
+    // D-085: the recovery error scrambles the route; recalibrate it in La
+    // Muralla (same beacons, new order), then DESYNC PROCESS (GAME-07).
+    setOverlay(null);
+    const recal = initialBeacons(RECAL_ROUNDS);
+    beaconsRef.current = recal;
+    setBeacons(recal);
+    openDialogue(RECAL_START, () => setOverlay('pulse'));
   };
   /** World object faced + confirm: chapter logic first, plain dialogue otherwise. */
   const interact = (found: Interactable) => {
@@ -226,15 +238,23 @@ export function OverworldScene(_: SceneProps) {
           services.audio.playSfx(
             outcome === 'solved'
               ? 'puzzleComplete'
-              : outcome === 'rejected'
-                ? 'puzzleWrong'
-                : 'interact',
+              : outcome === 'round'
+                ? 'signalFound'
+                : outcome === 'rejected'
+                  ? 'puzzleWrong'
+                  : 'interact',
           );
         }
-        if (outcome === 'solved') {
+        if (outcome === 'solved' && chapterStep(live.current.save) === 'recalibrating') {
+          dispatch({ type: 'puzzle/complete', puzzle: RECAL_ID, attempts: state.attempts });
+          openDialogue(RECAL_DONE, () => dispatch({ type: 'scene/goTo', scene: 'boss' }));
+        } else if (outcome === 'solved') {
           dispatch({ type: 'puzzle/complete', puzzle: BEACONS_ID, attempts: state.attempts });
           dispatch({ type: 'achievement/unlock', achievement: 'first_sync' });
           openDialogue(ROUTE_SOLVED, () => openDialogue(SEAGULL_ALERT));
+        } else if (outcome === 'round') {
+          // Round 1 synced: show the new, longer order right away.
+          openDialogue(ROUTE_ROUND_DONE, () => setOverlay('pulse'));
         } else if (outcome === 'rejected') openDialogue(BEACON_REJECTED);
         else if (outcome === 'synced')
           openDialogue(beaconSynced(step.symbol, state.progress, state.sequence.length));
@@ -359,8 +379,13 @@ export function OverworldScene(_: SceneProps) {
     rewardPending ||
     overlay !== null ||
     card !== null;
-  const calibrating = chapterStep(save) === 'calibrating';
-  const syncedSymbols = beacons.sequence.slice(0, beacons.progress);
+  const step = chapterStep(save);
+  const calibrating = step === 'calibrating' || step === 'recalibrating';
+  // A mark reads as synced only if it is not needed again in this round.
+  const remaining = beacons.sequence.slice(beacons.progress);
+  const syncedSymbols = beacons.sequence
+    .slice(0, beacons.progress)
+    .filter((sym) => !remaining.includes(sym));
   const showPrompt = target && !busy;
 
   return (
@@ -381,8 +406,14 @@ export function OverworldScene(_: SceneProps) {
           </span>
         </footer>
       )}
-      {!card && overlay === null && <ChapterHud level={chapterLevel(save)} />}
-      {calibrating && <RouteHud state={beacons} />}
+      {/* Top-left, under the location tag, never over the café's sign; the
+          route HUD stacks under the level so the two never overlap. */}
+      <div className="overworld__objectives">
+        {!card && overlay === null && (
+          <ChapterHud level={chapterLevel(save)} compact={calibrating} />
+        )}
+        {calibrating && <RouteHud state={beacons} recal={step === 'recalibrating'} />}
+      </div>
       {calibrating &&
         BEACON_MARKS.map((mark, i) => (
           <div

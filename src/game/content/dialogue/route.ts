@@ -51,6 +51,17 @@ export const BEACON_REJECTED: DialogueScript = {
   },
 };
 
+/** First calibration round done (pacing pass): a second, longer order follows. */
+export const ROUTE_ROUND_DONE: DialogueScript = {
+  id: 'route.roundDone',
+  start: 'a',
+  nodes: {
+    a: sys('a', ['RUTA 1/2 — SINCRONIZADA\nSEÑAL INCOMPLETA: SEGUNDA SECUENCIA'], { next: 'b' }),
+    b: say('b', ['Una ruta no era suficiente.[pause] Claro que no.'], { next: 'c' }),
+    c: sys('c', ['NUEVO PATRÓN DE CALIBRACIÓN']),
+  },
+};
+
 export const ROUTE_SOLVED: DialogueScript = {
   id: 'route.solved',
   start: 'a',
@@ -156,3 +167,29 @@ export const seagullDone = (outcome: 'cleared' | 'bored'): DialogueScript => ({
     c: sys('c', ['INTERFERENCIA RESUELTA\nACCESO DE SERVICIO EN LÍNEA']),
   },
 });
+
+/**
+ * Duration pass (D-085): the recovery error scrambles the route, so it must
+ * be recalibrated in La Muralla before the hostile process is reached.
+ */
+export const RECAL_START: DialogueScript = {
+  id: 'route.recalStart',
+  start: 'a',
+  nodes: {
+    a: sys('a', ['RUTA DESINCRONIZADA\nEL ERROR DE RECUPERACIÓN HA ALTERADO LA RUTA'], {
+      next: 'b',
+    }),
+    b: say('b', ['Arreglar una cosa y romper otra.[pause] Clásico.'], { next: 'c' }),
+    c: sys('c', ['RECALIBRACIÓN OBLIGATORIA — NUEVO PATRÓN']),
+  },
+};
+
+export const RECAL_DONE: DialogueScript = {
+  id: 'route.recalDone',
+  start: 'a',
+  nodes: {
+    a: sys('a', ['RUTA RECALIBRADA — OK\nORIGEN DEL ERROR LOCALIZADO'], { next: 'b' }),
+    b: say('b', ['Ahí está lo que lo desordenaba todo.'], { next: 'c' }),
+    c: sys('c', ['ACCEDIENDO AL PROCESO...']),
+  },
+};

@@ -48,7 +48,11 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
       label: 'VELOCIDAD DEL TEXTO',
       value: optionLabel(TEXT_SPEED_OPTIONS, textSpeed),
     },
-    { id: 'motion', label: 'MOVIMIENTO', value: optionLabel(MOTION_OPTIONS, reducedMotion) },
+    {
+      id: 'motion',
+      label: 'MOVIMIENTO REDUCIDO',
+      value: optionLabel(MOTION_OPTIONS, reducedMotion),
+    },
     { id: 'back', label: 'VOLVER' },
   ];
 
@@ -92,6 +96,14 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
         onConfirm={menu.confirm}
       />
       {notice && <p className="title-settings__notice tone-danger">{notice}</p>}
+      <footer className="title-settings__hints key-hints">
+        <span>
+          <kbd>← →</kbd>CAMBIAR
+        </span>
+        <span>
+          <kbd>ESC</kbd>VOLVER
+        </span>
+      </footer>
     </section>
   );
 }

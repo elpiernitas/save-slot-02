@@ -32,6 +32,41 @@ const H = ROWS * TILE;
 const PAVING = { x: 397, y: 292, w: 133, h: 80 };
 /** The seagull, cut from ENV-001 (east gull occluder art). */
 const GULL = { x: 746, y: 321, w: 37, h: 30 };
+/** The gull's outline inside that crop, so it flies without its patch of pavement. */
+const GULL_OUTLINE: [number, number][] = [
+  [2, 5],
+  [4, 3],
+  [7, 3],
+  [9, 6],
+  [10, 10],
+  [16, 13],
+  [22, 16],
+  [28, 20],
+  [35, 24],
+  [35, 27],
+  [24, 27],
+  [14, 27],
+  [6, 26],
+  [1, 22],
+  [1, 15],
+  [2, 10],
+];
+let gullCutout: HTMLCanvasElement | null = null;
+
+/** Gull cut out of the La Muralla painting along GULL_OUTLINE (built once). */
+function gullSprite(full: CanvasImageSource): HTMLCanvasElement {
+  if (gullCutout) return gullCutout;
+  const c = document.createElement('canvas');
+  c.width = GULL.w;
+  c.height = GULL.h;
+  const g = c.getContext('2d')!;
+  g.beginPath();
+  GULL_OUTLINE.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y)));
+  g.closePath();
+  g.clip();
+  g.drawImage(full, GULL.x, GULL.y, GULL.w, GULL.h, 0, 0, GULL.w, GULL.h);
+  return (gullCutout = c);
+}
 
 /** Failed runs survive leaving the panel (page load only), so the fallback is always reachable. */
 let failuresThisVisit = 0;
@@ -103,7 +138,7 @@ export function SeagullProtocol({ onComplete, onLeave }: SeagullProtocolProps) {
   useEffect(() => {
     if (!import.meta.env.DEV) return;
     const w = window as unknown as { __seagull?: unknown };
-    w.__seagull = { state: () => stateRef.current };
+    w.__seagull = { state: () => stateRef.current, marked: () => markedTiles(stateRef.current) };
     return () => {
       delete w.__seagull;
     };
@@ -222,6 +257,24 @@ function draw(
 
   const marked = markedTiles(s);
   const k = s.phase === 'telegraph' ? Math.min(1, s.t / telegraphMs(s)) : 1;
+  // The seagull itself: perched and watching between dives, circling over
+  // the grid while its shadow warns, then down on the marked tiles.
+  const gull = (x: number, y: number, scale = 1, flip = false) => {
+    if (!full) return;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(flip ? -scale : scale, scale);
+    ctx.drawImage(gullSprite(full), -GULL.w / 2, -GULL.h / 2);
+    ctx.restore();
+  };
+  if (s.phase === 'ready' || s.phase === 'gap' || s.phase === 'hit') gull(W - 26, 20, 0.9, true);
+  if (s.phase === 'telegraph' && marked.length) {
+    const cx = (marked.reduce((a, [c]) => a + c, 0) / marked.length) * TILE + TILE / 2;
+    const cy = (marked.reduce((a, [, r]) => a + r, 0) / marked.length) * TILE + TILE / 2;
+    // Circles high above, drops towards the target as the warning fills.
+    const sway = reduced ? 0 : Math.sin(s.t / 160) * 18;
+    gull(cx + sway * (1 - k), 14 + (cy - 30) * k * k, 0.8 + 0.4 * k, sway < 0);
+  }
   for (const [c, r] of marked) {
     const x = c * TILE;
     const y = r * TILE;
@@ -247,7 +300,7 @@ function draw(
     } else {
       ctx.fillStyle = 'rgb(232 115 90 / 0.55)';
       ctx.fillRect(x + 1, y + 1, TILE - 2, TILE - 2);
-      if (full) ctx.drawImage(full, GULL.x, GULL.y, GULL.w, GULL.h, x + 9, y + 12, GULL.w, GULL.h);
+      if (full) ctx.drawImage(gullSprite(full), x + 9, y + 12);
     }
   }
 

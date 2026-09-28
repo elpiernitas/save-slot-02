@@ -7,6 +7,8 @@ import {
   BEACONS_ID,
   chapterInteraction,
   chapterStep,
+  RECAL_ID,
+  recalibrationDone,
   routeUpdateDue,
   SEAGULL_ID,
   TERMINAL_ID,
@@ -30,9 +32,12 @@ describe('GAME-06 chapter flow in La Muralla', () => {
     expect(chapterStep(beacons)).toBe('seagull');
     const gull = done(beacons, SEAGULL_ID);
     expect(chapterStep(gull)).toBe('serviceAccess');
-    expect(chapterStep(done(gull, TERMINAL_ID))).toBe('done');
-    // A save that finished the terminal before PZ-03 existed stays done.
-    expect(chapterStep(done(beacons, TERMINAL_ID))).toBe('done');
+    // D-085: after the terminal the route is recalibrated, then done.
+    const terminal = done(gull, TERMINAL_ID);
+    expect(chapterStep(terminal)).toBe('recalibrating');
+    expect(chapterStep(done(terminal, RECAL_ID))).toBe('done');
+    // A save that finished the terminal before PZ-03 existed goes on the same way.
+    expect(chapterStep(done(beacons, TERMINAL_ID))).toBe('recalibrating');
   });
 
   it('the seagull protocol: gull opens it, board hints, the door stays blocked', () => {
@@ -62,7 +67,28 @@ describe('GAME-06 chapter flow in La Muralla', () => {
     expect(chapterInteraction('barDoor', updated).kind).toBe('routeNode');
     const gull = done(beacons, SEAGULL_ID);
     expect(chapterInteraction('barDoor', gull).kind).toBe('serviceAccess');
-    expect(chapterInteraction('barDoor', done(gull, TERMINAL_ID)).kind).toBe('serviceDone');
+    const terminal = done(gull, TERMINAL_ID);
+    expect(chapterInteraction('barDoor', terminal).kind).toBe('routeNode');
+    expect(chapterInteraction('barDoor', done(terminal, RECAL_ID)).kind).toBe('serviceDone');
+  });
+
+  it('recalibration: the same three objects are beacons again, then inert', () => {
+    const gull = done(done(flag(base, ROUTE_FLAGS.updated), BEACONS_ID), SEAGULL_ID);
+    const terminal = done(gull, TERMINAL_ID);
+    expect(chapterInteraction('lamp', terminal)).toEqual({ kind: 'beacon', symbol: 'lamp' });
+    expect(chapterInteraction('board', terminal)).toEqual({ kind: 'beacon', symbol: 'cup' });
+    expect(chapterInteraction('gull', terminal)).toEqual({ kind: 'beacon', symbol: 'bird' });
+    expect(chapterInteraction('waitress', terminal)).toEqual({ kind: 'default' });
+    const recal = done(terminal, RECAL_ID);
+    expect(chapterInteraction('lamp', recal)).toEqual({ kind: 'default' });
+  });
+
+  it('a save that already fought the boss does not owe the recalibration', () => {
+    const terminal = done(base, TERMINAL_ID);
+    expect(recalibrationDone(terminal)).toBe(false);
+    const fought = gameReducer(terminal, { type: 'boss/attempt', at });
+    expect(recalibrationDone(fought)).toBe(true);
+    expect(chapterStep(fought)).toBe('done');
   });
 
   it('prototype keys are not beacons', () => {

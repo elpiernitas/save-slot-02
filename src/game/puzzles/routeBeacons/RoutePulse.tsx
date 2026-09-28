@@ -54,7 +54,7 @@ export function RoutePulse({
         <p className="route-pulse__title">CALIBRACIÓN DE RUTA</p>
         <ol className="route-pulse__row">
           {sequence.map((symbol, i) => (
-            <li key={symbol} className="route-pulse__slot" data-lit={i < lit || undefined}>
+            <li key={i} className="route-pulse__slot" data-lit={i < lit || undefined}>
               <span className="route-pulse__n">{i + 1}</span>
               <BeaconIcon symbol={symbol} label={SYMBOL_LABEL[symbol]} />
               <span className="route-pulse__name">{SYMBOL_LABEL[symbol]}</span>

@@ -17,6 +17,14 @@ export const PUZZLES = {
     optional: false,
     estimatedSeconds: 60,
   },
+  'route.recalibration': {
+    id: 'route.recalibration',
+    title: 'RECALIBRACIÓN DE RUTA',
+    kind: 'routeSequence',
+    // Same beacons, hints and pattern replay as the first route: never blocks.
+    optional: false,
+    estimatedSeconds: 120,
+  },
   'system.player_sync': {
     id: 'system.player_sync',
     title: 'TERMINAL DE SINCRONIZACIÓN',

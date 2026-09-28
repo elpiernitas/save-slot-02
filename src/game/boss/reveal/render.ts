@@ -12,7 +12,7 @@ import {
   SEAFRONT_SUNSET,
 } from '../../render/compositing';
 import { CHARACTER_ROWS, SPRITES, type SpriteImages } from '../../world/art/assets';
-import { DOOR, FLOOR, GATE_ARENA, SWITCH_1, SWITCH_2, type GateState } from './gate';
+import { FLOOR, GATE_ARENA, SWITCH_1, SWITCH_2, type GateState } from './gate';
 
 const C = {
   bg: '#0b1626',
@@ -48,22 +48,29 @@ export function createGateRenderer(canvas: HTMLCanvasElement, images: SpriteImag
   resize(GATE_ARENA.h);
 
   /** Ground switch: a ring on the promenade that fills with signal light. */
-  const pad = (p: { x: number; y: number }, on: boolean, reduced: boolean, t: number) => {
+  const pad = (
+    p: { x: number; y: number },
+    on: boolean,
+    reduced: boolean,
+    t: number,
+    tone: readonly [number, number, number] = [191, 238, 242],
+  ) => {
+    const rgb = tone.join(' ');
     ctx.save();
     ctx.translate(p.x, p.y);
     ctx.scale(1, 0.4);
     if (on) {
       const pulse = reduced ? 1 : 0.85 + 0.15 * Math.sin(t / 220);
       const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, 26);
-      glow.addColorStop(0, `rgb(191 238 242 / ${0.75 * pulse})`);
-      glow.addColorStop(1, 'rgb(191 238 242 / 0)');
+      glow.addColorStop(0, `rgb(${rgb} / ${0.75 * pulse})`);
+      glow.addColorStop(1, `rgb(${rgb} / 0)`);
       ctx.fillStyle = glow;
       ctx.beginPath();
       ctx.arc(0, 0, 26, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.lineWidth = 2;
-    ctx.strokeStyle = on ? C.cyan : 'rgb(244 236 218 / 0.7)';
+    ctx.strokeStyle = on ? `rgb(${rgb})` : 'rgb(244 236 218 / 0.85)';
     ctx.setLineDash(on ? [] : [4, 3]);
     ctx.beginPath();
     ctx.arc(0, 0, 15, 0, Math.PI * 2);
@@ -89,69 +96,112 @@ export function createGateRenderer(canvas: HTMLCanvasElement, images: SpriteImag
     ctx.setLineDash([2, 4]);
     ctx.beginPath();
     ctx.moveTo(from.x, from.y - 6);
-    ctx.lineTo(toX, DOOR.y + DOOR.h + 2);
+    ctx.lineTo(toX, PORTAL.y + PORTAL.h + 2);
     ctx.stroke();
     ctx.setLineDash([]);
   };
 
   /**
-   * The portal: a lit frame whose two halves light up with each player's
-   * signal and open into warm light. Same states as before, clearer reading.
+   * The portal (audit): a tall arched frame standing on the horizon, two
+   * glass halves (P1 cyan, P2 gold) through which the sunset shows, each
+   * lighting up with its player's signal; when open, the halves slide apart
+   * on a column of warm light with its reflection on the floor. Drawing only:
+   * the gate's states, switches and timing are unchanged.
    */
+  const P1_TONE = [191, 238, 242] as const;
+  const P2_TONE = [242, 193, 78] as const;
+  const PORTAL = { x: 262, y: 44, w: 116, h: 108 };
   const portal = (s: GateState, reduced: boolean) => {
     const p1On = s.stage !== 'await1';
     const p2On = s.stage === 'p2ready' || s.stage === 'opening' || s.stage === 'open';
     const k = s.stage === 'open' ? 1 : s.stage === 'opening' && !reduced ? 0.5 : 0;
-    const { x, y, w, h } = DOOR;
-    const half = w / 2;
-    const cx = x + half;
-    // Halo: cool while waiting, warm once it opens.
-    const glow = ctx.createRadialGradient(cx, y + h / 2, 6, cx, y + h / 2, 80);
-    glow.addColorStop(0, k > 0 ? 'rgb(255 205 120 / 0.6)' : 'rgb(191 238 242 / 0.28)');
-    glow.addColorStop(1, 'rgb(0 0 0 / 0)');
-    ctx.fillStyle = glow;
-    ctx.fillRect(x - 80, y - 80, w + 160, h + 160);
-    // Reflection on the floor below the threshold.
-    const refl = ctx.createLinearGradient(0, y + h, 0, y + h + 60);
-    refl.addColorStop(0, k > 0 ? 'rgb(255 205 120 / 0.45)' : 'rgb(191 238 242 / 0.16)');
-    refl.addColorStop(1, 'rgb(0 0 0 / 0)');
-    ctx.fillStyle = refl;
-    ctx.fillRect(x + 4, y + h + 2, w - 8, 60);
-    // Opening: a column of warm light between the halves.
-    if (k > 0) {
-      ctx.fillStyle = 'rgb(255 226 160 / 0.95)';
-      ctx.fillRect(cx - half * k, y, w * k, h);
-    }
-    // Two glass halves: the sunset shows through; each lights with its signal.
-    const panel = (px: number, on: boolean) => {
-      const pw = half * (1 - k);
-      if (pw <= 0) return;
-      ctx.fillStyle = on ? 'rgb(40 96 120 / 0.72)' : 'rgb(14 26 44 / 0.55)';
-      ctx.fillRect(px, y, pw, h);
-      ctx.fillStyle = on ? 'rgb(191 238 242 / 0.55)' : 'rgb(191 238 242 / 0.12)';
-      for (let ly = y + 3; ly < y + h - 1; ly += 4) ctx.fillRect(px + 2, ly, pw - 4, 1);
+    const { x, y, w, h } = PORTAL;
+    const cx = x + w / 2;
+    const r = w / 2;
+    const arch = (inset: number) => {
+      ctx.beginPath();
+      ctx.moveTo(x + inset, y + h);
+      ctx.lineTo(x + inset, y + r);
+      ctx.arc(cx, y + r, r - inset, Math.PI, 0);
+      ctx.lineTo(x + w - inset, y + h);
+      ctx.closePath();
     };
-    panel(x, p1On);
-    panel(x + w - half * (1 - k), p2On);
-    if (k === 0) {
-      ctx.fillStyle = 'rgb(244 236 218 / 0.5)';
-      ctx.fillRect(cx, y + 2, 1, h - 4);
+
+    // Floor reflection: a soft elliptical pool, strongest once open.
+    ctx.save();
+    ctx.translate(cx, y + h + 26);
+    ctx.scale(1, 0.28);
+    const reflCol = k > 0 ? '255 214 150' : p1On || p2On ? '191 238 242' : '244 236 218';
+    const pool = ctx.createRadialGradient(0, 0, 4, 0, 0, w * 0.8);
+    pool.addColorStop(0, `rgb(${reflCol} / ${k > 0 ? 0.55 : 0.16})`);
+    pool.addColorStop(1, 'rgb(0 0 0 / 0)');
+    ctx.fillStyle = pool;
+    ctx.beginPath();
+    ctx.arc(0, 0, w * 0.8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Column of light (open only): soft, layered, reaching into the sky.
+    if (k > 0) {
+      const beamW = w * 0.55 * k;
+      const beam = ctx.createLinearGradient(cx - beamW, 0, cx + beamW, 0);
+      beam.addColorStop(0, 'rgb(255 214 150 / 0)');
+      beam.addColorStop(0.35, 'rgb(255 222 170 / 0.55)');
+      beam.addColorStop(0.5, 'rgb(255 248 228 / 0.95)');
+      beam.addColorStop(0.65, 'rgb(255 222 170 / 0.55)');
+      beam.addColorStop(1, 'rgb(255 214 150 / 0)');
+      ctx.fillStyle = beam;
+      ctx.fillRect(cx - beamW, 0, beamW * 2, y + h);
+      const halo = ctx.createRadialGradient(cx, y + h * 0.6, 4, cx, y + h * 0.6, 110);
+      halo.addColorStop(0, 'rgb(255 230 180 / 0.55)');
+      halo.addColorStop(1, 'rgb(255 230 180 / 0)');
+      ctx.fillStyle = halo;
+      ctx.fillRect(cx - 120, y - 60, 240, h + 120);
     }
-    // Frame with gold corners.
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = k > 0 ? C.gold : C.cream;
-    ctx.strokeRect(x - 1, y - 1, w + 2, h + 2);
+
+    // Glass halves: the sunset stays visible through them.
+    ctx.save();
+    arch(6);
+    ctx.clip();
+    const half = (w - 12) / 2;
+    const slide = half * k;
+    const glass = (left: boolean, on: boolean, tone: readonly [number, number, number]) => {
+      const gx = left ? x + 6 - slide : x + 6 + half + slide;
+      const rgb = tone.join(' ');
+      ctx.fillStyle = on ? `rgb(${rgb} / 0.22)` : 'rgb(14 26 44 / 0.42)';
+      ctx.fillRect(gx, y, half, h);
+      // Signal lines climbing the glass.
+      ctx.fillStyle = on ? `rgb(${rgb} / 0.85)` : 'rgb(244 236 218 / 0.18)';
+      for (let ly = y + h - 8; ly > y + 10; ly -= 7) ctx.fillRect(gx + 6, ly, half - 12, 1);
+      // Inner edge light where the halves meet.
+      ctx.fillStyle = on ? `rgb(${rgb})` : 'rgb(244 236 218 / 0.35)';
+      ctx.fillRect(left ? gx + half - 2 : gx, y, 2, h);
+      // Player tag on each half.
+      ctx.font = 'bold 9px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = on ? `rgb(${rgb})` : 'rgb(244 236 218 / 0.6)';
+      ctx.fillText(left ? 'P1' : 'P2', gx + half / 2, y + h - 12);
+    };
+    glass(true, p1On, P1_TONE);
+    glass(false, p2On, P2_TONE);
+    ctx.restore();
+
+    // Frame: dark stone-navy band, cream inner line, gold keystones.
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#0b1626';
+    arch(2.5);
+    ctx.stroke();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = k > 0 ? C.gold : '#f4ecda';
+    arch(5);
+    ctx.stroke();
     ctx.fillStyle = C.gold;
-    for (const [qx, qy] of [
-      [x - 3, y - 3],
-      [x + w - 3, y - 3],
-      [x - 3, y + h - 3],
-      [x + w - 3, y + h - 3],
-    ] as const)
-      ctx.fillRect(qx, qy, 6, 6);
+    ctx.fillRect(cx - 4, y - 3, 8, 6);
+    ctx.fillRect(x - 3, y + h - 5, 8, 6);
+    ctx.fillRect(x + w - 5, y + h - 5, 8, 6);
     // Threshold on the ground.
-    ctx.fillStyle = k > 0 ? C.gold : 'rgb(244 236 218 / 0.7)';
-    ctx.fillRect(x - 8, y + h + 2, w + 16, 2);
+    ctx.fillStyle = k > 0 ? C.gold : 'rgb(244 236 218 / 0.75)';
+    ctx.fillRect(x - 10, y + h, w + 20, 2);
   };
 
   return {
@@ -167,11 +217,11 @@ export function createGateRenderer(canvas: HTMLCanvasElement, images: SpriteImag
 
       const p1On = s.stage !== 'await1';
       const p2On = s.stage === 'p2ready' || s.stage === 'opening' || s.stage === 'open';
-      link(SWITCH_1, DOOR.x + DOOR.w / 4, p1On);
-      link(SWITCH_2, DOOR.x + (DOOR.w * 3) / 4, p2On);
+      link(SWITCH_1, PORTAL.x + PORTAL.w / 4, p1On);
+      link(SWITCH_2, PORTAL.x + (PORTAL.w * 3) / 4, p2On);
       portal(s, reduced);
-      pad(SWITCH_1, p1On, reduced, s.t);
-      pad(SWITCH_2, p2On, reduced, s.t);
+      pad(SWITCH_1, p1On, reduced, s.t, P1_TONE);
+      pad(SWITCH_2, p2On, reduced, s.t, P2_TONE);
 
       // Depth: whoever is lower on screen is drawn last.
       const actors = [
@@ -211,10 +261,12 @@ export function createGateRenderer(canvas: HTMLCanvasElement, images: SpriteImag
     // fades into night-blue glass so the players stand on a floor.
     const top = FLOOR.y - 14;
     const ground = g.createLinearGradient(0, top - 16, 0, GATE_ARENA.h);
+    // Opaque from just under the horizon: nothing of the promenade photo
+    // (bollards, bike) floats under the players.
     ground.addColorStop(0, 'rgb(12 22 40 / 0)');
-    ground.addColorStop(0.1, 'rgb(12 22 40 / 0.82)');
-    ground.addColorStop(0.35, 'rgb(10 18 34 / 0.92)');
-    ground.addColorStop(1, 'rgb(8 14 28 / 0.96)');
+    ground.addColorStop(0.08, 'rgb(14 26 46 / 0.92)');
+    ground.addColorStop(0.16, 'rgb(13 24 42 / 1)');
+    ground.addColorStop(1, 'rgb(8 14 28 / 1)');
     g.fillStyle = ground;
     g.fillRect(0, top - 16, GATE_ARENA.w, GATE_ARENA.h - top + 16);
     // Warm spill of the sunset on the floor, under the portal.

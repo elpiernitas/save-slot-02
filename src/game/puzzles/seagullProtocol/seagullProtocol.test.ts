@@ -57,7 +57,7 @@ describe('seagull protocol', () => {
     }
   });
 
-  it('is cleared by dodging all six dives', () => {
+  it('is cleared by dodging every dive of both waves', () => {
     let s = run(initialSeagull(), TIMING.ready + 20);
     for (const dive of DIVES) {
       expect(s.phase).toBe('telegraph');

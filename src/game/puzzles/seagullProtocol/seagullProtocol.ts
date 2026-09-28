@@ -3,7 +3,7 @@
  *
  * A 5×3 patch of La Muralla's paving. The seagull's shadow marks tiles
  * (telegraph), then it dives (strike). PLAYER 1 steps tile to tile out of
- * the marked ones. Survive the six dives of the fixed pattern. A hit does not
+ * the marked ones. Survive the ten dives of the fixed pattern (two waves). A hit does not
  * kill: the run restarts. After two failed runs the warnings last longer
  * (assist); after four the seagull loses interest and the puzzle completes,
  * so it can never block the story.
@@ -52,6 +52,39 @@ export const DIVES: readonly (readonly Tile[])[] = [
     [0, 2],
     [2, 2],
     [4, 2],
+  ],
+  // Second wave (pacing pass): the same ideas, mirrored and mixed.
+  [
+    [4, 0],
+    [4, 1],
+    [4, 2],
+    [2, 0],
+    [2, 1],
+    [2, 2],
+  ],
+  [
+    [1, 1],
+    [2, 1],
+    [3, 1],
+    [0, 0],
+    [4, 2],
+  ],
+  [
+    [0, 0],
+    [0, 1],
+    [0, 2],
+    [1, 0],
+    [1, 1],
+    [1, 2],
+  ],
+  [
+    [1, 0],
+    [3, 0],
+    [0, 1],
+    [2, 1],
+    [4, 1],
+    [1, 2],
+    [3, 2],
   ],
   // The big one: everything but three tiles.
   (() => {
