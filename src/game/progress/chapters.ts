@@ -65,3 +65,13 @@ export const chapterSeenFlag = (n: number) => `chapter.seen.${String(n).padStart
 
 export const chapterCardDue = (save: GameSave, n = chapterLevel(save).n) =>
   !save.flags[chapterSeenFlag(n)];
+
+/**
+ * The chapter card to show now, if any. `justClosed` is the level whose card
+ * was just dismissed: a save read before that dismissal is committed still
+ * lacks its seen flag, and must never bring the same card back (D-087).
+ */
+export function chapterCardToShow(save: GameSave, justClosed: number | null = null): Level | null {
+  const level = chapterLevel(save);
+  return level.n !== justClosed && chapterCardDue(save, level.n) ? level : null;
+}
